@@ -15,8 +15,8 @@ export default defineConfig({
         name: 'SpaceNight',
         short_name: 'SpaceNight',
         description:
-          'Qué hay en el cielo de Lima esta noche: Luna, planetas, Estación Espacial y clima.',
-        lang: 'es',
+          'What is in your sky tonight: the Moon, the planets, the Space Station and the weather.',
+        lang: 'en',
         start_url: './',
         scope: './',
         display: 'standalone',
@@ -49,5 +49,6 @@ export default defineConfig({
   },
   test: {
     include: ['tests/**/*.test.ts'],
+    setupFiles: ['tests/preparar.ts'],
   },
 });

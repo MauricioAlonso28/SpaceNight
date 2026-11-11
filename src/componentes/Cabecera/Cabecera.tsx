@@ -1,7 +1,9 @@
 import { Link } from 'react-router';
-import { RUTA_AJUSTES } from '../../app/rutas';
+import { RUTA_AJUSTES, nombreRuta } from '../../app/rutas';
 import { useAhora } from '../../estado/hooks';
 import { useEstado } from '../../estado/store';
+import { nombreLugar } from '../../idioma/comunes';
+import { textos } from '../../idioma/idioma';
 import { formatearFechaLarga, formatearHora } from '../../servicios/formato';
 import './Cabecera.css';
 
@@ -10,26 +12,30 @@ export function Cabecera() {
   const ahora = useAhora();
   const ubicacion = useEstado((s) => s.ubicacion);
   const formato24h = useEstado((s) => s.ajustes.formato24h);
+  const lugar = nombreLugar(ubicacion);
 
   return (
     <header className="cabecera">
       <div>
         <h1>SpaceNight</h1>
         <p className="cabecera-lugar">
-          {ubicacion.nombre}, {formatearFechaLarga(ahora, ubicacion.zona)}
+          {lugar}, {formatearFechaLarga(ahora, ubicacion.zona)}
         </p>
       </div>
       <div className="cabecera-derecha">
         <p
           className="cabecera-reloj"
-          aria-label={`Hora en ${ubicacion.nombre}`}
+          aria-label={textos({
+            es: `Hora en ${lugar}`,
+            en: `Time in ${lugar}`,
+          })}
         >
           {formatearHora(ahora, ubicacion.zona, formato24h)}
         </p>
         <Link
           to={`/${RUTA_AJUSTES.path}`}
           className="cabecera-ajustes"
-          aria-label={RUTA_AJUSTES.nombre}
+          aria-label={nombreRuta(RUTA_AJUSTES)}
         >
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="3" />

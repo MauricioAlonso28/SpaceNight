@@ -4,6 +4,10 @@ Web app personal que muestra qué hay en el cielo de Lima cada noche: la Luna, l
 planetas, la Estación Espacial, el clima y los eventos del mes. Todo se calcula en
 el navegador y se publica en GitHub Pages.
 
+La interfaz está en inglés por defecto y pasa a español si el navegador lo
+prefiere; en Ajustes se puede fijar el idioma. Los textos de cada pantalla
+están junto a ella, en un objeto `ES` y su traducción `EN` (ver `src/idioma/`).
+
 ## Comandos
 
 ```bash

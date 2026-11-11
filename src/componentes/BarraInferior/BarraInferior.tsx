@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { NavLink } from 'react-router';
-import { RUTAS_BARRA } from '../../app/rutas';
+import { RUTAS_BARRA, nombreRuta } from '../../app/rutas';
+import { textos } from '../../idioma/idioma';
 import './BarraInferior.css';
 
 const ICONOS: Record<string, ReactNode> = {
@@ -29,13 +30,13 @@ const ICONOS: Record<string, ReactNode> = {
 export function BarraInferior() {
   return (
     <div className="barra-inferior">
-      <nav aria-label="Pantallas">
+      <nav aria-label={textos({ es: 'Pantallas', en: 'Screens' })}>
         {RUTAS_BARRA.map((ruta) => (
           <NavLink key={ruta.path} to={`/${ruta.path}`}>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               {ICONOS[ruta.path]}
             </svg>
-            <span>{ruta.nombre}</span>
+            <span>{nombreRuta(ruta)}</span>
           </NavLink>
         ))}
       </nav>

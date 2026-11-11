@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { idioma } from '../../idioma/idioma';
 import type {
   Constelacion,
   FilaEstrella,
@@ -33,13 +34,22 @@ function pedirDatos(): Promise<DatosMapa> {
   return pedidos;
 }
 
+/** En inglés las constelaciones se llaman por su nombre latino, como en los atlas. */
+function localizar(d: DatosMapa): DatosMapa {
+  if (idioma() === 'es') return d;
+  return {
+    ...d,
+    constelaciones: d.constelaciones.map((c) => ({ ...c, nombre: c.latin })),
+  };
+}
+
 /** Estrellas y constelaciones del repositorio; null mientras cargan, 'error' si fallan. */
 export function useDatosMapa(): DatosMapa | null | 'error' {
   const [datos, setDatos] = useState<DatosMapa | null | 'error'>(null);
   useEffect(() => {
     let vigente = true;
     pedirDatos().then(
-      (d) => vigente && setDatos(d),
+      (d) => vigente && setDatos(localizar(d)),
       () => vigente && setDatos('error'),
     );
     return () => {

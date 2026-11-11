@@ -1,5 +1,11 @@
 import { useState } from 'react';
 import { useEstado } from '../../estado/store';
+import { letraCoordenada, nombreLugar } from '../../idioma/comunes';
+import {
+  idiomaNavegador,
+  textos,
+  type PreferenciaIdioma,
+} from '../../idioma/idioma';
 import { formatearNumero } from '../../servicios/formato';
 import { pedirUbicacion } from '../../servicios/sensores/ubicacion';
 import { CIUDADES } from '../../tipos/ciudades';
@@ -7,8 +13,58 @@ import './Ajustes.css';
 
 const GPS = 'gps';
 
+const ES = {
+  titulo: 'Ajustes',
+  sinGps:
+    'No se pudo leer la ubicación. Revisa el permiso del navegador o elige una ciudad.',
+  ubicacion: 'Ubicación',
+  ciudad: 'Ciudad',
+  buscando: 'Buscando…',
+  usarGps: 'Usar mi ubicación (GPS)',
+  idioma: 'Idioma',
+  auto: (nombre: string) => `Automático (${nombre})`,
+  pantalla: 'Pantalla',
+  modoRojo: 'Modo rojo nocturno',
+  modoRojoNota: 'Todo en rojo para no perder la visión de noche al observar.',
+  formato: 'Formato de hora',
+  h24: '24 horas (21:30)',
+  h12: '12 horas (9:30 p. m.)',
+  brujula: 'Brújula del modo cámara',
+  sinCalibrar:
+    'Sin calibrar. Calíbrala desde el modo cámara centrando la Luna o un planeta.',
+  correccion: (g: string) => `Corrección guardada: ${g}°.`,
+  borrar: 'Borrar calibración',
+};
+
+const EN: typeof ES = {
+  titulo: 'Settings',
+  sinGps:
+    'Could not read your location. Check the browser permission or pick a city.',
+  ubicacion: 'Location',
+  ciudad: 'City',
+  buscando: 'Searching…',
+  usarGps: 'Use my location (GPS)',
+  idioma: 'Language',
+  auto: (nombre) => `Automatic (${nombre})`,
+  pantalla: 'Display',
+  modoRojo: 'Red night mode',
+  modoRojoNota:
+    'Everything in red so you keep your night vision while observing.',
+  formato: 'Time format',
+  h24: '24-hour (21:30)',
+  h12: '12-hour (9:30 PM)',
+  brujula: 'Camera mode compass',
+  sinCalibrar:
+    'Not calibrated. Calibrate it from camera mode by centering the Moon or a planet.',
+  correccion: (g) => `Saved correction: ${g}°.`,
+  borrar: 'Clear calibration',
+};
+
+const NOMBRE_IDIOMA = { es: 'Español', en: 'English' };
+
 /** Ajustes: ubicación (GPS o ciudad), modo rojo nocturno, formato de hora y calibración de la brújula. */
 export function Ajustes() {
+  const t = textos({ es: ES, en: EN });
   const ubicacion = useEstado((s) => s.ubicacion);
   const ajustes = useEstado((s) => s.ajustes);
   const fijarUbicacion = useEstado((s) => s.fijarUbicacion);
@@ -24,10 +80,7 @@ export function Ajustes() {
     const u = await pedirUbicacion();
     setBuscando(false);
     if (u) fijarUbicacion(u);
-    else
-      setAviso(
-        'No se pudo leer la ubicación. Revisa el permiso del navegador o elige una ciudad.',
-      );
+    else setAviso(t.sinGps);
   };
 
   const elegirCiudad = (nombre: string) => {
@@ -41,23 +94,24 @@ export function Ajustes() {
 
   return (
     <section className="ajustes" aria-labelledby="t-ajustes">
-      <h2 id="t-ajustes">Ajustes</h2>
+      <h2 id="t-ajustes">{t.titulo}</h2>
 
       <fieldset className="panel">
-        <legend>Ubicación</legend>
+        <legend>{t.ubicacion}</legend>
         <p className="ajustes-actual">
-          {ubicacion.nombre}: {formatearNumero(Math.abs(ubicacion.latitud), 2)}°{' '}
-          {ubicacion.latitud < 0 ? 'S' : 'N'},{' '}
+          {nombreLugar(ubicacion)}:{' '}
+          {formatearNumero(Math.abs(ubicacion.latitud), 2)}°{' '}
+          {letraCoordenada(ubicacion.latitud, 'latitud')},{' '}
           {formatearNumero(Math.abs(ubicacion.longitud), 2)}°{' '}
-          {ubicacion.longitud < 0 ? 'O' : 'E'}
+          {letraCoordenada(ubicacion.longitud, 'longitud')}
         </p>
-        <label htmlFor="ciudad">Ciudad</label>
+        <label htmlFor="ciudad">{t.ciudad}</label>
         <select
           id="ciudad"
           value={ciudad ? ciudad.nombre : GPS}
           onChange={(e) => elegirCiudad(e.target.value)}
         >
-          {!ciudad && <option value={GPS}>{ubicacion.nombre}</option>}
+          {!ciudad && <option value={GPS}>{nombreLugar(ubicacion)}</option>}
           {CIUDADES.map((c) => (
             <option key={c.nombre} value={c.nombre}>
               {c.nombre}
@@ -70,13 +124,37 @@ export function Ajustes() {
           onClick={usarGps}
           disabled={buscando}
         >
-          {buscando ? 'Buscando…' : 'Usar mi ubicación (GPS)'}
+          {buscando ? t.buscando : t.usarGps}
         </button>
         {aviso && <p className="ajustes-aviso">{aviso}</p>}
       </fieldset>
 
       <fieldset className="panel">
-        <legend>Pantalla</legend>
+        <legend>{t.idioma}</legend>
+        <label htmlFor="idioma" className="oculto">
+          {t.idioma}
+        </label>
+        <select
+          id="idioma"
+          value={ajustes.idioma}
+          onChange={(e) =>
+            cambiarAjustes({ idioma: e.target.value as PreferenciaIdioma })
+          }
+        >
+          <option value="auto">
+            {t.auto(NOMBRE_IDIOMA[idiomaNavegador()])}
+          </option>
+          <option value="en" lang="en">
+            {NOMBRE_IDIOMA.en}
+          </option>
+          <option value="es" lang="es">
+            {NOMBRE_IDIOMA.es}
+          </option>
+        </select>
+      </fieldset>
+
+      <fieldset className="panel">
+        <legend>{t.pantalla}</legend>
         <label className="interruptor">
           <input
             type="checkbox"
@@ -84,16 +162,14 @@ export function Ajustes() {
             onChange={(e) => cambiarAjustes({ modoRojo: e.target.checked })}
           />
           <span>
-            Modo rojo nocturno
-            <small>
-              Todo en rojo para no perder la visión de noche al observar.
-            </small>
+            {t.modoRojo}
+            <small>{t.modoRojoNota}</small>
           </span>
         </label>
       </fieldset>
 
       <fieldset className="panel">
-        <legend>Formato de hora</legend>
+        <legend>{t.formato}</legend>
         <label className="opcion">
           <input
             type="radio"
@@ -101,7 +177,7 @@ export function Ajustes() {
             checked={ajustes.formato24h}
             onChange={() => cambiarAjustes({ formato24h: true })}
           />
-          24 horas (21:30)
+          {t.h24}
         </label>
         <label className="opcion">
           <input
@@ -110,16 +186,16 @@ export function Ajustes() {
             checked={!ajustes.formato24h}
             onChange={() => cambiarAjustes({ formato24h: false })}
           />
-          12 horas (9:30 p. m.)
+          {t.h12}
         </label>
       </fieldset>
 
       <fieldset className="panel">
-        <legend>Brújula del modo cámara</legend>
+        <legend>{t.brujula}</legend>
         <p className="ajustes-actual">
           {ajustes.calibracionBrujula === 0
-            ? 'Sin calibrar. Calíbrala desde el modo cámara centrando la Luna o un planeta.'
-            : `Corrección guardada: ${formatearNumero(ajustes.calibracionBrujula, 1)}°.`}
+            ? t.sinCalibrar
+            : t.correccion(formatearNumero(ajustes.calibracionBrujula, 1))}
         </p>
         {ajustes.calibracionBrujula !== 0 && (
           <button
@@ -127,7 +203,7 @@ export function Ajustes() {
             className="boton"
             onClick={() => cambiarAjustes({ calibracionBrujula: 0 })}
           >
-            Borrar calibración
+            {t.borrar}
           </button>
         )}
       </fieldset>

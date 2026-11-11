@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { PreferenciaIdioma } from '../idioma/idioma';
 import { BORTLE_ESTIMADO, LIMA, type Ubicacion } from '../tipos/ubicacion';
 
 /** Preferencias que el usuario cambia en Ajustes. */
@@ -7,12 +8,14 @@ export interface Ajustes {
   formato24h: boolean;
   modoRojo: boolean;
   calibracionBrujula: number;
+  idioma: PreferenciaIdioma;
 }
 
 export const AJUSTES_INICIALES: Ajustes = {
   formato24h: true,
   modoRojo: false,
   calibracionBrujula: 0,
+  idioma: 'auto',
 };
 
 /** Estado global: dónde se observa, qué fecha se mira y los ajustes. */
@@ -43,7 +46,7 @@ export function fechaDeUrl(busqueda: string): Date | null {
 }
 
 /**
- * Pone al día lo guardado por versiones anteriores: la v1 no tenía Bortle y la v2 no tenía calibración de brújula.
+ * Pone al día lo guardado por versiones anteriores: la v1 no tenía Bortle, la v2 no tenía calibración de brújula y la v3 no tenía idioma.
  * @param guardado lo que había en localStorage
  * @param version la versión con la que se guardó
  */
@@ -56,7 +59,7 @@ export function migrarEstado(guardado: unknown, version: number): unknown {
     const esLima = s.ubicacion.nombre === LIMA.nombre;
     s.ubicacion.bortle = esLima ? LIMA.bortle : BORTLE_ESTIMADO;
   }
-  if (version < 3 && s) {
+  if (version < 4 && s) {
     s.ajustes = { ...AJUSTES_INICIALES, ...s.ajustes };
   }
   return s;
@@ -82,7 +85,7 @@ export const useEstado = create<EstadoApp>()(
     }),
     {
       name: 'tu-cielo',
-      version: 3,
+      version: 4,
       migrate: migrarEstado,
       partialize: (s) => ({
         ubicacion: s.ubicacion,

@@ -32,6 +32,8 @@ import {
   type Constelacion,
   type FilaEstrella,
 } from '../servicios/astro/estrellas';
+import { rumboCorto } from '../idioma/comunes';
+import type { Rumbo } from '../servicios/astro/planetas';
 import { densidadPixeles, texturaPunto } from './comun';
 
 const R_ESTRELLAS = 100;
@@ -66,7 +68,7 @@ export interface ControlMapa {
   destruir: () => void;
 }
 
-const RUMBOS: readonly [string, number][] = [
+const RUMBOS: readonly [Rumbo, number][] = [
   ['N', 0],
   ['NE', 45],
   ['E', 90],
@@ -236,9 +238,9 @@ export function crearMapa(
     etiquetas.push(e);
     return e;
   };
-  for (const [texto, az] of RUMBOS) {
+  for (const [r, az] of RUMBOS) {
     const p = new Vector3(...direccionDe(2, az)).multiplyScalar(R_SUELO);
-    nuevaEtiqueta(texto, 'mapa-rumbo', () => p, false);
+    nuevaEtiqueta(rumboCorto(r), 'mapa-rumbo', () => p, false);
   }
   const etiquetasConstelacion = constelaciones.map((c) => {
     const p = new Vector3(...vectorEcuatorial(...c.centro)).multiplyScalar(

@@ -4,6 +4,7 @@
     {
       "codigo": "NTA",
       "nombre": "Táuridas del Norte",
+      "nombreEn": "Northern Taurids",
       "pico": "2026-11-12",
       "tasa": 5,
       "ar": 58,
@@ -12,6 +13,7 @@
     {
       "codigo": "LEO",
       "nombre": "Leónidas",
+      "nombreEn": "Leonids",
       "pico": "2026-11-17",
       "tasa": 15,
       "ar": 152,
@@ -20,6 +22,7 @@
     {
       "codigo": "GEM",
       "nombre": "Gemínidas",
+      "nombreEn": "Geminids",
       "pico": "2026-12-14",
       "tasa": 150,
       "ar": 112,
@@ -28,6 +31,7 @@
     {
       "codigo": "URS",
       "nombre": "Úrsidas",
+      "nombreEn": "Ursids",
       "pico": "2026-12-22",
       "tasa": 10,
       "ar": 217,
@@ -36,6 +40,7 @@
     {
       "codigo": "QUA",
       "nombre": "Cuadrántidas",
+      "nombreEn": "Quadrantids",
       "pico": "2027-01-04",
       "tasa": 80,
       "ar": 230,
@@ -44,6 +49,7 @@
     {
       "codigo": "ACE",
       "nombre": "Alfa Centáuridas",
+      "nombreEn": "Alpha Centaurids",
       "pico": "2027-02-08",
       "tasa": 6,
       "ar": 210,
@@ -52,6 +58,7 @@
     {
       "codigo": "LYR",
       "nombre": "Líridas",
+      "nombreEn": "Lyrids",
       "pico": "2027-04-23",
       "tasa": 18,
       "ar": 271,
@@ -60,6 +67,7 @@
     {
       "codigo": "ETA",
       "nombre": "Eta Acuáridas",
+      "nombreEn": "Eta Aquariids",
       "pico": "2027-05-06",
       "tasa": 50,
       "ar": 338,
@@ -68,6 +76,7 @@
     {
       "codigo": "SDA",
       "nombre": "Delta Acuáridas del Sur",
+      "nombreEn": "Southern Delta Aquariids",
       "pico": "2027-07-30",
       "tasa": 25,
       "ar": 340,
@@ -76,6 +85,7 @@
     {
       "codigo": "CAP",
       "nombre": "Alfa Capricórnidas",
+      "nombreEn": "Alpha Capricornids",
       "pico": "2027-07-30",
       "tasa": 5,
       "ar": 307,
@@ -84,6 +94,7 @@
     {
       "codigo": "PER",
       "nombre": "Perseidas",
+      "nombreEn": "Perseids",
       "pico": "2027-08-13",
       "tasa": 100,
       "ar": 48,
@@ -92,6 +103,7 @@
     {
       "codigo": "ORI",
       "nombre": "Oriónidas",
+      "nombreEn": "Orionids",
       "pico": "2027-10-21",
       "tasa": 20,
       "ar": 95,
@@ -100,6 +112,7 @@
     {
       "codigo": "STA",
       "nombre": "Táuridas del Sur",
+      "nombreEn": "Southern Taurids",
       "pico": "2027-11-05",
       "tasa": 5,
       "ar": 52,
@@ -108,6 +121,7 @@
     {
       "codigo": "NTA",
       "nombre": "Táuridas del Norte",
+      "nombreEn": "Northern Taurids",
       "pico": "2027-11-12",
       "tasa": 5,
       "ar": 58,
@@ -116,6 +130,7 @@
     {
       "codigo": "LEO",
       "nombre": "Leónidas",
+      "nombreEn": "Leonids",
       "pico": "2027-11-17",
       "tasa": 15,
       "ar": 152,
@@ -124,6 +139,7 @@
     {
       "codigo": "GEM",
       "nombre": "Gemínidas",
+      "nombreEn": "Geminids",
       "pico": "2027-12-14",
       "tasa": 150,
       "ar": 112,
@@ -132,6 +148,7 @@
     {
       "codigo": "URS",
       "nombre": "Úrsidas",
+      "nombreEn": "Ursids",
       "pico": "2027-12-22",
       "tasa": 10,
       "ar": 217,

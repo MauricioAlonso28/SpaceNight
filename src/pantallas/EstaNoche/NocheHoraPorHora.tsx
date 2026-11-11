@@ -6,6 +6,7 @@ import {
   type VentanaNoche,
 } from '../../servicios/astro/noche';
 import type { NochePlaneta } from '../../servicios/astro/planetas';
+import { textos } from '../../idioma/idioma';
 import { formatearHora } from '../../servicios/formato';
 import type { PasoISS } from '../../servicios/satelites/iss';
 import { filasNoche } from './filasNoche';
@@ -63,9 +64,15 @@ export function NocheHoraPorHora({
         ahora={posAhora >= 0 && posAhora <= 1 ? posAhora : null}
       />
       <p className="leyenda">
-        Cada barra marca cuándo está sobre el horizonte. La primera fila muestra
-        cuándo el cielo está oscuro de verdad.
-        {estacion && ' Los puntos son los pasos visibles de la Estación.'}
+        {textos({
+          es: 'Cada barra marca cuándo está sobre el horizonte. La primera fila muestra cuándo el cielo está oscuro de verdad.',
+          en: 'Each bar shows when it is above the horizon. The first row shows when the sky is truly dark.',
+        })}
+        {estacion &&
+          textos({
+            es: ' Los puntos son los pasos visibles de la Estación.',
+            en: ' The dots are the visible Space Station passes.',
+          })}
       </p>
     </div>
   );

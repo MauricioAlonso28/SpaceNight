@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAhora } from '../../estado/hooks';
 import { useEstado } from '../../estado/store';
+import { nombreLugar } from '../../idioma/comunes';
+import { textos } from '../../idioma/idioma';
+import { formatearDecimal } from '../../servicios/formato';
 import {
   abrirCamaraTrasera,
   cerrarCamara,
@@ -12,12 +15,41 @@ import { objetivoInicial, objetosCamara } from './objetosCamara';
 import { Visor } from './Visor';
 import './Camara.css';
 
-function decimal(n: number): string {
-  return n.toFixed(1).replace('.', ',').replace('-', '−');
-}
+const ES = {
+  sinCamara: 'No se pudo abrir la cámara: se muestra sobre fondo oscuro.',
+  titulo: 'Modo cámara',
+  intro:
+    'Apunta el móvil al cielo y verás los nombres de los planetas, las estrellas brillantes y las constelaciones justo donde están.',
+  permisos:
+    'Para eso la app pide dos permisos: la cámara trasera, para ver el cielo de fondo, y los sensores de movimiento, para saber hacia dónde apuntas. La imagen no sale del teléfono.',
+  activar: 'Activar cámara y brújula',
+  sinCamaraBoton: 'Usar sin cámara',
+  declinacion: (lugar: string, grados: string) =>
+    `Declinación magnética en ${lugar}: ${grados}° (World Magnetic Model 2025).`,
+  calibracion: (grados: string) => ` Calibración guardada: ${grados}°.`,
+  borrar: 'Borrar calibración',
+};
+
+const EN: typeof ES = {
+  sinCamara: 'Could not open the camera: showing a dark background instead.',
+  titulo: 'Camera mode',
+  intro:
+    'Point your phone at the sky to see the names of the planets, the bright stars and the constellations right where they are.',
+  permisos:
+    'For that the app asks for two permissions: the rear camera, to show the sky behind, and the motion sensors, to know where you are pointing. The image never leaves your phone.',
+  activar: 'Turn on camera and compass',
+  sinCamaraBoton: 'Use without camera',
+  declinacion: (lugar, grados) =>
+    `Magnetic declination in ${lugar}: ${grados}° (World Magnetic Model 2025).`,
+  calibracion: (grados) => ` Saved calibration: ${grados}°.`,
+  borrar: 'Clear calibration',
+};
+
+const decimal = (n: number) => formatearDecimal(n);
 
 /** Modo cámara: explica qué permisos pide, abre la cámara trasera y rotula el cielo encima. */
 export function Camara() {
+  const t = textos({ es: ES, en: EN });
   const ahora = useAhora();
   const ubicacion = useEstado((s) => s.ubicacion);
   const calibracion = useEstado((s) => s.ajustes.calibracionBrujula);
@@ -49,7 +81,7 @@ export function Camara() {
       try {
         setStream(await abrirCamaraTrasera());
       } catch {
-        setAviso('No se pudo abrir la cámara: se muestra sobre fondo oscuro.');
+        setAviso(t.sinCamara);
       }
     }
     setActivo(true);
@@ -80,34 +112,25 @@ export function Camara() {
 
   return (
     <section className="camara-inicio" aria-labelledby="t-camara">
-      <h2 id="t-camara">Modo cámara</h2>
-      <p>
-        Apunta el móvil al cielo y verás los nombres de los planetas, las
-        estrellas brillantes y las constelaciones justo donde están.
-      </p>
-      <p>
-        Para eso la app pide dos permisos: la cámara trasera, para ver el cielo
-        de fondo, y los sensores de movimiento, para saber hacia dónde apuntas.
-        La imagen no sale del teléfono.
-      </p>
+      <h2 id="t-camara">{t.titulo}</h2>
+      <p>{t.intro}</p>
+      <p>{t.permisos}</p>
       <div className="camara-botones">
         <button
           type="button"
           className="boton boton-principal"
           onClick={() => empezar(true)}
         >
-          Activar cámara y brújula
+          {t.activar}
         </button>
         <button type="button" className="boton" onClick={() => empezar(false)}>
-          Usar sin cámara
+          {t.sinCamaraBoton}
         </button>
       </div>
       {aviso && <p className="camara-aviso">{aviso}</p>}
       <p className="pie">
-        Declinación magnética en {ubicacion.nombre}: {decimal(decl)}° (World
-        Magnetic Model 2025).
-        {calibracion !== 0 &&
-          ` Calibración guardada: ${decimal(calibracion)}°.`}
+        {t.declinacion(nombreLugar(ubicacion), decimal(decl))}
+        {calibracion !== 0 && t.calibracion(decimal(calibracion))}
         {calibracion !== 0 && (
           <>
             {' '}
@@ -116,7 +139,7 @@ export function Camara() {
               className="enlace"
               onClick={() => cambiarAjustes({ calibracionBrujula: 0 })}
             >
-              Borrar calibración
+              {t.borrar}
             </button>
           </>
         )}

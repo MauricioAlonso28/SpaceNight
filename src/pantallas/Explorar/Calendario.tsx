@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useLluvias } from '../../estado/datos';
+import { textos } from '../../idioma/idioma';
 import { semanasDelMes } from '../../servicios/astro/calendario';
 import { formatearHora } from '../../servicios/formato';
 import { partesEnZona } from '../../servicios/tiempo';
@@ -7,21 +8,45 @@ import type { Ubicacion } from '../../tipos/ubicacion';
 import { IconoFase } from './IconoFase';
 import { lineasDelMes } from './datosExplorar';
 
-const DIAS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
-const MESES = [
-  'enero',
-  'febrero',
-  'marzo',
-  'abril',
-  'mayo',
-  'junio',
-  'julio',
-  'agosto',
-  'septiembre',
-  'octubre',
-  'noviembre',
-  'diciembre',
-];
+const ES = {
+  dias: ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
+  meses: [
+    'enero',
+    'febrero',
+    'marzo',
+    'abril',
+    'mayo',
+    'junio',
+    'julio',
+    'agosto',
+    'septiembre',
+    'octubre',
+    'noviembre',
+    'diciembre',
+  ],
+  anterior: 'Mes anterior',
+  siguiente: 'Mes siguiente',
+};
+
+const EN: typeof ES = {
+  dias: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+  meses: [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ],
+  anterior: 'Previous month',
+  siguiente: 'Next month',
+};
 
 /** Calendario mensual con la fase de cada día y la lista de fases y eventos. */
 export function Calendario({
@@ -33,6 +58,7 @@ export function Calendario({
   ubicacion: Ubicacion;
   formato24h: boolean;
 }) {
+  const t = textos({ es: ES, en: EN });
   const hoy = partesEnZona(fecha, ubicacion.zona);
   const [mes, setMes] = useState({ anio: hoy.anio, mes: hoy.mes });
   const lluvias = useLluvias();
@@ -69,18 +95,18 @@ export function Calendario({
         <button
           type="button"
           className="boton"
-          aria-label="Mes anterior"
+          aria-label={t.anterior}
           onClick={() => mover(-1)}
         >
           ‹
         </button>
         <h3>
-          {MESES[mes.mes - 1]} {mes.anio}
+          {t.meses[mes.mes - 1]} {mes.anio}
         </h3>
         <button
           type="button"
           className="boton"
-          aria-label="Mes siguiente"
+          aria-label={t.siguiente}
           onClick={() => mover(1)}
         >
           ›
@@ -89,8 +115,8 @@ export function Calendario({
       <table className="calendario-tabla">
         <thead>
           <tr>
-            {DIAS.map((d) => (
-              <th key={d} scope="col">
+            {t.dias.map((d, i) => (
+              <th key={i} scope="col">
                 {d}
               </th>
             ))}

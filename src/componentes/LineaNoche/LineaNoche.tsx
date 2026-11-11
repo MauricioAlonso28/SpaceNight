@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { textos } from '../../idioma/idioma';
 import './LineaNoche.css';
 
 /** Un tramo de barra en fracciones de la ventana (0 a 1). */
@@ -76,7 +77,7 @@ export function LineaNoche({
       {ahora !== null && (
         <div className="linea-capa" aria-hidden="true">
           <div className="linea-ahora" style={{ left: pct(ahora) }}>
-            <span>Ahora</span>
+            <span>{textos({ es: 'Ahora', en: 'Now' })}</span>
           </div>
         </div>
       )}

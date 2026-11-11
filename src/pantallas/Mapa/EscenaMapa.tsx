@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import type { ControlMapa, CuerpoMapa, Seleccion } from '../../3d/escenaMapa';
 import { soportaWebGL } from '../../3d/soporte';
+import { textos } from '../../idioma/idioma';
 import type { DatosMapa } from './datosMapa';
 
 /**
@@ -64,7 +65,10 @@ export function EscenaMapa({
     <div className="mapa-escena" ref={contenedor}>
       {!soportaWebGL() && (
         <p className="mapa-aviso">
-          Este navegador no puede dibujar el mapa en 3D.
+          {textos({
+            es: 'Este navegador no puede dibujar el mapa en 3D.',
+            en: 'This browser cannot draw the 3D map.',
+          })}
         </p>
       )}
     </div>

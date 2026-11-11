@@ -1,5 +1,5 @@
 {
-  "fuente": "NASA Planetary Fact Sheets (nssdc.gsfc.nasa.gov/planetary/factsheet). Redactado a mano.",
+  "fuente": "NASA Planetary Fact Sheets (nssdc.gsfc.nasa.gov/planetary/factsheet). Redactado a mano. Versión en inglés traducida a mano.",
   "cuerpos": [
     {
       "clave": "sol",
@@ -9,7 +9,15 @@
       "dia": "unos 25 días en el ecuador",
       "anio": "unos 230 millones de años alrededor de la Vía Láctea",
       "lunas": "8 planetas lo orbitan",
-      "dato": "Dentro cabrían más de un millón de Tierras, y aun así es una estrella mediana."
+      "dato": "Dentro cabrían más de un millón de Tierras, y aun así es una estrella mediana.",
+      "en": {
+        "nombre": "Sun",
+        "tipo": "Star",
+        "dia": "about 25 days at the equator",
+        "anio": "about 230 million years around the Milky Way",
+        "lunas": "8 planets orbit it",
+        "dato": "More than a million Earths would fit inside, and it is still a medium-sized star."
+      }
     },
     {
       "clave": "luna",
@@ -19,7 +27,15 @@
       "dia": "29,5 días de luz y sombra",
       "anio": "27,3 días alrededor de la Tierra",
       "lunas": "ninguna",
-      "dato": "Siempre nos enseña la misma cara: gira sobre sí misma en el mismo tiempo que tarda en dar la vuelta a la Tierra."
+      "dato": "Siempre nos enseña la misma cara: gira sobre sí misma en el mismo tiempo que tarda en dar la vuelta a la Tierra.",
+      "en": {
+        "nombre": "Moon",
+        "tipo": "Earth's satellite",
+        "dia": "29.5 days of light and shadow",
+        "anio": "27.3 days around the Earth",
+        "lunas": "none",
+        "dato": "It always shows us the same face: it spins on its axis in the same time it takes to go around the Earth."
+      }
     },
     {
       "clave": "mercurio",
@@ -29,7 +45,15 @@
       "dia": "176 días terrestres de amanecer a amanecer",
       "anio": "88 días",
       "lunas": "ninguna",
-      "dato": "Un día suyo, de amanecer a amanecer, dura lo mismo que dos de sus años."
+      "dato": "Un día suyo, de amanecer a amanecer, dura lo mismo que dos de sus años.",
+      "en": {
+        "nombre": "Mercury",
+        "tipo": "Rocky planet",
+        "dia": "176 Earth days from sunrise to sunrise",
+        "anio": "88 days",
+        "lunas": "none",
+        "dato": "One of its days, sunrise to sunrise, lasts as long as two of its years."
+      }
     },
     {
       "clave": "venus",
@@ -39,7 +63,15 @@
       "dia": "117 días terrestres de amanecer a amanecer",
       "anio": "225 días",
       "lunas": "ninguna",
-      "dato": "Gira al revés que casi todos los planetas: allí el Sol sale por el oeste."
+      "dato": "Gira al revés que casi todos los planetas: allí el Sol sale por el oeste.",
+      "en": {
+        "nombre": "Venus",
+        "tipo": "Rocky planet",
+        "dia": "117 Earth days from sunrise to sunrise",
+        "anio": "225 days",
+        "lunas": "none",
+        "dato": "It spins the opposite way to almost every planet: there the Sun rises in the west."
+      }
     },
     {
       "clave": "marte",
@@ -49,7 +81,15 @@
       "dia": "24 horas y 40 minutos",
       "anio": "687 días",
       "lunas": "2, Fobos y Deimos",
-      "dato": "Tiene el volcán más alto del sistema solar, el Olympus Mons, de unos 22 km."
+      "dato": "Tiene el volcán más alto del sistema solar, el Olympus Mons, de unos 22 km.",
+      "en": {
+        "nombre": "Mars",
+        "tipo": "Rocky planet",
+        "dia": "24 hours and 40 minutes",
+        "anio": "687 days",
+        "lunas": "2, Phobos and Deimos",
+        "dato": "It has the tallest volcano in the solar system, Olympus Mons, about 22 km high."
+      }
     },
     {
       "clave": "jupiter",
@@ -59,7 +99,15 @@
       "dia": "9 horas y 56 minutos",
       "anio": "11,9 años",
       "lunas": "más de 90",
-      "dato": "Su Gran Mancha Roja es una tormenta más grande que la Tierra que dura desde hace siglos."
+      "dato": "Su Gran Mancha Roja es una tormenta más grande que la Tierra que dura desde hace siglos.",
+      "en": {
+        "nombre": "Jupiter",
+        "tipo": "Gas giant",
+        "dia": "9 hours and 56 minutes",
+        "anio": "11.9 years",
+        "lunas": "more than 90",
+        "dato": "Its Great Red Spot is a storm bigger than the Earth that has lasted for centuries."
+      }
     },
     {
       "clave": "saturno",
@@ -69,7 +117,15 @@
       "dia": "10 horas y 34 minutos",
       "anio": "29,4 años",
       "lunas": "más de 270",
-      "dato": "Es menos denso que el agua: en una bañera lo bastante grande, flotaría."
+      "dato": "Es menos denso que el agua: en una bañera lo bastante grande, flotaría.",
+      "en": {
+        "nombre": "Saturn",
+        "tipo": "Gas giant",
+        "dia": "10 hours and 34 minutes",
+        "anio": "29.4 years",
+        "lunas": "more than 270",
+        "dato": "It is less dense than water: in a big enough bathtub, it would float."
+      }
     }
   ]
 }

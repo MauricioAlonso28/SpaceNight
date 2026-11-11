@@ -93,6 +93,7 @@ describe('textos de los eventos', () => {
       lluvia: {
         codigo: 'LEO',
         nombre: 'Leónidas',
+        nombreEn: 'Leonids',
         pico: '2026-11-17',
         tasa: 15,
         ar: 152,

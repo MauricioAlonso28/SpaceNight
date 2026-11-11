@@ -5,18 +5,23 @@ import { CUERPO, type Planeta } from '../../servicios/astro/planetas';
 import type { PuntoOrbita } from '../../servicios/satelites/iss';
 import { medianocheLocal } from '../../servicios/tiempo';
 import type { Ubicacion } from '../../tipos/ubicacion';
-import { NOMBRE_CUARTO, tituloCalendario } from './textosExplorar';
+import { nombreCuarto, tituloCalendario } from './textosExplorar';
 
-/** Una ficha del JSON de planetas, redactada a mano. */
-export interface FichaCuerpo {
-  clave: string;
+/** Los textos de una ficha en un idioma. */
+export interface TextosFicha {
   nombre: string;
   tipo: string;
-  diametroKm: number;
   dia: string;
   anio: string;
   lunas: string;
   dato: string;
+}
+
+/** Una ficha del JSON de planetas, redactada a mano en español con su versión en inglés. */
+export interface FichaCuerpo extends TextosFicha {
+  clave: string;
+  diametroKm: number;
+  en: TextosFicha;
 }
 
 /** Cuerpo de Astronomy Engine para cada clave del JSON. */
@@ -53,7 +58,7 @@ export function lineasDelMes(
   return [
     ...fasesEntre(desde, hasta).map((f) => ({
       fecha: f.fecha,
-      titulo: NOMBRE_CUARTO[f.cuarto],
+      titulo: nombreCuarto(f.cuarto),
       fase: true,
     })),
     ...eventosEntre(desde, hasta, ubicacion, lluvias).map((e) => ({

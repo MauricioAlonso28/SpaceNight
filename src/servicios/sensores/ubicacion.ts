@@ -1,4 +1,8 @@
-import { BORTLE_ESTIMADO, type Ubicacion } from '../../tipos/ubicacion';
+import {
+  BORTLE_ESTIMADO,
+  NOMBRE_GPS,
+  type Ubicacion,
+} from '../../tipos/ubicacion';
 
 /** Pide la posición al navegador; devuelve null si no hay permiso o falla. */
 export function pedirUbicacion(): Promise<Ubicacion | null> {
@@ -9,7 +13,7 @@ export function pedirUbicacion(): Promise<Ubicacion | null> {
     navigator.geolocation.getCurrentPosition(
       (pos) =>
         resolver({
-          nombre: 'Tu ubicación',
+          nombre: NOMBRE_GPS,
           latitud: pos.coords.latitude,
           longitud: pos.coords.longitude,
           altura: pos.coords.altitude ?? 0,

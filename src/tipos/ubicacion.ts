@@ -8,6 +8,9 @@ export interface Ubicacion {
   bortle: number;
 }
 
+/** Nombre guardado cuando la ubicación viene del GPS; se traduce al mostrarlo. */
+export const NOMBRE_GPS = 'Tu ubicación';
+
 /** Bortle supuesto cuando la ubicación viene del GPS y no se conoce su cielo. */
 export const BORTLE_ESTIMADO = 7;
 

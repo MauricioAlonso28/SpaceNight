@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { ListaEventos } from '../../componentes/ListaEventos/ListaEventos';
 import { useJsonPublico, usePasosISS, useTleISS } from '../../estado/datos';
 import { useEstado } from '../../estado/store';
+import { letraCoordenada } from '../../idioma/comunes';
+import { textos } from '../../idioma/idioma';
 import { pasosEntre } from '../../servicios/astro/eventos';
 import { formatearNumero } from '../../servicios/formato';
 import { posicionISS, trazaISS } from '../../servicios/satelites/iss';
@@ -14,6 +16,36 @@ const MS_HORA = 3_600_000;
 const REFRESCO_MS = 5000;
 const MINUTOS_TRAZA = 45;
 
+const ES = {
+  sobre: (lat: number, lon: number) =>
+    `La Estación Espacial está sobre latitud ${lat}°, longitud ${lon}°`,
+  mapa: 'Mapa del mundo',
+  error: 'No se pudo descargar la órbita.',
+  cargando: 'Cargando la órbita…',
+  ahora: (lat: string, lon: string, km: string) =>
+    `Ahora sobre ${lat}, ${lon}, a ${km} km de altura. El punto pequeño eres tú; la línea, su órbita de los últimos y próximos 45 minutos.`,
+  proximos: 'Próximos pasos visibles',
+  noPasa: 'No pasa a la vista en los próximos 3 días.',
+  calculando: 'Calculando los pasos…',
+};
+
+const EN: typeof ES = {
+  sobre: (lat, lon) =>
+    `The Space Station is over latitude ${lat}°, longitude ${lon}°`,
+  mapa: 'World map',
+  error: 'Could not download the orbit.',
+  cargando: 'Loading the orbit…',
+  ahora: (lat, lon, km) =>
+    `Now over ${lat}, ${lon}, ${km} km up. The small dot is you; the line is its orbit over the last and next 45 minutes.`,
+  proximos: 'Next visible passes',
+  noPasa: 'It does not pass in view in the next 3 days.',
+  calculando: 'Working out the passes…',
+};
+
+function coordenada(valor: number, tipo: 'latitud' | 'longitud'): string {
+  return `${formatearNumero(Math.abs(valor), 1)}° ${letraCoordenada(valor, tipo)}`;
+}
+
 /** La Estación Espacial ahora sobre el mapa del mundo, su traza y sus próximos pasos visibles. */
 export function Estacion({
   ahora,
@@ -24,6 +56,7 @@ export function Estacion({
   ubicacion: Ubicacion;
   formato24h: boolean;
 }) {
+  const t = textos({ es: ES, en: EN });
   const hora = Math.floor(ahora.getTime() / MS_HORA);
   const tle = useTleISS(hora);
   const pasos = usePasosISS(ubicacion, hora);
@@ -67,8 +100,11 @@ export function Estacion({
           role="img"
           aria-label={
             orbita?.punto
-              ? `La Estación Espacial está sobre latitud ${Math.round(orbita.punto.latitud)}°, longitud ${Math.round(orbita.punto.longitud)}°`
-              : 'Mapa del mundo'
+              ? t.sobre(
+                  Math.round(orbita.punto.latitud),
+                  Math.round(orbita.punto.longitud),
+                )
+              : t.mapa
           }
         >
           <rect width="360" height="180" className="estacion-mar" />
@@ -99,20 +135,20 @@ export function Estacion({
           )}
         </svg>
         <figcaption>
-          {tle.estado === 'error' && 'No se pudo descargar la órbita.'}
-          {tle.estado === 'cargando' && 'Cargando la órbita…'}
+          {tle.estado === 'error' && t.error}
+          {tle.estado === 'cargando' && t.cargando}
           {orbita?.punto &&
-            `Ahora sobre ${formatearNumero(Math.abs(orbita.punto.latitud), 1)}° ${orbita.punto.latitud >= 0 ? 'N' : 'S'}, ${formatearNumero(Math.abs(orbita.punto.longitud), 1)}° ${orbita.punto.longitud >= 0 ? 'E' : 'O'}, a ${formatearNumero(orbita.punto.alturaKm)} km de altura. El punto pequeño eres tú; la línea, su órbita de los últimos y próximos 45 minutos.`}
+            t.ahora(
+              coordenada(orbita.punto.latitud, 'latitud'),
+              coordenada(orbita.punto.longitud, 'longitud'),
+              formatearNumero(orbita.punto.alturaKm),
+            )}
         </figcaption>
       </figure>
-      <h3 className="estacion-titulo">Próximos pasos visibles</h3>
+      <h3 className="estacion-titulo">{t.proximos}</h3>
       <ListaEventos
         items={proximos.map((e) => itemEvento(e, hoy, formato))}
-        vacia={
-          pasos
-            ? 'No pasa a la vista en los próximos 3 días.'
-            : 'Calculando los pasos…'
-        }
+        vacia={pasos ? t.noPasa : t.calculando}
       />
     </div>
   );
