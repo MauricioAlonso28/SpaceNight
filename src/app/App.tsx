@@ -1,11 +1,27 @@
+import { lazy } from 'react';
 import { HashRouter, Navigate, Route, Routes } from 'react-router';
 import { Layout } from './Layout';
 import { RUTA_AJUSTES, RUTA_INICIAL } from './rutas';
-import { EstaNoche } from '../pantallas/EstaNoche/EstaNoche';
-import { Mapa } from '../pantallas/Mapa/Mapa';
-import { Camara } from '../pantallas/Camara/Camara';
-import { Explorar } from '../pantallas/Explorar/Explorar';
-import { Ajustes } from '../pantallas/Ajustes/Ajustes';
+
+const EstaNoche = lazy(() =>
+  import('../pantallas/EstaNoche/EstaNoche').then((m) => ({
+    default: m.EstaNoche,
+  })),
+);
+const Mapa = lazy(() =>
+  import('../pantallas/Mapa/Mapa').then((m) => ({ default: m.Mapa })),
+);
+const Camara = lazy(() =>
+  import('../pantallas/Camara/Camara').then((m) => ({ default: m.Camara })),
+);
+const Explorar = lazy(() =>
+  import('../pantallas/Explorar/Explorar').then((m) => ({
+    default: m.Explorar,
+  })),
+);
+const Ajustes = lazy(() =>
+  import('../pantallas/Ajustes/Ajustes').then((m) => ({ default: m.Ajustes })),
+);
 
 /** Raíz de la app: HashRouter para que GitHub Pages no dé 404 al recargar. */
 export function App() {

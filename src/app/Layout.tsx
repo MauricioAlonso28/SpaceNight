@@ -1,29 +1,26 @@
-import { Link, Outlet } from 'react-router';
-import { BarraInferior } from './BarraInferior';
-import { RUTA_AJUSTES } from './rutas';
+import { Suspense } from 'react';
+import { Outlet } from 'react-router';
+import { BarraInferior } from '../componentes/BarraInferior/BarraInferior';
+import { Cabecera } from '../componentes/Cabecera/Cabecera';
+import { Fondo3D } from '../componentes/Fondo3D/Fondo3D';
+import { usePedirUbicacionUnaVez, useReloj } from '../estado/hooks';
 import './Layout.css';
 
-/** Marco común: cabecera con acceso a Ajustes, contenido y barra inferior. */
+/** Marco común: fondo 3D, cabecera, la pantalla activa y la barra inferior. */
 export function Layout() {
+  useReloj();
+  usePedirUbicacionUnaVez();
+
   return (
-    <div className="layout">
-      <header className="cabecera">
-        <span className="cabecera-titulo">Tu cielo esta noche</span>
-        <Link
-          to={`/${RUTA_AJUSTES.path}`}
-          className="cabecera-ajustes"
-          aria-label={RUTA_AJUSTES.nombre}
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" />
-          </svg>
-        </Link>
-      </header>
-      <main className="contenido">
-        <Outlet />
+    <>
+      <Fondo3D />
+      <main className="app">
+        <Cabecera />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </main>
       <BarraInferior />
-    </div>
+    </>
   );
 }
