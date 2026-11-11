@@ -1,0 +1,318 @@
+.motor-ciclos {
+  margin-bottom: 24px;
+}
+
+.motor-cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 28px 56px;
+  animation: nasa-fundido 0.35s ease-out;
+}
+
+.motor-figura {
+  margin: 0;
+}
+
+.motor-diagrama {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+.motor-tubo {
+  fill: none;
+  stroke-width: 5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 7 7;
+  animation: motor-fluir 0.9s linear infinite;
+}
+
+.motor-tubo.fino {
+  stroke-width: 2.5;
+}
+
+.motor-tubo.combustible,
+.motor-muestra.combustible {
+  stroke: #ffd166;
+  background: #ffd166;
+}
+
+.motor-tubo.oxidante,
+.motor-muestra.oxidante {
+  stroke: #8fb4ff;
+  background: #8fb4ff;
+}
+
+.motor-tubo.caliente,
+.motor-muestra.caliente {
+  stroke: #ff7d66;
+  background: #ff7d66;
+}
+
+.motor-tubo.gas,
+.motor-muestra.gas {
+  stroke: #c9d2e8;
+  background: #c9d2e8;
+}
+
+.motor-tubo.electrico,
+.motor-muestra.electrico {
+  stroke: #7bd389;
+  background: #7bd389;
+  stroke-dasharray: 2 6;
+}
+
+.motor-tubo.eje,
+.motor-muestra.eje {
+  stroke: #9aa3bd;
+  background: #9aa3bd;
+  stroke-width: 6;
+  stroke-dasharray: none;
+  animation: none;
+}
+
+@keyframes motor-fluir {
+  to {
+    stroke-dashoffset: -14;
+  }
+}
+
+.motor-pieza {
+  transition: opacity 0.25s ease;
+}
+
+.motor-pieza.tenue {
+  opacity: 0.35;
+}
+
+.motor-pieza rect,
+.motor-pieza circle,
+.motor-pieza.escape path:first-of-type {
+  fill: #1b2a5e;
+  stroke: #9fb3ee;
+  stroke-width: 1.5;
+}
+
+.motor-pieza.foco rect,
+.motor-pieza.foco circle,
+.motor-pieza.foco .motor-tobera {
+  stroke: var(--acento);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 8px rgba(255, 125, 102, 0.7));
+}
+
+.motor-pieza text {
+  fill: var(--texto);
+  font-size: 15px;
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+}
+
+.motor-pieza.tanque-f rect {
+  fill: #3d3a3a;
+  stroke: #ffd166;
+}
+
+.motor-pieza.tanque-o rect {
+  fill: #26386e;
+  stroke: #8fb4ff;
+}
+
+.motor-pieza.camisa circle {
+  fill: #ffd166;
+  stroke: #ff7d66;
+}
+
+.motor-giro {
+  fill: none;
+  stroke: #c9d2e8;
+  stroke-width: 1.6;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: motor-girar 0.8s linear infinite;
+}
+
+.turbina .motor-giro {
+  fill: #c9d2e8;
+  stroke: none;
+}
+
+@keyframes motor-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.motor-llamita {
+  fill: #ff9f6b;
+}
+
+.motor-signo {
+  stroke: #7bd389;
+  stroke-width: 2;
+}
+
+.motor-humo {
+  fill: none;
+  stroke: rgba(255, 125, 102, 0.6);
+  stroke-width: 3;
+}
+
+.motor-tobera {
+  fill: #23356d;
+  stroke: #9fb3ee;
+  stroke-width: 1.5;
+}
+
+.motor-chorro {
+  fill: rgba(255, 125, 102, 0.35);
+  stroke: none;
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: motor-latir 0.18s ease-in-out infinite alternate;
+}
+
+.motor-chorro.dentro {
+  fill: rgba(255, 220, 160, 0.6);
+}
+
+@keyframes motor-latir {
+  to {
+    transform: scaleY(0.88);
+  }
+}
+
+.motor-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 16px;
+  margin-top: 8px;
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+}
+
+.motor-leyenda span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.motor-muestra {
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.motor-texto h3 {
+  font-size: clamp(1.7rem, 2.8vw, 2.3rem);
+  margin: 0 0 8px;
+}
+
+.motor-resumen {
+  color: var(--texto-suave);
+  margin: 0 0 18px;
+  max-width: 60ch;
+}
+
+.motor-pasos {
+  list-style: none;
+  margin: 10px 0 18px;
+  padding: 0;
+}
+
+.motor-pasos button {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 6px;
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--texto);
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.motor-pasos button:hover,
+.motor-pasos button[aria-pressed='true'] {
+  background: var(--pista);
+}
+
+.motor-pasos button span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid var(--acento);
+  color: var(--acento);
+  font-size: 0.78rem;
+}
+
+.motor-datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 28px;
+  margin: 0;
+}
+
+.motor-datos dt {
+  color: var(--dato);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.motor-datos dd {
+  margin: 4px 0 0;
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+}
+
+.motor-presion {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.motor-presion i {
+  width: 22px;
+  height: 8px;
+  border-radius: 3px;
+  background: var(--pista);
+}
+
+.motor-presion i.lleno {
+  background: var(--acento);
+}
+
+.motor-presion span {
+  margin-left: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motor-tubo,
+  .motor-giro,
+  .motor-chorro {
+    animation: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .motor-cuerpo {
+    grid-template-columns: 1fr;
+  }
+
+  .motor-datos {
+    grid-template-columns: 1fr;
+  }
+}

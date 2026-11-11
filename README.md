@@ -73,3 +73,7 @@ falta para la órbita baja, la geoestacionaria, la Luna, Marte y Júpiter.
 «Cohetes a escala» (`#/cohete/escala`) dibuja trece cohetes reales a la misma
 escala junto a la Estatua de la Libertad, con sus cifras públicas aproximadas
 (`src/servicios/cohete/cohetes.ts`).
+
+«Motores por dentro» (`#/cohete/motores`) anima los seis ciclos de motor
+(presión, bomba eléctrica, generador de gas, combustión por etapas, flujo
+completo y expansor) a partir de `src/servicios/cohete/ciclos.ts`.
