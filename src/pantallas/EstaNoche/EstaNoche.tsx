@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { Luna3D } from '../../componentes/Luna3D/Luna3D';
+import { usePasosISS } from '../../estado/datos';
 import { useAhora, useFechaVista } from '../../estado/hooks';
 import { useEstado } from '../../estado/store';
 import { datosLuna } from '../../servicios/astro/luna';
-import { ventanaNoche } from '../../servicios/astro/noche';
+import { HORAS_NOCHE, ventanaNoche } from '../../servicios/astro/noche';
 import { nochePlanetas } from '../../servicios/astro/planetas';
 import { nocheSol } from '../../servicios/astro/sol';
 import { formatearDiaCorto, formatearHora } from '../../servicios/formato';
@@ -14,6 +15,8 @@ import { NocheHoraPorHora } from './NocheHoraPorHora';
 import { PlanetasVisibles } from './PlanetasVisibles';
 import { NOMBRE_FASE, notaFase } from './textos';
 import './EstaNoche.css';
+
+const MS_HORA = 3_600_000;
 
 /** Portada: la Luna, los planetas, la noche hora por hora, el cielo y los eventos. */
 export function EstaNoche() {
@@ -29,6 +32,11 @@ export function EstaNoche() {
     [inicioNoche, ubicacion],
   );
   const hemisferioSur = ubicacion.latitud < 0;
+  const iss = usePasosISS(ubicacion, Math.floor(ahora.getTime() / MS_HORA));
+  const nocheCubierta =
+    iss !== null &&
+    inicioNoche >= iss.desde.getTime() &&
+    inicioNoche + HORAS_NOCHE * MS_HORA <= iss.hasta.getTime();
 
   const hora = (f: Date | null) =>
     f ? formatearHora(f, ubicacion.zona, formato24h) : '—';
@@ -101,6 +109,7 @@ export function EstaNoche() {
           ahora={ahora}
           zona={ubicacion.zona}
           formato24h={formato24h}
+          estacion={nocheCubierta ? iss.pasos : null}
         />
       </section>
       <CieloYEventos
@@ -109,10 +118,11 @@ export function EstaNoche() {
         ahora={ahora}
         ubicacion={ubicacion}
         formato24h={formato24h}
+        iss={iss}
       />
       <p className="pie">
-        Clima de Open-Meteo, con una hora de caché. Lluvias de meteoros según la
-        IMO. Los pasos de la Estación Espacial llegan en la fase 4.
+        Clima de Open-Meteo, con una hora de caché. Órbita de la Estación de
+        CelesTrak, con 12 horas de caché. Lluvias de meteoros según la IMO.
       </p>
     </>
   );

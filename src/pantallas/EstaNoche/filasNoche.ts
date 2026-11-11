@@ -6,6 +6,7 @@ import {
   type VentanaNoche,
 } from '../../servicios/astro/noche';
 import type { NochePlaneta } from '../../servicios/astro/planetas';
+import type { PasoISS } from '../../servicios/satelites/iss';
 import { NOMBRE_PLANETA, PISTA_PLANETA } from './textosPlanetas';
 
 const TONOS_CIELO: readonly [number, [number, number, number]][] = [
@@ -64,8 +65,32 @@ function describir(
 }
 
 /**
- * Filas de la línea: cielo, Luna y cada planeta visible.
+ * Fila de la Estación: un punto por cada paso visible que empieza dentro de la noche.
+ * @param pasos todos los pasos calculados, o null si esa noche queda fuera de la predicción
+ */
+export function filaEstacion(
+  pasos: PasoISS[] | null,
+  ventana: VentanaNoche,
+  hora: (fraccion: number) => string,
+): FilaLinea | null {
+  if (!pasos) return null;
+  const puntos = pasos
+    .map((p) => fraccionVentana(p.aparece.fecha, ventana))
+    .filter((f) => f >= 0 && f <= 1);
+  return {
+    nombre: 'Estación',
+    descripcion:
+      puntos.length === 0
+        ? 'La Estación Espacial no pasa a la vista esta noche'
+        : `La Estación Espacial pasa a la vista a las ${puntos.map(hora).join(' y a las ')}`,
+    puntos,
+  };
+}
+
+/**
+ * Filas de la línea: cielo, Luna, cada planeta visible y la Estación.
  * @param hora convierte una fracción de la ventana en texto de hora
+ * @param estacion pasos de la Estación, o null si esa noche no tiene predicción
  */
 export function filasNoche(
   ventana: VentanaNoche,
@@ -74,6 +99,7 @@ export function filasNoche(
   luna: Posicion[],
   planetas: NochePlaneta[],
   hora: (fraccion: number) => string,
+  estacion: PasoISS[] | null = null,
 ): FilaLinea[] {
   const tramosLuna = tramosSobreHorizonte(instantes, luna, ventana);
   const filas: FilaLinea[] = [
@@ -98,5 +124,7 @@ export function filasNoche(
       tramos: lista,
     });
   }
+  const filaIss = filaEstacion(estacion, ventana, hora);
+  if (filaIss) filas.push(filaIss);
   return filas;
 }

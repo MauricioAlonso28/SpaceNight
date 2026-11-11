@@ -47,6 +47,17 @@ export function formatearDiaMes(fecha: Date, zona: string): string {
   }).format(fecha);
 }
 
+/** Día de la semana y del mes como «jueves 12». */
+export function formatearDiaSemana(fecha: Date, zona: string): string {
+  return formateador(`semana|${zona}`, {
+    timeZone: zona,
+    weekday: 'long',
+    day: 'numeric',
+  })
+    .format(fecha)
+    .replace(',', '');
+}
+
 /** Fecha corta como «24 nov». */
 export function formatearDiaCorto(fecha: Date, zona: string): string {
   return formateador(`corta|${zona}`, {

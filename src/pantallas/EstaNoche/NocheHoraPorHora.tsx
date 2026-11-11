@@ -7,11 +7,12 @@ import {
 } from '../../servicios/astro/noche';
 import type { NochePlaneta } from '../../servicios/astro/planetas';
 import { formatearHora } from '../../servicios/formato';
+import type { PasoISS } from '../../servicios/satelites/iss';
 import { filasNoche } from './filasNoche';
 
 const MS_HORA = 3_600_000;
 
-/** Panel Tu noche, hora por hora: cielo, Luna y planetas de 18:00 a 06:00. */
+/** Panel Tu noche, hora por hora: cielo, Luna, planetas y Estación de 18:00 a 06:00. */
 export function NocheHoraPorHora({
   ventana,
   instantes,
@@ -21,6 +22,7 @@ export function NocheHoraPorHora({
   ahora,
   zona,
   formato24h,
+  estacion,
 }: {
   ventana: VentanaNoche;
   instantes: Date[];
@@ -30,6 +32,7 @@ export function NocheHoraPorHora({
   ahora: Date;
   zona: string;
   formato24h: boolean;
+  estacion: PasoISS[] | null;
 }) {
   const enHora = (f: number) =>
     formatearHora(
@@ -42,7 +45,15 @@ export function NocheHoraPorHora({
     posicion: h / HORAS_NOCHE,
   }));
   const posAhora = fraccionVentana(ahora, ventana);
-  const filas = filasNoche(ventana, instantes, sol, luna, planetas, enHora);
+  const filas = filasNoche(
+    ventana,
+    instantes,
+    sol,
+    luna,
+    planetas,
+    enHora,
+    estacion,
+  );
 
   return (
     <div className="panel">
@@ -54,6 +65,7 @@ export function NocheHoraPorHora({
       <p className="leyenda">
         Cada barra marca cuándo está sobre el horizonte. La primera fila muestra
         cuándo el cielo está oscuro de verdad.
+        {estacion && ' Los puntos son los pasos visibles de la Estación.'}
       </p>
     </div>
   );
