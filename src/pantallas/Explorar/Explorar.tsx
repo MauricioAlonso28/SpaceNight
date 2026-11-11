@@ -47,6 +47,11 @@ const ES = {
       'Solar System Scope',
       'CC BY 4.0',
     ],
+    [
+      'NASA en vivo',
+      'NeoWs, EPIC, EONET, JPL Fireball y Sentry, Exoplanet Archive, NASA Image Library',
+      'datos públicos de la NASA',
+    ],
   ] as [string, string, string][],
 };
 
@@ -82,6 +87,11 @@ const EN: typeof ES = {
     ['World map', 'Natural Earth', 'public domain'],
     ['Planet fact sheets', 'NASA Planetary Fact Sheets', 'written by hand'],
     ['Sun, Moon and planet textures', 'Solar System Scope', 'CC BY 4.0'],
+    [
+      'NASA live',
+      'NeoWs, EPIC, EONET, JPL Fireball and Sentry, Exoplanet Archive, NASA Image Library',
+      'NASA public data',
+    ],
   ],
 };
 

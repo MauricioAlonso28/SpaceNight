@@ -118,3 +118,10 @@
   font-size: 0.78rem;
   white-space: nowrap;
 }
+
+@media (max-width: 899px) {
+  .eventos-ficha {
+    position: static;
+    margin-top: 12px;
+  }
+}

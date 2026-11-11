@@ -68,3 +68,14 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 - El transbordador viene comprimido con [Draco](https://github.com/google/draco), de Google. Su decodificador (`draco_decoder.wasm` y `draco_wasm_wrapper.js`) viene con three.js en `three/examples/jsm/libs/draco/gltf/`, y Vite lo copia a `assets/` al compilar; solo se descarga al abrir ese modelo.
 - Licencia: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+## nasa/*.json y NASA en vivo
+
+Los genera `scripts/datos-nasa.mjs` en cada despliegue. Las fuentes en vivo se piden desde el navegador.
+
+- [NASA NeoWs](https://api.nasa.gov/): asteroides que pasan cerca de la Tierra.
+- [JPL Fireball](https://ssd-api.jpl.nasa.gov/doc/fireball.html): bólidos registrados por sensores del gobierno de EE. UU.
+- [JPL Sentry](https://ssd-api.jpl.nasa.gov/doc/sentry.html): lista de vigilancia de impactos.
+- [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/), tabla `pscomppars`: operado por Caltech/IPAC para la NASA.
+- En vivo: [NASA EONET](https://eonet.gsfc.nasa.gov/), [NASA EPIC](https://epic.gsfc.nasa.gov/) (cámara de la nave DSCOVR de NOAA) y la [NASA Image and Video Library](https://images.nasa.gov/).
+- Uso: los datos y la mayoría de las imágenes de la NASA no tienen derechos de autor en EE. UU. según sus [pautas de uso](https://www.nasa.gov/nasa-brand-center/images-and-media/). Se cita la fuente de cada uno y nada aquí sugiere que la NASA respalde esta app. Algunas imágenes del archivo pueden tener créditos de terceros, que se ven en su página de images.nasa.gov.

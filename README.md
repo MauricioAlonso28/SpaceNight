@@ -31,3 +31,22 @@ la Estación usan la última copia guardada).
 Los catálogos de `public/data/` se regeneran con los scripts de `scripts/`
 (estrellas HYG, constelaciones de d3-celestial y mapa del mundo de Natural
 Earth). Las fuentes y licencias están en `public/data/LICENCIAS.md`.
+
+## NASA en vivo
+
+Seis vistas con datos de la NASA (`#/nasa`): asteroides de la semana, la Tierra
+desde EPIC, eventos naturales de EONET, bólidos y la lista Sentry, exoplanetas y
+el archivo de imágenes. Hay avisos en vivo en la campana de la cabecera.
+
+- EONET, EPIC y la biblioteca de imágenes se piden en vivo desde el navegador.
+- NeoWs, JPL Fireball, JPL Sentry y el Exoplanet Archive no se pueden pedir
+  desde el navegador (falta CORS o hace falta clave). `npm run datos:nasa`
+  (`scripts/datos-nasa.mjs`) los descarga y recorta en `public/data/nasa/`.
+  Corre solo antes de cada `npm run build`, así que cada despliegue los
+  refresca. Esos archivos no se guardan en git.
+- La clave de NeoWs sale de la variable `NASA_API_KEY`. Sin ella se usa
+  `DEMO_KEY`, que admite 10 consultas por hora.
+
+Pendiente por permisos del token (falta el alcance `workflow`): añadir al flujo
+de despliegue un `schedule` cada 6 horas y pasar `NASA_API_KEY` desde los
+secretos del repo.

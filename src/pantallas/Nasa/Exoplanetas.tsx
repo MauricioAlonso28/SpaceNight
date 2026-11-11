@@ -283,7 +283,11 @@ function Diagrama({
           return (
             <g key={p.clave} className="exo-solar">
               <circle cx={x(kx)} cy={y(ky)} r="6" />
-              <text x={x(kx) + 9} y={y(ky) + 4}>
+              <text
+                x={x(kx) > tam.w - 80 ? x(kx) - 9 : x(kx) + 9}
+                y={y(ky) + 4}
+                textAnchor={x(kx) > tam.w - 80 ? 'end' : 'start'}
+              >
                 {nombre}
               </text>
             </g>
