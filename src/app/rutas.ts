@@ -24,11 +24,19 @@ export const RUTAS_BARRA: readonly Ruta[] = [
   { path: 'explorar', nombre: { es: 'Explorar', en: 'Explore' } },
 ];
 
-/** La sección del cohete, solo para escritorio. */
+/** El cohete en 3D, solo para escritorio. */
 export const RUTA_COHETE: Ruta = {
   path: 'cohete',
-  nombre: { es: 'Cohete', en: 'Rocket' },
+  nombre: { es: 'Cohete en 3D', en: '3D rocket' },
 };
+
+/** El resto de la sección del cohete, para cualquier pantalla. */
+export const RUTAS_COHETE: readonly Ruta[] = [
+  {
+    path: 'cohete/lanzamientos',
+    nombre: { es: 'Próximos lanzamientos', en: 'Upcoming launches' },
+  },
+];
 
 /** Portada de NASA en vivo, con una línea viva de cada vista. */
 export const RUTA_NASA: Ruta = {
@@ -73,7 +81,7 @@ export const GRUPOS: readonly GrupoRutas[] = [
   {
     id: 'cohete',
     nombre: { es: 'Cohete', en: 'Rocket' },
-    rutas: [RUTA_COHETE],
+    rutas: [RUTA_COHETE, ...RUTAS_COHETE],
   },
   {
     id: 'nasa',

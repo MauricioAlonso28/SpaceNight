@@ -16,6 +16,7 @@ export interface FuenteNasa {
  * Cabecera común de las vistas de NASA en vivo: punto en vivo, título, una línea y de dónde salen los datos.
  * @param generado cuándo se descargaron los datos (ISO); sin él, dice que se piden en vivo
  * @param extra lo que va a la derecha del título, como los filtros
+ * @param kicker la sección sobre el título; por defecto NASA en vivo
  */
 export function CabezaNasa({
   id,
@@ -24,6 +25,7 @@ export function CabezaNasa({
   fuentes,
   generado,
   extra,
+  kicker,
 }: {
   id: string;
   titulo: string;
@@ -31,6 +33,7 @@ export function CabezaNasa({
   fuentes: FuenteNasa[];
   generado?: string | null;
   extra?: ReactNode;
+  kicker?: string;
 }) {
   const ahora = useAhora();
   return (
@@ -38,7 +41,7 @@ export function CabezaNasa({
       <div>
         <p className="nasa-kicker">
           <span className="nasa-vivo" aria-hidden="true" />
-          {textos({ es: 'NASA en vivo', en: 'NASA live' })}
+          {kicker ?? textos({ es: 'NASA en vivo', en: 'NASA live' })}
         </p>
         <h2 id={id} className="nasa-titulo">
           {titulo}

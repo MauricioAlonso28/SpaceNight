@@ -6,6 +6,7 @@ import {
   RUTA_AJUSTES,
   RUTA_INICIAL,
   RUTAS_BARRA,
+  RUTAS_COHETE,
   RUTAS_NASA,
 } from '../src/app/rutas';
 
@@ -25,6 +26,7 @@ describe('rutas', () => {
     const todas = GRUPOS.flatMap((g) => g.rutas.map((r) => r.path));
     expect(new Set(todas).size).toBe(todas.length);
     expect(todas).toContain('cohete');
+    expect(RUTAS_COHETE.every((r) => r.path.startsWith('cohete/'))).toBe(true);
   });
 
   it('la ruta inicial es una pantalla de la barra', () => {

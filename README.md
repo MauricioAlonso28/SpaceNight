@@ -50,3 +50,11 @@ Sentry, exoplanetas y el archivo de imágenes con la foto del día. Hay avisos e
 
 El flujo de despliegue corre también cada 6 horas (`schedule`) y pasa
 `NASA_API_KEY` desde los secretos del repo al paso de build.
+
+## Cohete
+
+Además del cohete en 3D (solo escritorio), la sección tiene vistas para
+cualquier pantalla: los próximos lanzamientos del mundo (Launch Library 2, de
+The Space Devs, descargado por el mismo `scripts/datos-nasa.mjs` en
+`public/data/nasa/lanzamientos.json`), con cuenta atrás, secuencia de vuelo y
+avisos en la campana para los que despegan en las próximas 6 horas.

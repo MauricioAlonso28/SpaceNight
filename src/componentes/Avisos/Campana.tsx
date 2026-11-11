@@ -25,6 +25,7 @@ const ES = {
     bolido: 'Bólidos nuevos',
     tierra: 'Fotos nuevas de la Tierra',
     exoplanetas: 'Cambios en el total de exoplanetas',
+    lanzamiento: 'Cohetes que despegan en las próximas 6 horas',
   } as Record<Regla, string>,
   cerrar: 'Cerrar',
 };
@@ -46,6 +47,7 @@ const EN: typeof ES = {
     bolido: 'New fireballs',
     tierra: 'New photos of Earth',
     exoplanetas: 'Changes in the exoplanet total',
+    lanzamiento: 'Rockets lifting off in the next 6 hours',
   },
   cerrar: 'Close',
 };
