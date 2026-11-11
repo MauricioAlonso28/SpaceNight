@@ -44,7 +44,7 @@ el archivo de imágenes. Hay avisos en vivo en la campana de la cabecera.
   (`scripts/datos-nasa.mjs`) los descarga y recorta en `public/data/nasa/`.
   Corre solo antes de cada `npm run build`, así que cada despliegue los
   refresca. Esos archivos no se guardan en git.
-- La clave de NeoWs sale de la variable `NASA_API_KEY`. Sin ella se usa
+- La clave de NeoWs sale de `NASA_API_KEY`, en `.env.local` (ignorado por git) o en el entorno. Sin ella se usa
   `DEMO_KEY`, que admite 10 consultas por hora.
 
 Pendiente por permisos del token (falta el alcance `workflow`): añadir al flujo
