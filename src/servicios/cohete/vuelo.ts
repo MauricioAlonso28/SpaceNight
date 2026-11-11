@@ -49,7 +49,7 @@ export const RESERVA: Record<Recuperacion, number> = {
   ninguna: 0,
 };
 
-/** Un instante del vuelo. Alturas y distancias en m, velocidades en m/s, aceleración en g, presión en Pa. */
+/** Un instante del vuelo. Alturas y distancias en m, velocidades en m/s, aceleración en g, presión en Pa, empuje en N. */
 export interface Muestra {
   t: number;
   altura: number;
@@ -61,6 +61,7 @@ export interface Muestra {
   masa: number;
   etapa: 1 | 2;
   angulo: number;
+  empuje: number;
 }
 
 /** Un hito del vuelo, en segundos desde el despegue. */
@@ -193,6 +194,7 @@ function muestra(
   presion: number,
   etapa: 1 | 2,
   angulo: number,
+  empuje: number,
 ): Muestra {
   const g = geometria(e);
   const { ax, ay } = velocidadAire(e);
@@ -207,6 +209,7 @@ function muestra(
     masa: e.masa,
     etapa,
     angulo,
+    empuje,
   };
 }
 
@@ -292,7 +295,7 @@ export function simularAscenso(
     quemado += m.gasto * dt;
     t += dt;
     if (r.presion > maxQ.q) maxQ = { t, q: r.presion };
-    anotar(muestra(t, e, r.aceleracion, r.presion, 1, angulo));
+    anotar(muestra(t, e, r.aceleracion, r.presion, 1, angulo, m.empuje));
   }
   hitos.push(
     { id: 'maxq', t: Math.round(maxQ.t) },
@@ -310,7 +313,7 @@ export function simularAscenso(
     const r = paso(e, dt, 0, 0, 0, 0.3);
     e = r.e;
     t += dt;
-    anotar(muestra(t, e, r.aceleracion, r.presion, 2, 0));
+    anotar(muestra(t, e, r.aceleracion, r.presion, 2, 0, 0));
   }
   hitos.push({ id: 'ses', t: Math.round(t) });
 
@@ -330,7 +333,7 @@ export function simularAscenso(
     e = r.e;
     restante -= m.gasto * dt;
     t += dt;
-    anotar(muestra(t, e, r.aceleracion, r.presion, 2, angulo));
+    anotar(muestra(t, e, r.aceleracion, r.presion, 2, angulo, m.empuje));
     const o = orbitaDe(e);
     terminado = o.perigeo > objetivo - 25_000 && o.perigeo > 140_000;
   }
@@ -415,7 +418,7 @@ export function simularRegreso(
     t += dt;
     if (Math.floor(t) > ultima) {
       ultima = Math.floor(t);
-      muestras.push(muestra(t, e, r.aceleracion, r.presion, 1, angulo));
+      muestras.push(muestra(t, e, r.aceleracion, r.presion, 1, angulo, empuje));
     }
   };
   const quemar = (q: Quema, inicio: Hito['id'], fin: Hito['id']) => {
