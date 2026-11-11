@@ -4,7 +4,8 @@ import { direccionDe } from '../../servicios/astro/cielo';
 import { posicion } from '../../servicios/astro/noche';
 import { CUERPO, PLANETAS } from '../../servicios/astro/planetas';
 import type { Ubicacion } from '../../tipos/ubicacion';
-import { NOMBRE_PLANETA, PISTA_PLANETA } from '../EstaNoche/textosPlanetas';
+import { nombreAstro, nombrePlaneta } from '../../idioma/comunes';
+import { PISTA_PLANETA } from '../EstaNoche/textosPlanetas';
 
 /** Un cuerpo del sistema solar en el mapa, con lo que su ficha necesita. */
 export interface CuerpoConDatos extends CuerpoMapa {
@@ -15,8 +16,7 @@ export interface CuerpoConDatos extends CuerpoMapa {
 }
 
 const FIJOS: readonly {
-  clave: string;
-  nombre: string;
+  clave: 'sol' | 'luna';
   cuerpo: Body;
   tipo: 'Sol' | 'Luna';
   color: string;
@@ -24,7 +24,6 @@ const FIJOS: readonly {
 }[] = [
   {
     clave: 'sol',
-    nombre: 'Sol',
     cuerpo: Body.Sun,
     tipo: 'Sol',
     color: '#ffd27a',
@@ -32,7 +31,6 @@ const FIJOS: readonly {
   },
   {
     clave: 'luna',
-    nombre: 'Luna',
     cuerpo: Body.Moon,
     tipo: 'Luna',
     color: '#f3ead2',
@@ -51,7 +49,7 @@ export function cuerposEn(fecha: Date, ubicacion: Ubicacion): CuerpoConDatos[] {
     const p = posicion(f.cuerpo, fecha, ubicacion);
     return {
       clave: f.clave,
-      nombre: f.nombre,
+      nombre: nombreAstro(f.clave),
       tipo: f.tipo,
       color: f.color,
       tamano: f.tamano,
@@ -65,7 +63,7 @@ export function cuerposEn(fecha: Date, ubicacion: Ubicacion): CuerpoConDatos[] {
     const magnitud = Illumination(CUERPO[planeta], fecha).mag;
     return {
       clave: planeta,
-      nombre: NOMBRE_PLANETA[planeta],
+      nombre: nombrePlaneta(planeta),
       tipo: 'Planeta' as const,
       color: PISTA_PLANETA[planeta],
       tamano: tamanoPlaneta(magnitud),

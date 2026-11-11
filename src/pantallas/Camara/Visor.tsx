@@ -14,7 +14,54 @@ import {
   type Bases,
   type Lectura,
 } from '../../servicios/sensores/rotacion';
+import { textos } from '../../idioma/idioma';
 import type { ObjetoCamara } from './objetosCamara';
+
+const ES = {
+  region: 'Modo cámara',
+  salir: 'Salir',
+  objetivo: 'Objeto a buscar',
+  centra: (n: string) => `Centra ${n} en el círculo y toca Listo.`,
+  elObjeto: 'el objeto',
+  listo: 'Listo',
+  cancelar: 'Cancelar',
+  calibrar: (n: string) => `Calibrar con ${n}`,
+  unObjeto: 'un objeto',
+  esperando: 'Leyendo la brújula…',
+  sinDatos:
+    'No llegan datos de orientación. En un ordenador no hay brújula ni giroscopio: prueba en el móvil o usa el Mapa del cielo.',
+  sinPermiso:
+    'Sin permiso de movimiento no se sabe hacia dónde apuntas. En iPhone se activa en Ajustes › Safari › Movimiento y orientación; luego vuelve a entrar.',
+  relativa:
+    'Este navegador no da el norte: calibra con la Luna o un planeta antes de fiarte de las etiquetas.',
+  normal:
+    'Si las etiquetas se desvían, mueve el móvil haciendo un 8 y calibra con la Luna o un planeta brillante.',
+};
+
+const EN: typeof ES = {
+  region: 'Camera mode',
+  salir: 'Exit',
+  objetivo: 'Object to find',
+  centra: (n) => `Center ${n} in the circle and tap Done.`,
+  elObjeto: 'the object',
+  listo: 'Done',
+  cancelar: 'Cancel',
+  calibrar: (n) => `Calibrate with ${n}`,
+  unObjeto: 'an object',
+  esperando: 'Reading the compass…',
+  sinDatos:
+    'No orientation data is arriving. A computer has no compass or gyroscope: try on your phone or use the Sky map.',
+  sinPermiso:
+    'Without motion permission the app cannot tell where you are pointing. On iPhone turn it on in Settings › Safari › Motion & Orientation Access, then come back.',
+  relativa:
+    'This browser does not give north: calibrate with the Moon or a planet before trusting the labels.',
+  normal:
+    'If the labels drift, move your phone in a figure 8 and calibrate with the Moon or a bright planet.',
+};
+
+function t() {
+  return textos({ es: ES, en: EN });
+}
 
 export const FOV_LADO_LARGO = 65;
 const SUAVIZADO = 0.2;
@@ -157,7 +204,7 @@ export function Visor({
   };
 
   return createPortal(
-    <div className="visor" role="region" aria-label="Modo cámara">
+    <div className="visor" role="region" aria-label={t().region}>
       {stream ? (
         <video ref={video} className="visor-video" autoPlay playsInline muted />
       ) : (
@@ -188,10 +235,10 @@ export function Visor({
       </div>
       <div className="visor-arriba">
         <button type="button" className="boton" onClick={alSalir}>
-          Salir
+          {t().salir}
         </button>
         <label className="oculto" htmlFor="objetivo">
-          Objeto a buscar
+          {t().objetivo}
         </label>
         <select
           id="objetivo"
@@ -211,24 +258,21 @@ export function Visor({
       <div className="visor-abajo panel">
         {calibrando ? (
           <>
-            <p>
-              Centra {elegido?.nombre ?? 'el objeto'} en el círculo y toca
-              Listo.
-            </p>
+            <p>{t().centra(elegido?.nombre ?? t().elObjeto)}</p>
             <div className="visor-botones">
               <button
                 type="button"
                 className="boton"
                 onClick={terminarCalibracion}
               >
-                Listo
+                {t().listo}
               </button>
               <button
                 type="button"
                 className="boton"
                 onClick={() => setCalibrando(false)}
               >
-                Cancelar
+                {t().cancelar}
               </button>
             </div>
           </>
@@ -245,7 +289,7 @@ export function Visor({
                   !elegido || estado === 'sin-datos' || estado === 'sin-permiso'
                 }
               >
-                Calibrar con {elegido?.nombre ?? 'un objeto'}
+                {t().calibrar(elegido?.nombre ?? t().unObjeto)}
               </button>
             </div>
           </>
@@ -259,14 +303,14 @@ export function Visor({
 function textoEstado(estado: EstadoSensor): string {
   switch (estado) {
     case 'esperando':
-      return 'Leyendo la brújula…';
+      return t().esperando;
     case 'sin-datos':
-      return 'No llegan datos de orientación. En un ordenador no hay brújula ni giroscopio: prueba en el móvil o usa el Mapa del cielo.';
+      return t().sinDatos;
     case 'sin-permiso':
-      return 'Sin permiso de movimiento no se sabe hacia dónde apuntas. En iPhone se activa en Ajustes › Safari › Movimiento y orientación; luego vuelve a entrar.';
+      return t().sinPermiso;
     case 'relativa':
-      return 'Este navegador no da el norte: calibra con la Luna o un planeta antes de fiarte de las etiquetas.';
+      return t().relativa;
     default:
-      return 'Si las etiquetas se desvían, mueve el móvil haciendo un 8 y calibra con la Luna o un planeta brillante.';
+      return t().normal;
   }
 }

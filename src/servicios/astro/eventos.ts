@@ -27,6 +27,7 @@ export const OSCURECIMIENTO_MINIMO = 0.01;
 export interface Lluvia {
   codigo: string;
   nombre: string;
+  nombreEn: string;
   pico: string;
   tasa: number;
   ar: number;

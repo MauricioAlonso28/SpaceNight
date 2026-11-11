@@ -86,6 +86,7 @@ describe('estado guardado', () => {
       formato24h: false,
       modoRojo: true,
       calibracionBrujula: 0,
+      idioma: 'auto',
     });
   });
 });

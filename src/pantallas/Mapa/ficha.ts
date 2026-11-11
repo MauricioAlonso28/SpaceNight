@@ -9,7 +9,9 @@ import type {
   FilaEstrella,
 } from '../../servicios/astro/estrellas';
 import { rumbo } from '../../servicios/astro/planetas';
-import { RUMBO_LARGO } from '../EstaNoche/textosPlanetas';
+import { rumboLargo } from '../../idioma/comunes';
+import { textos } from '../../idioma/idioma';
+import { formatearDecimal } from '../../servicios/formato';
 import type { CuerpoConDatos } from './cuerpos';
 
 /** El contenido de la ficha que se abre al tocar un objeto. */
@@ -19,24 +21,50 @@ export interface Ficha {
   datos: [string, string][];
 }
 
-function decimal(n: number): string {
-  const redondeado = Math.round(n * 10) / 10 || 0;
-  return redondeado.toFixed(1).replace('.', ',').replace('-', '−');
+const ES = {
+  ahora: 'Ahora',
+  bajo: (r: string) => `bajo el horizonte, hacia ${r}`,
+  altura: 'Altura',
+  direccion: 'Dirección',
+  hacia: (r: string) => `hacia ${r}`,
+  magnitud: 'Magnitud',
+  tipo: { Planeta: 'Planeta', Luna: 'Satélite de la Tierra', Sol: 'Estrella' },
+  estrella: 'Estrella',
+  estrellaDe: (c: string) => `Estrella de ${c}`,
+  masBrillante: 'Estrella más brillante',
+  constelacion: (latin: string) => `Constelación · ${latin}`,
+};
+
+const EN: typeof ES = {
+  ahora: 'Now',
+  bajo: (r) => `below the horizon, toward ${r}`,
+  altura: 'Altitude',
+  direccion: 'Direction',
+  hacia: (r) => `toward ${r}`,
+  magnitud: 'Magnitude',
+  tipo: { Planeta: 'Planet', Luna: "Earth's satellite", Sol: 'Star' },
+  estrella: 'Star',
+  estrellaDe: (c) => `Star in ${c}`,
+  masBrillante: 'Brightest star',
+  constelacion: () => 'Constellation',
+};
+
+function t() {
+  return textos({ es: ES, en: EN });
 }
 
+const decimal = (n: number) => formatearDecimal(n);
+
 function posicionTexto(altura: number, azimut: number): [string, string][] {
-  if (altura < 0) {
-    return [
-      ['Ahora', `bajo el horizonte, hacia ${RUMBO_LARGO[rumbo(azimut)]}`],
-    ];
-  }
+  const lado = rumboLargo(rumbo(azimut));
+  if (altura < 0) return [[t().ahora, t().bajo(lado)]];
   return [
-    ['Altura', `${Math.round(altura)}°`],
-    ['Dirección', `hacia ${RUMBO_LARGO[rumbo(azimut)]}`],
+    [t().altura, `${Math.round(altura)}°`],
+    [t().direccion, t().hacia(lado)],
   ];
 }
 
-/** Nombre en español de la constelación de una estrella, por su abreviatura (Ori, Cru…). */
+/** Nombre de la constelación de una estrella, por su abreviatura (Ori, Cru…). */
 export function nombreConstelacion(
   abreviatura: string,
   constelaciones: Constelacion[],
@@ -47,16 +75,11 @@ export function nombreConstelacion(
 }
 
 function fichaCuerpo(c: CuerpoConDatos): Ficha {
-  const subtitulos = {
-    Planeta: 'Planeta',
-    Luna: 'Satélite de la Tierra',
-    Sol: 'Estrella',
-  };
   return {
     titulo: c.nombre,
-    subtitulo: subtitulos[c.tipo],
+    subtitulo: t().tipo[c.tipo],
     datos: [
-      ['Magnitud', decimal(c.magnitud)],
+      [t().magnitud, decimal(c.magnitud)],
       ...posicionTexto(c.altura, c.azimut),
     ],
   };
@@ -70,14 +93,14 @@ function fichaEstrella(
   const [ar, dec, mag, , nombre, designacion, con] = fila;
   const h = horizontalDe(aplicar(matriz, vectorEcuatorial(ar, dec)));
   return {
-    titulo: nombre || designacion || 'Estrella',
+    titulo: nombre || designacion || t().estrella,
     subtitulo: [
       nombre && designacion,
-      `Estrella de ${nombreConstelacion(con, constelaciones)}`,
+      t().estrellaDe(nombreConstelacion(con, constelaciones)),
     ]
       .filter(Boolean)
       .join(' · '),
-    datos: [['Magnitud', decimal(mag)], ...posicionTexto(h.altura, h.azimut)],
+    datos: [[t().magnitud, decimal(mag)], ...posicionTexto(h.altura, h.azimut)],
   };
 }
 
@@ -91,14 +114,14 @@ function fichaConstelacion(
   const estrella: [string, string][] = brillante
     ? [
         [
-          'Estrella más brillante',
+          t().masBrillante,
           `${brillante[4] || brillante[5]} (${decimal(brillante[2])})`,
         ],
       ]
     : [];
   return {
     titulo: c.nombre,
-    subtitulo: `Constelación · ${c.latin}`,
+    subtitulo: t().constelacion(c.latin),
     datos: [...estrella, ...posicionTexto(h.altura, h.azimut)],
   };
 }

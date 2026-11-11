@@ -6,6 +6,7 @@ import {
   usePronostico,
   type PasosCalculados,
 } from '../../estado/datos';
+import { textos } from '../../idioma/idioma';
 import { pasosEntre } from '../../servicios/astro/eventos';
 import { fraccionIluminada } from '../../servicios/astro/luna';
 import { nocheSol } from '../../servicios/astro/sol';
@@ -18,6 +19,24 @@ import { itemEvento } from './textosEventos';
 export const DIAS_EVENTOS = 30;
 const MS_HORA = 3_600_000;
 const HORAS_ORBITA_VIEJA = 24;
+
+const ES = {
+  condiciones: '¿Se ve bien hoy?',
+  eventos: 'Próximos eventos',
+  nada: (dias: number) => `Nada destacado en los próximos ${dias} días.`,
+  calculando: 'Calculando los eventos…',
+  orbitaVieja: (horas: number) =>
+    `Sin conexión: la órbita de la Estación es de hace ${horas} horas y sus pasos pueden tener minutos de error.`,
+};
+
+const EN: typeof ES = {
+  condiciones: 'Is it a good night?',
+  eventos: 'Coming up',
+  nada: (dias) => `Nothing notable in the next ${dias} days.`,
+  calculando: 'Working out the events…',
+  orbitaVieja: (horas) =>
+    `Offline: the Space Station orbit is ${horas} hours old and its passes may be minutes off.`,
+};
 
 /**
  * Paneles ¿Se ve bien hoy? y Próximos eventos de la noche que se está mirando.
@@ -39,6 +58,7 @@ export function CieloYEventos({
   formato24h: boolean;
   iss: PasosCalculados | null;
 }) {
+  const t = textos({ es: ES, en: EN });
   const carga = usePronostico(ubicacion, Math.floor(ahora.getTime() / MS_HORA));
   const lluvias = useLluvias();
   const formato = { zona: ubicacion.zona, formato24h };
@@ -76,24 +96,18 @@ export function CieloYEventos({
   return (
     <div className="dos">
       <section className="seccion" aria-labelledby="t-cond">
-        <h2 id="t-cond">¿Se ve bien hoy?</h2>
+        <h2 id="t-cond">{t.condiciones}</h2>
         <CondicionesCielo vista={vista} />
       </section>
       <section className="seccion" aria-labelledby="t-eventos">
-        <h2 id="t-eventos">Próximos eventos</h2>
+        <h2 id="t-eventos">{t.eventos}</h2>
         <ListaEventos
           items={eventos.map((e) => itemEvento(e, new Date(hoy), formato))}
-          vacia={
-            astro
-              ? `Nada destacado en los próximos ${DIAS_EVENTOS} días.`
-              : 'Calculando los eventos…'
-          }
+          vacia={astro ? t.nada(DIAS_EVENTOS) : t.calculando}
         />
         {orbitaVieja && (
           <p className="condiciones-aviso">
-            Sin conexión: la órbita de la Estación es de hace{' '}
-            {Math.round(iss.horasDescarga)} horas y sus pasos pueden tener
-            minutos de error.
+            {t.orbitaVieja(Math.round(iss.horasDescarga))}
           </p>
         )}
       </section>

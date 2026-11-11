@@ -7,7 +7,41 @@ import {
 } from '../../servicios/astro/noche';
 import type { NochePlaneta } from '../../servicios/astro/planetas';
 import type { PasoISS } from '../../servicios/satelites/iss';
-import { NOMBRE_PLANETA, PISTA_PLANETA } from './textosPlanetas';
+import { nombreAstro, nombrePlaneta } from '../../idioma/comunes';
+import { textos } from '../../idioma/idioma';
+import { PISTA_PLANETA } from './textosPlanetas';
+
+const ES = {
+  bajo: (n: string) => `${n}: bajo el horizonte toda la noche`,
+  tramo: (a: string, b: string) => `de ${a} a ${b}`,
+  y: ' y ',
+  sobre: (n: string, partes: string) => `${n} sobre el horizonte ${partes}`,
+  estacion: 'Estación',
+  noPasa: 'La Estación Espacial no pasa a la vista esta noche',
+  pasa: (horas: string[]) =>
+    `La Estación Espacial pasa a la vista a las ${horas.join(' y a las ')}`,
+  cielo: 'Cielo oscuro',
+  cieloDescripcion: 'Del atardecer a la noche cerrada y de vuelta al amanecer',
+  laLuna: 'La Luna',
+};
+
+const EN: typeof ES = {
+  bajo: (n) => `${n}: below the horizon all night`,
+  tramo: (a, b) => `from ${a} to ${b}`,
+  y: ' and ',
+  sobre: (n, partes) => `${n} above the horizon ${partes}`,
+  estacion: 'Station',
+  noPasa: 'The Space Station does not pass in view tonight',
+  pasa: (horas) =>
+    `The Space Station passes in view at ${horas.join(' and at ')}`,
+  cielo: 'Dark sky',
+  cieloDescripcion: 'From sunset to full darkness and back to dawn',
+  laLuna: 'The Moon',
+};
+
+function t() {
+  return textos({ es: ES, en: EN });
+}
 
 const TONOS_CIELO: readonly [number, [number, number, number]][] = [
   [0, [154, 112, 144]],
@@ -59,9 +93,9 @@ function describir(
   lista: { desde: number; hasta: number }[],
   hora: (fraccion: number) => string,
 ): string {
-  if (lista.length === 0) return `${nombre}: bajo el horizonte toda la noche`;
-  const partes = lista.map((t) => `de ${hora(t.desde)} a ${hora(t.hasta)}`);
-  return `${nombre} sobre el horizonte ${partes.join(' y ')}`;
+  if (lista.length === 0) return t().bajo(nombre);
+  const partes = lista.map((x) => t().tramo(hora(x.desde), hora(x.hasta)));
+  return t().sobre(nombre, partes.join(t().y));
 }
 
 /**
@@ -78,11 +112,8 @@ export function filaEstacion(
     .map((p) => fraccionVentana(p.aparece.fecha, ventana))
     .filter((f) => f >= 0 && f <= 1);
   return {
-    nombre: 'Estación',
-    descripcion:
-      puntos.length === 0
-        ? 'La Estación Espacial no pasa a la vista esta noche'
-        : `La Estación Espacial pasa a la vista a las ${puntos.map(hora).join(' y a las ')}`,
+    nombre: t().estacion,
+    descripcion: puntos.length === 0 ? t().noPasa : t().pasa(puntos.map(hora)),
     puntos,
   };
 }
@@ -104,13 +135,13 @@ export function filasNoche(
   const tramosLuna = tramosSobreHorizonte(instantes, luna, ventana);
   const filas: FilaLinea[] = [
     {
-      nombre: 'Cielo oscuro',
-      descripcion: 'Del atardecer a la noche cerrada y de vuelta al amanecer',
+      nombre: t().cielo,
+      descripcion: t().cieloDescripcion,
       degradado: degradadoCielo(sol),
     },
     {
-      nombre: 'Luna',
-      descripcion: describir('La Luna', tramosLuna, hora),
+      nombre: nombreAstro('luna'),
+      descripcion: describir(t().laLuna, tramosLuna, hora),
       color: '#efe6cc',
       tramos: tramosLuna,
     },
@@ -118,8 +149,8 @@ export function filasNoche(
   for (const p of planetas.filter((x) => x.visible)) {
     const lista = tramosSobreHorizonte(instantes, p.muestras, ventana);
     filas.push({
-      nombre: NOMBRE_PLANETA[p.planeta],
-      descripcion: describir(NOMBRE_PLANETA[p.planeta], lista, hora),
+      nombre: nombrePlaneta(p.planeta),
+      descripcion: describir(nombrePlaneta(p.planeta), lista, hora),
       color: PISTA_PLANETA[p.planeta],
       tramos: lista,
     });

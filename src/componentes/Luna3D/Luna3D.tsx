@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { ControlLuna } from '../../3d/escenaLuna';
 import { ceder, cuandoEsteLibre, soportaWebGL } from '../../3d/soporte';
+import { textos } from '../../idioma/idioma';
 import './Luna3D.css';
 
 /**
@@ -29,7 +30,13 @@ export function Luna3D({
     const canvas = document.createElement('canvas');
     canvas.className = 'luna3d-canvas';
     canvas.setAttribute('role', 'img');
-    canvas.setAttribute('aria-label', 'La Luna en 3D, iluminada según su fase');
+    canvas.setAttribute(
+      'aria-label',
+      textos({
+        es: 'La Luna en 3D, iluminada según su fase',
+        en: 'The Moon in 3D, lit according to its phase',
+      }),
+    );
     div.appendChild(canvas);
     let vigente = true;
     const cancelar = cuandoEsteLibre(() => {

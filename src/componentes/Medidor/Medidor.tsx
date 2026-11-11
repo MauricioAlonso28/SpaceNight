@@ -1,3 +1,4 @@
+import { textos } from '../../idioma/idioma';
 import './Medidor.css';
 
 /**
@@ -35,7 +36,7 @@ export function Medidor({
         {valor ?? '—'}
       </text>
       <text className="medidor-de" x="60" y="82" textAnchor="middle">
-        de 100
+        {textos({ es: 'de 100', en: 'of 100' })}
       </text>
     </svg>
   );

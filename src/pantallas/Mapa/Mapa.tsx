@@ -2,13 +2,14 @@ import { useCallback, useMemo, useRef, useState, type FormEvent } from 'react';
 import type { ControlMapa, Seleccion } from '../../3d/escenaMapa';
 import { useFechaVista } from '../../estado/hooks';
 import { useEstado } from '../../estado/store';
+import { textos } from '../../idioma/idioma';
 import {
   aplicar,
   matrizCielo,
   vectorEcuatorial,
   type Vec3,
 } from '../../servicios/astro/cielo';
-import { formatearHora } from '../../servicios/formato';
+import { formatearHora, formatearNumero } from '../../servicios/formato';
 import { buscar, type Buscable } from './buscar';
 import { cuerposEn } from './cuerpos';
 import { useDatosMapa, type DatosMapa } from './datosMapa';
@@ -17,6 +18,44 @@ import { fichaDe } from './ficha';
 import './Mapa.css';
 
 const MS_HORA = 3_600_000;
+
+const ES = {
+  errorCatalogo: 'No se pudo cargar el catálogo de estrellas.',
+  cargando: 'Cargando estrellas…',
+  noEncuentro: (q: string) => `No encuentro «${q}».`,
+  bajoHorizonte: (n: string) => `${n} está ahora bajo el horizonte.`,
+  titulo: 'Mapa del cielo',
+  cerrar: 'Cerrar ficha',
+  ayuda:
+    'Arrastra para mirar alrededor, pellizca o usa la rueda para acercar y toca un objeto para ver su ficha.',
+  buscarEtiqueta: 'Buscar en el cielo',
+  ejemplo: 'Júpiter, Orión, Sirius…',
+  buscar: 'Buscar',
+  adelantar: 'Adelantar horas',
+  ahora: (h: string) => `Ahora, ${h}`,
+  mas: (horas: string, h: string) => `+${horas} h, ${h}`,
+  constelaciones: 'Mostrar constelaciones',
+  pie: 'Estrellas: HYG Database v4.1 (astronexus), CC BY-SA 4.0. Líneas y nombres de constelaciones: d3-celestial (Olaf Frohn), BSD-3-Clause.',
+};
+
+const EN: typeof ES = {
+  errorCatalogo: 'Could not load the star catalog.',
+  cargando: 'Loading stars…',
+  noEncuentro: (q) => `Can't find "${q}".`,
+  bajoHorizonte: (n) => `${n} is below the horizon right now.`,
+  titulo: 'Sky map',
+  cerrar: 'Close card',
+  ayuda:
+    'Drag to look around, pinch or use the wheel to zoom, and tap an object to see its card.',
+  buscarEtiqueta: 'Search the sky',
+  ejemplo: 'Jupiter, Orion, Sirius…',
+  buscar: 'Search',
+  adelantar: 'Move time forward',
+  ahora: (h) => `Now, ${h}`,
+  mas: (horas, h) => `+${horas} h, ${h}`,
+  constelaciones: 'Show constellations',
+  pie: 'Stars: HYG Database v4.1 (astronexus), CC BY-SA 4.0. Constellation lines and names: d3-celestial (Olaf Frohn), BSD-3-Clause.',
+};
 
 interface Destino extends Buscable {
   direccion: () => Vec3;
@@ -59,6 +98,7 @@ function destinos(
 
 /** Mapa del cielo: domo 3D, buscador, deslizador de horas y ficha del objeto tocado. */
 export function Mapa() {
+  const t = textos({ es: ES, en: EN });
   const datos = useDatosMapa();
   const base = useFechaVista();
   const ubicacion = useEstado((s) => s.ubicacion);
@@ -88,11 +128,9 @@ export function Mapa() {
   }, []);
 
   if (datos === 'error') {
-    return (
-      <p className="panel aviso">No se pudo cargar el catálogo de estrellas.</p>
-    );
+    return <p className="panel aviso">{t.errorCatalogo}</p>;
   }
-  if (!datos) return <p className="mapa-cargando">Cargando estrellas…</p>;
+  if (!datos) return <p className="mapa-cargando">{t.cargando}</p>;
 
   const ficha = seleccion
     ? fichaDe(seleccion, datos.estrellas, datos.constelaciones, cuerpos, matriz)
@@ -102,15 +140,13 @@ export function Mapa() {
     ev.preventDefault();
     const d = buscar(consulta, destinos(datos, matriz, cuerpos));
     if (!d) {
-      setAviso(`No encuentro «${consulta}».`);
+      setAviso(t.noEncuentro(consulta));
       return;
     }
     const dir = d.direccion();
     control.current?.mirarA(dir);
     setSeleccion(d.seleccion);
-    setAviso(
-      dir[1] < 0 ? `${d.nombres[0]} está ahora bajo el horizonte.` : null,
-    );
+    setAviso(dir[1] < 0 ? t.bajoHorizonte(d.nombres[0]) : null);
   };
 
   const hora = formatearHora(fecha, ubicacion.zona, formato24h);
@@ -118,7 +154,7 @@ export function Mapa() {
   return (
     <section className="mapa" aria-labelledby="t-mapa">
       <h2 id="t-mapa" className="mapa-titulo">
-        Mapa del cielo
+        {t.titulo}
       </h2>
       <div className="mapa-marco">
         <EscenaMapa
@@ -138,7 +174,7 @@ export function Mapa() {
             <button
               type="button"
               className="mapa-cerrar"
-              aria-label="Cerrar ficha"
+              aria-label={t.cerrar}
               onClick={() => setSeleccion(null)}
             >
               ×
@@ -156,34 +192,31 @@ export function Mapa() {
           </div>
         )}
       </div>
-      <p className="mapa-ayuda">
-        Arrastra para mirar alrededor, pellizca o usa la rueda para acercar y
-        toca un objeto para ver su ficha.
-      </p>
+      <p className="mapa-ayuda">{t.ayuda}</p>
       <form className="mapa-buscar" onSubmit={alBuscar} role="search">
         <label htmlFor="buscar-cielo" className="oculto">
-          Buscar en el cielo
+          {t.buscarEtiqueta}
         </label>
         <input
           id="buscar-cielo"
           type="search"
-          placeholder="Júpiter, Orión, Sirius…"
+          placeholder={t.ejemplo}
           value={consulta}
           onChange={(e) => setConsulta(e.target.value)}
           autoComplete="off"
         />
         <button type="submit" className="boton">
-          Buscar
+          {t.buscar}
         </button>
       </form>
       {aviso && <p className="mapa-aviso-busqueda">{aviso}</p>}
       <div className="deslizador mapa-horas">
         <label htmlFor="horas-mapa">
-          <span>Adelantar horas</span>
+          <span>{t.adelantar}</span>
           <output htmlFor="horas-mapa">
             {horas === 0
-              ? `Ahora, ${hora}`
-              : `+${String(horas).replace('.', ',')} h, ${hora}`}
+              ? t.ahora(hora)
+              : t.mas(formatearNumero(horas, 2), hora)}
           </output>
         </label>
         <input
@@ -202,12 +235,9 @@ export function Mapa() {
           checked={lineas}
           onChange={(e) => setLineas(e.target.checked)}
         />
-        Mostrar constelaciones
+        {t.constelaciones}
       </label>
-      <p className="pie">
-        Estrellas: HYG Database v4.1 (astronexus), CC BY-SA 4.0. Líneas y
-        nombres de constelaciones: d3-celestial (Olaf Frohn), BSD-3-Clause.
-      </p>
+      <p className="pie">{t.pie}</p>
     </section>
   );
 }

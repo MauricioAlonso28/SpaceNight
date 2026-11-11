@@ -1,6 +1,7 @@
 import { useMemo, type CSSProperties } from 'react';
 import { useAhora } from '../../estado/hooks';
 import { useEstado } from '../../estado/store';
+import { textos } from '../../idioma/idioma';
 import { fraccionIluminada } from '../../servicios/astro/luna';
 import { formatearDiaCorto } from '../../servicios/formato';
 import { inicioDelDia, sumarDias } from '../../servicios/tiempo';
@@ -39,7 +40,9 @@ export function DeslizadorNoches() {
   return (
     <div className="deslizador">
       <label htmlFor="dias">
-        <span>Ver otras noches</span>
+        <span>
+          {textos({ es: 'Ver otras noches', en: 'See other nights' })}
+        </span>
         <output htmlFor="dias">{cuando}</output>
       </label>
       <input

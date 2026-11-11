@@ -1,5 +1,7 @@
-import { lazy } from 'react';
+import { lazy, useEffect } from 'react';
 import { HashRouter, Navigate, Route, Routes } from 'react-router';
+import { useEstado } from '../estado/store';
+import { fijarIdioma, resolverIdioma } from '../idioma/idioma';
 import { EstaNoche } from '../pantallas/EstaNoche/EstaNoche';
 import { Layout } from './Layout';
 import { RUTA_AJUSTES, RUTA_INICIAL } from './rutas';
@@ -19,10 +21,18 @@ const Ajustes = lazy(() =>
   import('../pantallas/Ajustes/Ajustes').then((m) => ({ default: m.Ajustes })),
 );
 
-/** Raíz de la app: HashRouter para que GitHub Pages no dé 404 al recargar. */
+/** Raíz de la app: fija el idioma y monta el HashRouter, para que GitHub Pages no dé 404 al recargar. */
 export function App() {
+  const preferencia = useEstado((s) => s.ajustes.idioma);
+  const idioma = resolverIdioma(preferencia);
+  fijarIdioma(idioma);
+
+  useEffect(() => {
+    document.documentElement.lang = idioma;
+  }, [idioma]);
+
   return (
-    <HashRouter>
+    <HashRouter key={idioma}>
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<Navigate to={RUTA_INICIAL} replace />} />

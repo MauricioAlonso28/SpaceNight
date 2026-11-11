@@ -1,5 +1,6 @@
 import type { PointerEvent } from 'react';
 import type { Planeta } from '../../servicios/astro/planetas';
+import { textos } from '../../idioma/idioma';
 import './TarjetaPlaneta.css';
 
 /** Esfera dibujada con CSS para cada planeta; Saturno lleva anillo. */
@@ -62,7 +63,14 @@ export function TarjetaPlaneta({
             {l}
           </p>
         ))}
-        <div className="brillo" role="img" aria-label={`Brillo ${brillo} de 5`}>
+        <div
+          className="brillo"
+          role="img"
+          aria-label={textos({
+            es: `Brillo ${brillo} de 5`,
+            en: `Brightness ${brillo} of 5`,
+          })}
+        >
           {[1, 2, 3, 4, 5].map((n) => (
             <span key={n} className={n <= brillo ? 'on' : undefined} />
           ))}
