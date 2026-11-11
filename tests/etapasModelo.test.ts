@@ -87,7 +87,7 @@ describe('etapas de un modelo', () => {
     const foco = etapas.enfoque();
     expect(foco.mezcla).toBe(1);
     expect(foco.centro.y).toBeCloseTo(1.5);
-    expect(foco.centro.x).toBeGreaterThan(2);
+    expect(foco.centro.x).toBeCloseTo(2);
   });
 
   it('cerrar devuelve la pieza y las demás vuelven a verse enteras', () => {
