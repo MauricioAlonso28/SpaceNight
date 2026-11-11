@@ -39,6 +39,7 @@ const R_CUERPOS = 96;
 const R_SUELO = 90;
 const MAG_TOCABLE = 4;
 const RADIO_TOQUE = 28;
+const MARGEN_NOMBRE = 8;
 const FOV_MIN = 15;
 const FOV_MAX = 100;
 
@@ -53,7 +54,9 @@ export interface CuerpoMapa {
 
 /** Lo que se tocó: una estrella del catálogo o un cuerpo del sistema solar. */
 export type Seleccion =
-  { tipo: 'estrella'; indice: number } | { tipo: 'cuerpo'; clave: string };
+  | { tipo: 'estrella'; indice: number }
+  | { tipo: 'cuerpo'; clave: string }
+  | { tipo: 'constelacion'; id: string };
 
 /** Lo que la interfaz puede pedirle al mapa. */
 export interface ControlMapa {
@@ -317,7 +320,25 @@ export function crearMapa(
     if (!pendiente) pendiente = requestAnimationFrame(dibujar);
   }
 
+  const nombreTocado = (x: number, y: number): Seleccion | null => {
+    const lienzo = canvas.getBoundingClientRect();
+    const [px, py] = [x + lienzo.left, y + lienzo.top];
+    const i = etiquetasConstelacion.findIndex(({ el }) => {
+      if (el.style.display === 'none') return false;
+      const r = el.getBoundingClientRect();
+      return (
+        px >= r.left - MARGEN_NOMBRE &&
+        px <= r.right + MARGEN_NOMBRE &&
+        py >= r.top - MARGEN_NOMBRE &&
+        py <= r.bottom + MARGEN_NOMBRE
+      );
+    });
+    return i < 0 ? null : { tipo: 'constelacion', id: constelaciones[i].id };
+  };
+
   const elegir = (x: number, y: number): Seleccion | null => {
+    const nombre = nombreTocado(x, y);
+    if (nombre) return nombre;
     let mejor: { s: Seleccion; d: number } | null = null;
     const probar = (s: Seleccion, p: Vector3) => {
       if (p.y < -2) return;
