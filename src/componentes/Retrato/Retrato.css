@@ -73,6 +73,11 @@
   --oscuro: #a98a55;
 }
 
+.retrato-tierra {
+  --claro: #8fb7e8;
+  --oscuro: #1f4c7a;
+}
+
 .retrato-saturno img {
   width: 165%;
   height: 165%;
