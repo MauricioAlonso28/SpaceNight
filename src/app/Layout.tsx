@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router';
-import { BarraInferior } from '../componentes/BarraInferior/BarraInferior';
+import { Navegacion } from '../componentes/Navegacion/Navegacion';
 import { Cabecera } from '../componentes/Cabecera/Cabecera';
 import { Fondo3D } from '../componentes/Fondo3D/Fondo3D';
 import {
@@ -10,7 +10,7 @@ import {
 } from '../estado/hooks';
 import './Layout.css';
 
-/** Marco común: fondo 3D, cabecera, la pantalla activa y la barra inferior. */
+/** Marco común: fondo 3D, cabecera, la pantalla activa y la navegación. */
 export function Layout() {
   useReloj();
   usePedirUbicacionUnaVez();
@@ -25,7 +25,7 @@ export function Layout() {
           <Outlet />
         </Suspense>
       </main>
-      <BarraInferior />
+      <Navegacion />
     </>
   );
 }

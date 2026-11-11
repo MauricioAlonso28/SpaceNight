@@ -2,12 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { RUTA_AJUSTES, RUTA_INICIAL, RUTAS_BARRA } from '../src/app/rutas';
 
 describe('rutas', () => {
-  it('la barra inferior tiene las cuatro pantallas en orden', () => {
+  it('la barra de navegación tiene las cinco pantallas en orden', () => {
     expect(RUTAS_BARRA.map((r) => r.path)).toEqual([
       'esta-noche',
       'mapa',
       'camara',
       'explorar',
+      'cohete',
     ]);
   });
 
@@ -15,7 +16,7 @@ describe('rutas', () => {
     expect(RUTAS_BARRA.some((r) => r.path === RUTA_INICIAL)).toBe(true);
   });
 
-  it('ajustes no está en la barra inferior', () => {
+  it('ajustes no está en la barra de navegación', () => {
     expect(RUTAS_BARRA.some((r) => r.path === RUTA_AJUSTES.path)).toBe(false);
   });
 });
