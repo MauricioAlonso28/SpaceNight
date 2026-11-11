@@ -13,6 +13,9 @@ export function nombreRuta(ruta: Ruta): string {
 
 export const RUTA_INICIAL = 'esta-noche';
 
+/** Destino absoluto de las redirecciones; relativo se sumaría a la ruta actual sin fin. */
+export const DESTINO_INICIAL = `/${RUTA_INICIAL}`;
+
 /** Las cinco pantallas de la barra de navegación, en su orden. */
 export const RUTAS_BARRA: readonly Ruta[] = [
   { path: 'esta-noche', nombre: { es: 'Esta noche', en: 'Tonight' } },
