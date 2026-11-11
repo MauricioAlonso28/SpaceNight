@@ -51,7 +51,15 @@ export function EscenaCohete({
   }, [alListo]);
 
   return (
-    <div className="cohete-escena" ref={contenedor}>
+    <div
+      className="cohete-escena"
+      ref={contenedor}
+      role="img"
+      aria-label={textos({
+        es: 'Cohete en 3D, para ratón o trackpad. Todas las fichas están también en la lista de componentes.',
+        en: '3D rocket for mouse or trackpad. Every card is also in the list of components.',
+      })}
+    >
       {!soportaWebGL() && (
         <p className="cohete-sin3d">
           {textos({

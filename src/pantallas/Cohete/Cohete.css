@@ -1,4 +1,5 @@
 .cohete {
+  position: relative;
   margin-top: 14px;
 }
 
@@ -309,48 +310,6 @@
   margin-top: 28px;
 }
 
-.cohete-item {
-  font: inherit;
-  color: var(--texto);
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-  text-align: left;
-}
-
-.cohete-item:hover:not(:disabled) {
-  color: var(--dato);
-}
-
-.cohete-item[aria-pressed='true'] {
-  color: var(--acento);
-}
-
-.cohete-item:disabled {
-  cursor: default;
-}
-
-.cohete-zona ol {
-  margin: 0;
-  padding-left: 1.6em;
-}
-
-.cohete-zona li {
-  margin-bottom: 8px;
-}
-
-.cohete-zona li::marker {
-  color: var(--dato);
-  font-variant-numeric: tabular-nums;
-}
-
-.cohete-zona small {
-  display: block;
-  color: var(--texto-suave);
-  font-size: 0.85rem;
-}
-
 .cohete-etiqueta {
   margin-left: 8px;
   padding: 1px 8px;
@@ -490,4 +449,110 @@
 
 .cohete-ficha-pie small {
   color: var(--texto-suave);
+}
+
+.cohete-saltar {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: var(--panel);
+  border: 1px solid var(--acento);
+  color: var(--texto);
+}
+
+.cohete-saltar:focus {
+  left: 16px;
+}
+
+html[data-tema='rojo'] .cohete-canvas {
+  filter: brightness(0.55);
+}
+
+.cohete-lista:focus {
+  outline: none;
+}
+
+.cohete-detalle {
+  border-top: 1px solid var(--borde);
+}
+
+.cohete-detalle:first-of-type {
+  border-top: 0;
+}
+
+.cohete-detalle summary {
+  display: grid;
+  gap: 2px;
+  padding: 10px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.cohete-detalle summary::-webkit-details-marker {
+  display: none;
+}
+
+.cohete-detalle summary strong {
+  font-weight: 500;
+}
+
+.cohete-detalle summary strong::after {
+  content: ' ▾';
+  color: var(--texto-suave);
+  font-size: 0.8em;
+}
+
+.cohete-detalle[open] summary strong::after {
+  content: ' ▴';
+}
+
+.cohete-detalle[data-abierta] summary strong {
+  color: var(--acento);
+}
+
+.cohete-detalle summary small {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+.cohete-detalle-cuerpo {
+  padding: 0 0 14px;
+}
+
+.cohete-detalle-cuerpo h5 {
+  font-family: var(--fuente-texto);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dato);
+  margin: 12px 0 4px;
+}
+
+.cohete-detalle-cuerpo p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.cohete-detalle-cuerpo dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 14px;
+  margin: 4px 0 0;
+}
+
+.cohete-detalle-cuerpo dt {
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.cohete-detalle-cuerpo dd {
+  margin: 0;
+}
+
+.cohete-detalle-cuerpo .cohete-boton {
+  margin-top: 12px;
 }

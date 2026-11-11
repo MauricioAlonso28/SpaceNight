@@ -37,6 +37,85 @@ const EN: typeof ES = {
 };
 
 /**
+ * Los seis campos de una ficha, la nota de cifras orientativas y las fuentes.
+ * @param Titulo nivel de los títulos de cada campo, según dónde se muestre
+ */
+export function ContenidoFicha({
+  componente,
+  Titulo = 'h4',
+}: {
+  componente: ComponenteCohete;
+  Titulo?: 'h4' | 'h5';
+}) {
+  const t = textos({ es: ES, en: EN });
+  const { ficha } = componente;
+  if (!ficha) return <p className="cohete-ficha-nota">{t.pendiente}</p>;
+
+  const seccion = (titulo: string, texto: string) => (
+    <section>
+      <Titulo>{titulo}</Titulo>
+      <p>{texto}</p>
+    </section>
+  );
+
+  return (
+    <>
+      {seccion(t.paraQue, textos(ficha.paraQue))}
+      {seccion(t.comoFunciona, textos(ficha.comoFunciona))}
+      {seccion(t.material, textos(ficha.material))}
+      <section>
+        <Titulo>{t.datos}</Titulo>
+        <dl>
+          {ficha.datos.map((d) => (
+            <div key={d.etiqueta.es}>
+              <dt>{textos(d.etiqueta)}</dt>
+              <dd>{textos(d.valor)}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+      {seccion(t.otrosUsos, textos(ficha.otrosUsos))}
+      {seccion(t.enCohetes, textos(ficha.enCohetes))}
+      <p className="cohete-ficha-nota">{t.orientativo}</p>
+      <section>
+        <Titulo>{t.fuentes}</Titulo>
+        <ul className="cohete-ficha-fuentes">
+          {ficha.fuentes.map((f) => (
+            <li key={f.url}>
+              <a href={f.url} target="_blank" rel="noreferrer">
+                {f.titulo}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </>
+  );
+}
+
+/** Zona, número y etiquetas de un componente, en una línea. */
+export function LineaZona({
+  componente,
+  zona,
+}: {
+  componente: ComponenteCohete;
+  zona: string;
+}) {
+  const t = textos({ es: ES, en: EN });
+  return (
+    <span className="cohete-ficha-zona">
+      {String(componente.recorrido).padStart(2, '0')} · {zona}
+      {componente.interior && (
+        <span className="cohete-etiqueta">{t.interior}</span>
+      )}
+      {componente.tipo === 'material' && (
+        <span className="cohete-etiqueta">{t.material2}</span>
+      )}
+    </span>
+  );
+}
+
+/**
  * Ficha de un componente, a la derecha de la pieza centrada.
  * @param zona nombre visible de la zona del componente
  * @param alVolver devuelve la pieza al cohete
@@ -52,18 +131,10 @@ export function Ficha({
 }) {
   const t = textos({ es: ES, en: EN });
   const boton = useRef<HTMLButtonElement>(null);
-  const { ficha } = componente;
 
   useEffect(() => {
     boton.current?.focus({ preventScroll: true });
   }, [componente.id]);
-
-  const seccion = (titulo: string, texto: string) => (
-    <section>
-      <h4>{titulo}</h4>
-      <p>{texto}</p>
-    </section>
-  );
 
   return (
     <aside
@@ -71,52 +142,12 @@ export function Ficha({
       aria-labelledby="t-ficha"
       key={componente.id}
     >
-      <p className="cohete-ficha-zona">
-        {String(componente.recorrido).padStart(2, '0')} · {zona}
-        {componente.interior && (
-          <span className="cohete-etiqueta">{t.interior}</span>
-        )}
-        {componente.tipo === 'material' && (
-          <span className="cohete-etiqueta">{t.material2}</span>
-        )}
+      <p>
+        <LineaZona componente={componente} zona={zona} />
       </p>
       <h3 id="t-ficha">{textos(componente.nombre)}</h3>
       <p className="cohete-ficha-resumen">{textos(componente.resumen)}</p>
-      {ficha ? (
-        <>
-          {seccion(t.paraQue, textos(ficha.paraQue))}
-          {seccion(t.comoFunciona, textos(ficha.comoFunciona))}
-          {seccion(t.material, textos(ficha.material))}
-          <section>
-            <h4>{t.datos}</h4>
-            <dl>
-              {ficha.datos.map((d) => (
-                <div key={d.etiqueta.es}>
-                  <dt>{textos(d.etiqueta)}</dt>
-                  <dd>{textos(d.valor)}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-          {seccion(t.otrosUsos, textos(ficha.otrosUsos))}
-          {seccion(t.enCohetes, textos(ficha.enCohetes))}
-          <p className="cohete-ficha-nota">{t.orientativo}</p>
-          <section>
-            <h4>{t.fuentes}</h4>
-            <ul className="cohete-ficha-fuentes">
-              {ficha.fuentes.map((f) => (
-                <li key={f.url}>
-                  <a href={f.url} target="_blank" rel="noreferrer">
-                    {f.titulo}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </>
-      ) : (
-        <p className="cohete-ficha-nota">{t.pendiente}</p>
-      )}
+      <ContenidoFicha componente={componente} />
       <div className="cohete-ficha-pie">
         <button
           type="button"

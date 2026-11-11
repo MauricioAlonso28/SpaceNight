@@ -118,9 +118,15 @@ function brillo(malla: Mesh, color: number | Color): void {
   }
 }
 
-/** Densidad de píxeles hasta 1,5: el cohete se ve nítido sin cargar la GPU de un portátil modesto. */
+/** Equipo modesto: pocos núcleos o poca memoria; ahí se dibuja con menos detalle. */
+function gamaBaja(): boolean {
+  const n = navigator as Navigator & { deviceMemory?: number };
+  return (n.hardwareConcurrency ?? 8) <= 4 || (n.deviceMemory ?? 8) <= 4;
+}
+
+/** Densidad de píxeles hasta 1,5, y 1 en gama baja: el cohete se ve nítido sin cargar la GPU. */
 function densidad(): number {
-  return Math.min(window.devicePixelRatio || 1, 1.5);
+  return gamaBaja() ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
 }
 
 function reducirMovimiento(): boolean {
@@ -183,7 +189,11 @@ export function crearEscena(
   const etiqueta = crearEtiqueta(contenedor);
   etiqueta.ocultar();
 
-  const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
+  const renderer = new WebGLRenderer({
+    canvas,
+    antialias: !gamaBaja(),
+    alpha: true,
+  });
   renderer.setPixelRatio(densidad());
   renderer.setClearColor(0x000000, 0);
   renderer.localClippingEnabled = true;
