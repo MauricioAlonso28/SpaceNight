@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { simularAscenso, tiempoMision } from '../src/servicios/cohete/vuelo';
+import {
+  simularAscenso,
+  simularRegreso,
+  tiempoMision,
+} from '../src/servicios/cohete/vuelo';
 
 const hito = (hitos: { id: string; t: number }[], id: string) =>
   hitos.find((h) => h.id === id)?.t;
@@ -52,5 +56,47 @@ describe('simulador de ascenso', () => {
   it('tiempo de misión', () => {
     expect(tiempoMision(142.4)).toBe('T+02:22');
     expect(tiempoMision(-3)).toBe('T+00:00');
+  });
+});
+
+describe('simulador de regreso de la primera etapa', () => {
+  it('en barcaza: frena, enciende para aterrizar y se posa despacio con propelente de sobra', () => {
+    const a = simularAscenso(15_000, 'barcaza');
+    const r = simularRegreso(a, 'barcaza');
+    expect(r.toque).toBeLessThan(10);
+    expect(r.sobrante).toBeGreaterThan(0);
+    expect(r.distanciaFinal / 1000).toBeGreaterThan(300);
+    expect(r.hitos.map((h) => h.id)).toEqual([
+      'separacion',
+      'reentrada',
+      'fin-reentrada',
+      'aterrizaje-encendido',
+      'toque',
+    ]);
+  });
+
+  it('de vuelta a la base: el encendido de regreso la trae cerca del punto de despegue', () => {
+    const a = simularAscenso(5_000, 'base');
+    const r = simularRegreso(a, 'base');
+    expect(r.toque).toBeLessThan(10);
+    expect(Math.abs(r.distanciaFinal) / 1000).toBeLessThan(25);
+    expect(r.hitos.map((h) => h.id)).toContain('regreso');
+  });
+
+  it('el empuje solo aparece en los encendidos', () => {
+    const r = simularRegreso(simularAscenso(15_000, 'barcaza'), 'barcaza');
+    const entre = (a: number, b: number) =>
+      r.muestras.filter((m) => m.t > a && m.t < b);
+    const t = (id: string) => r.hitos.find((h) => h.id === id)!.t;
+    expect(
+      entre(t('separacion') + 2, t('reentrada') - 2).every(
+        (m) => m.empuje === 0,
+      ),
+    ).toBe(true);
+    expect(
+      entre(t('reentrada') + 1, t('fin-reentrada') - 1).every(
+        (m) => m.empuje > 0,
+      ),
+    ).toBe(true);
   });
 });

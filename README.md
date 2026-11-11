@@ -62,4 +62,6 @@ avisos en la campana para los que despegan en las próximas 6 horas.
 El simulador de vuelo (`#/cohete/vuelo`) integra paso a paso un cohete de dos
 etapas con los números públicos del Falcon 9 (`src/servicios/cohete/vuelo.ts`):
 gravedad, atmósfera exponencial, empuje que cambia con la presión y guiado
-sencillo. La carga y el modo de recuperación cambian si llega a órbita.
+sencillo. La carga y el modo de recuperación cambian si llega a órbita. La
+pestaña de aterrizaje simula el regreso de la primera etapa (encendido de
+regreso, reentrada y aterrizaje con un motor) en barcaza o en la base.

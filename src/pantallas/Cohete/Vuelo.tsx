@@ -3,8 +3,11 @@ import { textos } from '../../idioma/idioma';
 import { formatearNumero } from '../../servicios/formato';
 import {
   simularAscenso,
+  simularRegreso,
+  type Ascenso,
   type Recuperacion,
 } from '../../servicios/cohete/vuelo';
+import { Descenso } from './Descenso';
 import { CabezaNasa } from '../Nasa/CabezaNasa';
 import { Trayectoria } from './Trayectoria';
 import './Vuelo.css';
@@ -24,6 +27,19 @@ const ES = {
   enOrbita: (pe: string, ap: string) => `Carga en órbita: ${pe} × ${ap} km.`,
   noLlega: (dv: string) =>
     `No llega a la órbita: le faltan ${dv} m/s. Prueba con menos carga o deja de recuperar la primera etapa.`,
+  pestanas: 'Qué mirar',
+  despegue: 'Despegue',
+  aterrizaje: 'Aterrizaje de la 1.ª etapa',
+  desechada:
+    'Con la etapa desechada no hay regreso: cae al mar tras la separación. Elige barcaza o vuelta a la base para verlo.',
+  barcaza: 'Barcaza',
+  zona: 'Zona de aterrizaje',
+  aterrizo: (v: string, kg: string) =>
+    `Se posa a ${v} m/s con ${kg} kg de propelente de sobra.`,
+  dondeBarcaza: (km: string) => `La barcaza espera a ${km} km de la costa.`,
+  dondeBase: (km: string) => `Aterriza a ${km} km del punto de despegue.`,
+  choca: (v: string) =>
+    `Se queda sin propelente y llega al suelo a ${v} m/s: no sobreviviría.`,
   nota: 'Es un modelo simplificado (Tierra esférica, aire exponencial, guiado sencillo), así que las cifras son aproximadas.',
 };
 
@@ -42,6 +58,19 @@ const EN: typeof ES = {
   enOrbita: (pe, ap) => `Payload in orbit: ${pe} × ${ap} km.`,
   noLlega: (dv) =>
     `It does not reach orbit: ${dv} m/s short. Try a lighter payload or stop recovering the first stage.`,
+  pestanas: 'What to watch',
+  despegue: 'Liftoff',
+  aterrizaje: 'First stage landing',
+  desechada:
+    'With the stage expended there is no return: it falls into the sea after separation. Choose drone ship or return to base to see it.',
+  barcaza: 'Drone ship',
+  zona: 'Landing zone',
+  aterrizo: (v, kg) =>
+    `It touches down at ${v} m/s with ${kg} kg of propellant to spare.`,
+  dondeBarcaza: (km) => `The drone ship waits ${km} km offshore.`,
+  dondeBase: (km) => `It lands ${km} km from the launch site.`,
+  choca: (v) =>
+    `It runs out of propellant and hits the ground at ${v} m/s: it would not survive.`,
   nota: 'It is a simplified model (spherical Earth, exponential air, simple guidance), so the figures are approximate.',
 };
 
@@ -59,11 +88,61 @@ function cargaMaxima(modo: Recuperacion): number {
   return Math.floor(bajo / 100) * 100;
 }
 
-/** Vista Simulador de vuelo: elegir carga y recuperación y ver el ascenso a órbita con su telemetría. */
+/** Pestaña Aterrizaje: el regreso de la primera etapa con el acercamiento a los últimos kilómetros, o por qué no hay regreso. */
+function Aterrizaje({
+  ascenso,
+  modo,
+  clave,
+}: {
+  ascenso: Ascenso;
+  modo: Recuperacion;
+  clave: string;
+}) {
+  const t = textos({ es: ES, en: EN });
+  const regreso = useMemo(
+    () => (modo === 'ninguna' ? null : simularRegreso(ascenso, modo)),
+    [ascenso, modo],
+  );
+  if (!regreso || modo === 'ninguna')
+    return <p className="vuelo-aviso">{t.desechada}</p>;
+  const ok = regreso.toque < 10;
+  const km = formatearNumero(Math.abs(regreso.distanciaFinal) / 1000);
+  return (
+    <Trayectoria
+      key={clave}
+      muestras={regreso.muestras}
+      hitos={regreso.hitos}
+      fondo={ascenso.muestras.filter((m) => m.etapa === 1)}
+      objetivo={{
+        distancia: regreso.distanciaFinal,
+        nombre: modo === 'barcaza' ? t.barcaza : t.zona,
+      }}
+      acercamiento={(m, terminado) => (
+        <Descenso m={m} terminado={terminado} destino={modo} />
+      )}
+      resultado={
+        <>
+          <p className={ok ? 'bien' : 'mal'}>
+            {ok
+              ? t.aterrizo(
+                  formatearNumero(regreso.toque, 1),
+                  formatearNumero(regreso.sobrante),
+                )
+              : t.choca(formatearNumero(regreso.toque))}
+          </p>
+          <p>{modo === 'barcaza' ? t.dondeBarcaza(km) : t.dondeBase(km)}</p>
+        </>
+      }
+    />
+  );
+}
+
+/** Vista Simulador de vuelo: elegir carga y recuperación y ver el ascenso a órbita o el regreso de la primera etapa, con su telemetría. */
 export function Vuelo() {
   const t = textos({ es: ES, en: EN });
   const [carga, setCarga] = useState(15_000);
   const [modo, setModo] = useState<Recuperacion>('barcaza');
+  const [pestana, setPestana] = useState<'despegue' | 'aterrizaje'>('despegue');
   const cargaSim = useDeferredValue(carga);
   const ascenso = useMemo(
     () => simularAscenso(cargaSim, modo),
@@ -129,18 +208,39 @@ export function Vuelo() {
           ))}
         </fieldset>
       </div>
-      <Trayectoria
-        key={`${cargaSim}-${modo}`}
-        muestras={ascenso.muestras}
-        hitos={ascenso.hitos}
-        resultado={
-          <p className={ascenso.enOrbita ? 'bien' : 'mal'}>
-            {ascenso.enOrbita
-              ? t.enOrbita(km(ascenso.perigeo), km(ascenso.apogeo))
-              : t.noLlega(formatearNumero(ascenso.faltaVelocidad))}
-          </p>
-        }
-      />
+      <div className="vuelo-pestanas" role="tablist" aria-label={t.pestanas}>
+        {(['despegue', 'aterrizaje'] as const).map((p) => (
+          <button
+            key={p}
+            type="button"
+            role="tab"
+            aria-selected={pestana === p}
+            onClick={() => setPestana(p)}
+          >
+            {t[p]}
+          </button>
+        ))}
+      </div>
+      {pestana === 'aterrizaje' ? (
+        <Aterrizaje
+          ascenso={ascenso}
+          modo={modo}
+          clave={`${cargaSim}-${modo}`}
+        />
+      ) : (
+        <Trayectoria
+          key={`${cargaSim}-${modo}`}
+          muestras={ascenso.muestras}
+          hitos={ascenso.hitos}
+          resultado={
+            <p className={ascenso.enOrbita ? 'bien' : 'mal'}>
+              {ascenso.enOrbita
+                ? t.enOrbita(km(ascenso.perigeo), km(ascenso.apogeo))
+                : t.noLlega(formatearNumero(ascenso.faltaVelocidad))}
+            </p>
+          }
+        />
+      )}
       <p className="vuelo-nota">{t.nota}</p>
     </section>
   );

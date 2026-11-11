@@ -107,6 +107,7 @@ function muestraEn(muestras: Muestra[], t: number): Muestra {
     presion: mezcla(a.presion, b.presion),
     masa: mezcla(a.masa, b.masa),
     angulo: mezcla(a.angulo, b.angulo),
+    empuje: a.empuje,
   };
 }
 
@@ -163,6 +164,7 @@ function Grafico({
  * @param fondo trayectoria ya recorrida que se dibuja tenue detrás, como el ascenso al ver el regreso
  * @param objetivo dónde aterriza, en metros de distancia, con su nombre
  * @param resultado lo que se muestra al llegar al final
+ * @param acercamiento vista de detalle que se dibuja junto al perfil con la muestra del instante
  */
 export function Trayectoria({
   muestras,
@@ -170,12 +172,14 @@ export function Trayectoria({
   fondo = [],
   objetivo,
   resultado,
+  acercamiento,
 }: {
   muestras: Muestra[];
   hitos: Hito[];
   fondo?: Muestra[];
   objetivo?: { distancia: number; nombre: string };
   resultado: ReactNode;
+  acercamiento?: (m: Muestra, terminado: boolean) => ReactNode;
 }) {
   const t = textos({ es: ES, en: EN });
   const inicio = muestras[0].t;
@@ -211,12 +215,16 @@ export function Trayectoria({
   const py = y(ahora.altura / 1000);
   const siguiente = muestraEn(muestras, Math.min(fin, ahora.t + 2));
   const giro =
-    (Math.atan2(
-      y(siguiente.altura / 1000) - py,
-      x(siguiente.distancia / 1000) - px || 0.001,
-    ) *
-      180) /
-    Math.PI;
+    (ahora.empuje > 0
+      ? Math.atan2(
+          -Math.sin(ahora.angulo) * (y(0) - y(1)),
+          Math.cos(ahora.angulo) * (x(1) - x(0)),
+        )
+      : Math.atan2(
+          y(siguiente.altura / 1000) - py,
+          x(siguiente.distancia / 1000) - px || 0.001,
+        )) *
+    (180 / Math.PI);
   const terminado = r.t >= fin;
 
   return (
@@ -266,84 +274,89 @@ export function Trayectoria({
         </div>
       </dl>
 
-      <svg
-        className="vuelo-perfil"
-        viewBox={`0 0 ${ANCHO} ${ALTO}`}
-        role="img"
-        aria-label={t.dibujo}
-      >
-        <defs>
-          <linearGradient id="vuelo-cielo" x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0" stopColor="#3a6fd8" stopOpacity="0.35" />
-            <stop offset="0.35" stopColor="#3a6fd8" stopOpacity="0.08" />
-            <stop offset="1" stopColor="#3a6fd8" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <rect
-          x="0"
-          y={y(100)}
-          width={ANCHO}
-          height={y(0) - y(100)}
-          fill="url(#vuelo-cielo)"
-        />
-        <line
-          x1="0"
-          x2={ANCHO}
-          y1={y(100)}
-          y2={y(100)}
-          className="vuelo-karman"
-        />
-        <text
-          x={ANCHO - 8}
-          y={y(100) - 6}
-          textAnchor="end"
-          className="vuelo-rotulo"
-          fontSize={lz.letra}
+      <div className={`vuelo-lienzo${acercamiento ? ' con-detalle' : ''}`}>
+        <svg
+          className="vuelo-perfil"
+          viewBox={`0 0 ${ANCHO} ${ALTO}`}
+          role="img"
+          aria-label={t.dibujo}
         >
-          100 km
-        </text>
-        <path d={`M0 ${y(0)} H${ANCHO}`} className="vuelo-suelo" />
-        {objetivo && (
-          <g
-            transform={`translate(${x(objetivo.distancia / 1000)} ${y(0)})`}
-            className="vuelo-objetivo"
+          <defs>
+            <linearGradient id="vuelo-cielo" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stopColor="#3a6fd8" stopOpacity="0.35" />
+              <stop offset="0.35" stopColor="#3a6fd8" stopOpacity="0.08" />
+              <stop offset="1" stopColor="#3a6fd8" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <rect
+            x="0"
+            y={y(100)}
+            width={ANCHO}
+            height={y(0) - y(100)}
+            fill="url(#vuelo-cielo)"
+          />
+          <line
+            x1="0"
+            x2={ANCHO}
+            y1={y(100)}
+            y2={y(100)}
+            className="vuelo-karman"
+          />
+          <text
+            x={ANCHO - 8}
+            y={y(100) - 6}
+            textAnchor="end"
+            className="vuelo-rotulo"
+            fontSize={lz.letra}
           >
-            <rect x="-16" y="-4" width="32" height="6" rx="1" />
-            <text y={lz.letra * 1.4} fontSize={lz.letra} textAnchor="middle">
-              {objetivo.nombre}
-            </text>
-          </g>
-        )}
-        {fondo.length > 1 && <path d={camino(fondo)} className="vuelo-fondo" />}
-        <path d={camino(muestras)} className="vuelo-previsto" />
-        {recorrido.length > 1 && (
-          <path d={camino(recorrido)} className="vuelo-hecho" />
-        )}
-        {hitos.map((h) => {
-          const m = muestraEn(muestras, h.t);
-          return (
-            <circle
-              key={h.id}
-              cx={x(m.distancia / 1000)}
-              cy={y(m.altura / 1000)}
-              r={h.t <= r.t ? 4.5 : 3}
-              className={`vuelo-hito${h.t <= r.t ? ' pasado' : ''}`}
-            />
-          );
-        })}
-        <g
-          transform={`translate(${px} ${py}) rotate(${giro}) scale(${lz.nave})`}
-          className="vuelo-nave"
-        >
-          <path d="M10 0 L-6 -4 L-4 0 L-6 4 Z" />
-          {ahora.aceleracion > 0.2 && !terminado && (
-            <path
-              d="M-6 0 L-18 -2.5 L-15 0 L-18 2.5 Z"
-              className="vuelo-llama"
-            />
+            100 km
+          </text>
+          <path d={`M0 ${y(0)} H${ANCHO}`} className="vuelo-suelo" />
+          {objetivo && (
+            <g
+              transform={`translate(${x(objetivo.distancia / 1000)} ${y(0)})`}
+              className="vuelo-objetivo"
+            >
+              <rect x="-16" y="-4" width="32" height="6" rx="1" />
+              <text y={lz.letra * 1.4} fontSize={lz.letra} textAnchor="middle">
+                {objetivo.nombre}
+              </text>
+            </g>
           )}
-        </g>
-      </svg>
+          {fondo.length > 1 && (
+            <path d={camino(fondo)} className="vuelo-fondo" />
+          )}
+          <path d={camino(muestras)} className="vuelo-previsto" />
+          {recorrido.length > 1 && (
+            <path d={camino(recorrido)} className="vuelo-hecho" />
+          )}
+          {hitos.map((h) => {
+            const m = muestraEn(muestras, h.t);
+            return (
+              <circle
+                key={h.id}
+                cx={x(m.distancia / 1000)}
+                cy={y(m.altura / 1000)}
+                r={h.t <= r.t ? 4.5 : 3}
+                className={`vuelo-hito${h.t <= r.t ? ' pasado' : ''}`}
+              />
+            );
+          })}
+          <g
+            transform={`translate(${px} ${py}) rotate(${giro}) scale(${lz.nave})`}
+            className="vuelo-nave"
+          >
+            <path d="M10 0 L-6 -4 L-4 0 L-6 4 Z" />
+            {ahora.empuje > 0 && !terminado && (
+              <path
+                d="M-6 0 L-18 -2.5 L-15 0 L-18 2.5 Z"
+                className="vuelo-llama"
+              />
+            )}
+          </g>
+        </svg>
+        {acercamiento?.(ahora, terminado)}
+      </div>
 
       <div className="vuelo-controles">
         <button

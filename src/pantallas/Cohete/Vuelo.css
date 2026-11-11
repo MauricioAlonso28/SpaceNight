@@ -308,3 +308,127 @@
     font-size: 1.1rem;
   }
 }
+
+.vuelo-pestanas {
+  display: flex;
+  gap: 28px;
+  border-bottom: 1px solid var(--borde);
+  margin-bottom: 4px;
+}
+
+.vuelo-pestanas button {
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 10px 0;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.vuelo-pestanas button:hover {
+  color: var(--texto);
+}
+
+.vuelo-pestanas button[aria-selected='true'] {
+  color: var(--texto);
+  border-bottom-color: var(--acento);
+}
+
+.vuelo-aviso {
+  padding: 40px 0;
+  color: var(--texto-suave);
+  max-width: 62ch;
+}
+
+.vuelo-lienzo.con-detalle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px;
+  gap: 20px;
+  align-items: end;
+}
+
+.descenso {
+  margin: 0;
+}
+
+.descenso svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.descenso-marca {
+  stroke: var(--borde);
+}
+
+.descenso-texto {
+  fill: var(--texto-suave);
+  font-size: 11px;
+  font-family: var(--fuente-texto);
+}
+
+.descenso-texto.fuerte {
+  fill: var(--dato);
+  font-size: 13px;
+}
+
+.descenso-barcaza path {
+  fill: #2a3a63;
+  stroke: rgba(143, 180, 255, 0.4);
+}
+
+.descenso-base rect {
+  fill: #1d2a4d;
+}
+
+.descenso-diana {
+  fill: none;
+  stroke: #ffd166;
+  stroke-width: 2;
+}
+
+.descenso-etapa rect {
+  fill: #e9ecf3;
+}
+
+.descenso-aletas,
+.descenso-patas {
+  fill: none;
+  stroke: #c9cfdc;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.descenso-llama {
+  fill: var(--acento);
+  filter: drop-shadow(0 0 8px var(--acento));
+}
+
+.descenso-datos {
+  display: flex;
+  justify-content: space-between;
+  margin: 6px 0 0;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.descenso-datos span {
+  color: var(--texto-suave);
+}
+
+@media (max-width: 899px) {
+  .vuelo-lienzo.con-detalle {
+    grid-template-columns: minmax(0, 1fr) 96px;
+    gap: 10px;
+  }
+
+  .descenso-datos {
+    flex-direction: column;
+    font-size: 0.75rem;
+  }
+}

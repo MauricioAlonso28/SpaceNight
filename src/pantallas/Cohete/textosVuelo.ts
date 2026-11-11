@@ -118,7 +118,7 @@ export const HITOS: Record<
     },
   },
   toque: {
-    es: 'Toca tierra',
+    es: 'Aterriza',
     en: 'Touchdown',
     queEs: {
       es: 'Se despliegan las patas y la etapa se posa. Se revisa y puede volver a volar.',
