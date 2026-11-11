@@ -1,0 +1,31 @@
+.medidor {
+  width: 112px;
+  height: 112px;
+  display: block;
+}
+
+.medidor-fondo {
+  fill: none;
+  stroke: var(--pista);
+  stroke-width: 10;
+}
+
+.medidor-valor {
+  fill: none;
+  stroke: var(--dato);
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+
+.medidor-num {
+  font-family: var(--fuente-titulo);
+  font-size: 36px;
+  font-weight: 600;
+  fill: var(--texto);
+}
+
+.medidor-de {
+  font-family: var(--fuente-texto);
+  font-size: 11px;
+  fill: var(--texto-suave);
+}

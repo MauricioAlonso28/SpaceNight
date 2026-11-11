@@ -5,13 +5,18 @@ export interface Ubicacion {
   longitud: number;
   altura: number;
   zona: string;
+  bortle: number;
 }
 
-/** Ubicación por defecto: centro de Lima, 150 m sobre el nivel del mar. */
+/** Bortle supuesto cuando la ubicación viene del GPS y no se conoce su cielo. */
+export const BORTLE_ESTIMADO = 7;
+
+/** Ubicación por defecto: centro de Lima, 150 m sobre el nivel del mar, cielo urbano (Bortle 8). */
 export const LIMA: Ubicacion = {
   nombre: 'Lima',
   latitud: -12.05,
   longitud: -77.04,
   altura: 150,
   zona: 'America/Lima',
+  bortle: 8,
 };

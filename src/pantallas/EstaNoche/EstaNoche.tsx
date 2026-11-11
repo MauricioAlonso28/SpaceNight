@@ -8,13 +8,14 @@ import { nochePlanetas } from '../../servicios/astro/planetas';
 import { nocheSol } from '../../servicios/astro/sol';
 import { formatearDiaCorto, formatearHora } from '../../servicios/formato';
 import { inicioDelDia, sumarDias } from '../../servicios/tiempo';
+import { CieloYEventos } from './CieloYEventos';
 import { DeslizadorNoches } from './DeslizadorNoches';
 import { NocheHoraPorHora } from './NocheHoraPorHora';
 import { PlanetasVisibles } from './PlanetasVisibles';
 import { NOMBRE_FASE, notaFase } from './textos';
 import './EstaNoche.css';
 
-/** Portada: la Luna, los planetas visibles y la noche hora por hora. */
+/** Portada: la Luna, los planetas, la noche hora por hora, el cielo y los eventos. */
 export function EstaNoche() {
   const fecha = useFechaVista();
   const ahora = useAhora();
@@ -102,9 +103,16 @@ export function EstaNoche() {
           formato24h={formato24h}
         />
       </section>
+      <CieloYEventos
+        fecha={fecha}
+        inicioNoche={inicioNoche}
+        ahora={ahora}
+        ubicacion={ubicacion}
+        formato24h={formato24h}
+      />
       <p className="pie">
-        El clima y los próximos eventos llegan en la fase 3; la Estación
-        Espacial, en la fase 4.
+        Clima de Open-Meteo, con una hora de caché. Lluvias de meteoros según la
+        IMO. Los pasos de la Estación Espacial llegan en la fase 4.
       </p>
     </>
   );

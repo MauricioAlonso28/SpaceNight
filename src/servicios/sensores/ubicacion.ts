@@ -1,4 +1,4 @@
-import type { Ubicacion } from '../../tipos/ubicacion';
+import { BORTLE_ESTIMADO, type Ubicacion } from '../../tipos/ubicacion';
 
 /** Pide la posición al navegador; devuelve null si no hay permiso o falla. */
 export function pedirUbicacion(): Promise<Ubicacion | null> {
@@ -14,6 +14,7 @@ export function pedirUbicacion(): Promise<Ubicacion | null> {
           longitud: pos.coords.longitude,
           altura: pos.coords.altitude ?? 0,
           zona: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          bortle: BORTLE_ESTIMADO,
         }),
       () => resolver(null),
       { maximumAge: 3_600_000, timeout: 15_000 },

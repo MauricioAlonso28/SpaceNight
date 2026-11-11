@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { LIMA, type Ubicacion } from '../tipos/ubicacion';
+import { BORTLE_ESTIMADO, LIMA, type Ubicacion } from '../tipos/ubicacion';
 
 /** Preferencias que el usuario cambia en Ajustes. */
 export interface Ajustes {
@@ -35,6 +35,20 @@ export function fechaDeUrl(busqueda: string): Date | null {
   return Number.isNaN(fecha.getTime()) ? null : fecha;
 }
 
+/**
+ * Pone al día lo guardado por versiones anteriores: la v1 no tenía Bortle.
+ * @param guardado lo que había en localStorage
+ * @param version la versión con la que se guardó
+ */
+export function migrarEstado(guardado: unknown, version: number): unknown {
+  const s = guardado as { ubicacion?: Partial<Ubicacion> } | null;
+  if (version < 2 && s?.ubicacion && s.ubicacion.bortle === undefined) {
+    const esLima = s.ubicacion.nombre === LIMA.nombre;
+    s.ubicacion.bortle = esLima ? LIMA.bortle : BORTLE_ESTIMADO;
+  }
+  return s;
+}
+
 export const useEstado = create<EstadoApp>()(
   persist(
     (set) => ({
@@ -55,7 +69,8 @@ export const useEstado = create<EstadoApp>()(
     }),
     {
       name: 'tu-cielo',
-      version: 1,
+      version: 2,
+      migrate: migrarEstado,
       partialize: (s) => ({
         ubicacion: s.ubicacion,
         ubicacionPreguntada: s.ubicacionPreguntada,
