@@ -1,20 +1,47 @@
 {
   "zonas": [
-    { "id": "punta", "nombre": { "es": "Punta", "en": "Nose" } },
+    {
+      "id": "punta",
+      "nombre": {
+        "es": "Punta",
+        "en": "Nose"
+      }
+    },
     {
       "id": "segunda-etapa",
-      "nombre": { "es": "Segunda etapa", "en": "Second stage" }
+      "nombre": {
+        "es": "Segunda etapa",
+        "en": "Second stage"
+      }
     },
     {
       "id": "entre-etapas",
-      "nombre": { "es": "Entre etapas", "en": "Interstage" }
+      "nombre": {
+        "es": "Entre etapas",
+        "en": "Interstage"
+      }
     },
     {
       "id": "primera-etapa",
-      "nombre": { "es": "Primera etapa", "en": "First stage" }
+      "nombre": {
+        "es": "Primera etapa",
+        "en": "First stage"
+      }
     },
-    { "id": "motores", "nombre": { "es": "Motores", "en": "Engines" } },
-    { "id": "materiales", "nombre": { "es": "Materiales", "en": "Materials" } }
+    {
+      "id": "motores",
+      "nombre": {
+        "es": "Motores",
+        "en": "Engines"
+      }
+    },
+    {
+      "id": "materiales",
+      "nombre": {
+        "es": "Materiales",
+        "en": "Materials"
+      }
+    }
   ],
   "componentes": [
     {
@@ -23,10 +50,87 @@
       "tipo": "pieza",
       "interior": false,
       "recorrido": 1,
-      "nombre": { "es": "Cofia", "en": "Payload fairing" },
+      "nombre": {
+        "es": "Cofia",
+        "en": "Payload fairing"
+      },
       "resumen": {
         "es": "Protege la carga del aire y el calor al subir; se abre en dos y cae",
         "en": "Shields the payload from air and heat on the way up; splits in two and falls away"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Protege el satélite de la presión del aire, del calor por rozamiento y del ruido mientras el cohete atraviesa la atmósfera.",
+          "en": "It shields the satellite from air pressure, friction heating and noise while the rocket climbs through the atmosphere."
+        },
+        "comoFunciona": {
+          "es": "Son dos mitades unidas por una costura vertical. Cuando el cohete deja atrás el aire denso, a unos 110 km de altura, unos cierres se sueltan y empujadores separan las mitades, que caen. Llevarla más arriba sería cargar peso inútil.",
+          "en": "It is two halves joined along a vertical seam. Once the rocket leaves the dense air behind, about 110 km up, latches release and pushers split the halves, which fall away. Carrying it any higher would be dead weight."
+        },
+        "material": {
+          "es": "Paneles sándwich: láminas de fibra de carbono sobre un núcleo de aluminio en nido de abeja, rígidos y muy livianos, con mantas acústicas por dentro.",
+          "en": "Sandwich panels: carbon fiber sheets over an aluminum honeycomb core, stiff and very light, with acoustic blankets inside."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Diámetro",
+              "en": "Diameter"
+            },
+            "valor": {
+              "es": "≈ 5 m",
+              "en": "≈ 5 m"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Altura",
+              "en": "Height"
+            },
+            "valor": {
+              "es": "≈ 13 m",
+              "en": "≈ 13 m"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Se separa a",
+              "en": "Jettisoned at"
+            },
+            "valor": {
+              "es": "≈ 110 km de altura",
+              "en": "≈ 110 km altitude"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Momento",
+              "en": "When"
+            },
+            "valor": {
+              "es": "≈ 3,5 min tras el despegue",
+              "en": "≈ 3.5 min after liftoff"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Los paneles sándwich de nido de abeja se usan en los pisos y las paredes interiores de los aviones y en trenes rápidos.",
+          "en": "Honeycomb sandwich panels are used in aircraft floors and interior walls and in high-speed trains."
+        },
+        "enCohetes": {
+          "es": "La cofia de Falcon 9 mide 5,2 m por 13,2 m y se recupera del mar; Ariane 6 y Atlas V usan otras parecidas.",
+          "en": "Falcon 9's fairing is 5.2 m by 13.2 m and is recovered from the sea; Ariane 6 and Atlas V use similar ones."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Rocket Parts",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/rocket-parts/"
+          },
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -35,10 +139,77 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 2,
-      "nombre": { "es": "Satélite (carga útil)", "en": "Satellite (payload)" },
+      "nombre": {
+        "es": "Satélite (carga útil)",
+        "en": "Satellite (payload)"
+      },
       "resumen": {
         "es": "Lo que el cohete lleva a órbita",
         "en": "What the rocket carries to orbit"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Es la razón del viaje: todo el cohete existe para dejarlo en la órbita correcta.",
+          "en": "It is the reason for the trip: the whole rocket exists to leave it in the right orbit."
+        },
+        "comoFunciona": {
+          "es": "Viaja plegado y sujeto al adaptador. Tras separarse despliega sus paneles solares y antenas, se orienta y usa sus propios propulsores para ajustar la órbita. Desde ahí trabaja años: comunica, observa la Tierra o estudia el universo.",
+          "en": "It travels folded and clamped to the adapter. After separation it unfolds its solar panels and antennas, points itself and uses its own thrusters to trim the orbit. From there it works for years: relaying signals, watching Earth or studying the universe."
+        },
+        "material": {
+          "es": "Estructura de aluminio y fibra de carbono. Las láminas doradas son mantas térmicas de varias capas de plástico metalizado que lo protegen del sol y del frío.",
+          "en": "An aluminum and carbon fiber frame. The gold sheets are thermal blankets made of several layers of metallized plastic that protect it from sunlight and cold."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Carga máxima a órbita baja",
+              "en": "Max payload to low orbit"
+            },
+            "valor": {
+              "es": "≈ 20 t",
+              "en": "≈ 20 t"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "A órbita de transferencia geoestacionaria",
+              "en": "To geostationary transfer orbit"
+            },
+            "valor": {
+              "es": "≈ 8 t",
+              "en": "≈ 8 t"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Velocidad en órbita baja",
+              "en": "Low-orbit speed"
+            },
+            "valor": {
+              "es": "≈ 7,8 km/s",
+              "en": "≈ 7.8 km/s"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las mantas de plástico metalizado inspiraron las mantas térmicas de emergencia y aislantes reflectivos para edificios.",
+          "en": "Metallized plastic blankets inspired emergency space blankets and reflective insulation for buildings."
+        },
+        "enCohetes": {
+          "es": "Satélites de comunicaciones, de observación de la Tierra y sondas científicas lanzadas por Falcon 9, Ariane 6 o Atlas V.",
+          "en": "Communications, Earth-observation and science spacecraft launched on Falcon 9, Ariane 6 or Atlas V."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Rocket Parts",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/rocket-parts/"
+          },
+          {
+            "titulo": "NASA Spinoff — 'Reflecting' on Life's Daily Challenges",
+            "url": "https://spinoff.nasa.gov/Reflecting-on-Lifes-Daily-Challenges"
+          }
+        ]
       }
     },
     {
@@ -47,10 +218,63 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 3,
-      "nombre": { "es": "Adaptador de carga", "en": "Payload adapter" },
+      "nombre": {
+        "es": "Adaptador de carga",
+        "en": "Payload adapter"
+      },
       "resumen": {
         "es": "Une el satélite al cohete y lo suelta en órbita",
         "en": "Joins the satellite to the rocket and releases it in orbit"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Une el satélite con la segunda etapa, aguanta las fuerzas del despegue y lo suelta con suavidad en órbita.",
+          "en": "It joins the satellite to the second stage, carries the launch loads and lets it go gently in orbit."
+        },
+        "comoFunciona": {
+          "es": "Es un cono de transición con un anillo de separación. Una abrazadera tensada sujeta el satélite; en órbita se libera y unos resortes lo empujan a menos de un metro por segundo, para que se aleje sin girar de más.",
+          "en": "It is a transition cone with a separation ring. A tensioned clamp band holds the satellite; in orbit it releases and springs push the satellite off at under a meter per second, so it drifts away without tumbling."
+        },
+        "material": {
+          "es": "Aluminio mecanizado o compuesto de fibra de carbono, para que sea rígido y liviano.",
+          "en": "Machined aluminum or carbon fiber composite, so it is stiff and light."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Interfaces estándar",
+              "en": "Standard interfaces"
+            },
+            "valor": {
+              "es": "937, 1.194 o 1.666 mm",
+              "en": "937, 1,194 or 1,666 mm"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Velocidad de separación",
+              "en": "Separation speed"
+            },
+            "valor": {
+              "es": "< 1 m/s",
+              "en": "< 1 m/s"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las abrazaderas de liberación rápida con resortes se usan en máquinas industriales para soltar piezas sin golpes.",
+          "en": "Quick-release spring clamps are used in industrial machines to let go of parts without a jolt."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 y Falcon Heavy ofrecen abrazaderas de 937, 1.194 y 1.666 mm; Ariane 6 y Vega usan interfaces parecidas.",
+          "en": "Falcon 9 and Falcon Heavy offer 937, 1,194 and 1,666 mm clamp bands; Ariane 6 and Vega use similar interfaces."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -66,6 +290,56 @@
       "resumen": {
         "es": "Separa las dos mitades de la cofia",
         "en": "Pushes the two fairing halves apart"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Abre la cofia en el momento justo y aleja las dos mitades sin que toquen el satélite.",
+          "en": "It opens the fairing at the right moment and pushes the two halves away without touching the satellite."
+        },
+        "comoFunciona": {
+          "es": "Cierres mecánicos mantienen unida la costura vertical. Al llegar la orden, un circuito de helio a alta presión abre los cierres y cuatro empujadores neumáticos separan las mitades. Al no usar explosivos, el golpe es suave y el sistema se puede probar antes del vuelo.",
+          "en": "Mechanical latches hold the vertical seam together. On command, a high-pressure helium circuit opens the latches and four pneumatic pushers split the halves. With no explosives the shock is mild, and the real hardware can be tested before flight."
+        },
+        "material": {
+          "es": "Cierres de acero y aluminio; empujadores accionados con helio a presión.",
+          "en": "Steel and aluminum latches; pushers driven by pressurized helium."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Empujadores",
+              "en": "Pushers"
+            },
+            "valor": {
+              "es": "4",
+              "en": "4"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Se abre",
+              "en": "Opens"
+            },
+            "valor": {
+              "es": "≈ 3,5 min tras el despegue",
+              "en": "≈ 3.5 min after liftoff"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Los cilindros neumáticos que empujan con aire o gas a presión abren las puertas de los autobuses y mueven brazos en las fábricas.",
+          "en": "Pneumatic cylinders that push with compressed air or gas open bus doors and move arms in factories."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 usa cierres y empujadores neumáticos; otros cohetes cortan la costura con cordones pirotécnicos.",
+          "en": "Falcon 9 uses pneumatic latches and pushers; other rockets cut the seam with pyrotechnic cords."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -74,10 +348,91 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 5,
-      "nombre": { "es": "Motor de vacío", "en": "Vacuum engine" },
+      "nombre": {
+        "es": "Motor de vacío",
+        "en": "Vacuum engine"
+      },
       "resumen": {
         "es": "Empuja en el vacío; tobera muy grande",
         "en": "Pushes in a vacuum; very large nozzle"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Impulsa la segunda etapa desde la separación hasta la órbita, ya fuera de la atmósfera.",
+          "en": "It drives the second stage from separation up to orbit, outside the atmosphere."
+        },
+        "comoFunciona": {
+          "es": "Quema queroseno y oxígeno como los motores principales, pero su tobera es enorme: en el vacío los gases pueden expandirse mucho más y empujar con más eficiencia. Se apaga y se vuelve a encender para ajustar la órbita.",
+          "en": "It burns kerosene and oxygen like the main engines, but its nozzle is huge: in a vacuum the gases can expand much further and push more efficiently. It shuts down and restarts to shape the orbit."
+        },
+        "material": {
+          "es": "Cámara de aleación de cobre refrigerada por el combustible; la gran extensión de la tobera es de niobio, que aguanta el calor brillando al rojo.",
+          "en": "A fuel-cooled copper alloy chamber; the large nozzle extension is niobium, which takes the heat by glowing red-hot."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Empuje en el vacío",
+              "en": "Vacuum thrust"
+            },
+            "valor": {
+              "es": "≈ 980 kN",
+              "en": "≈ 980 kN"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Relación de expansión",
+              "en": "Expansion ratio"
+            },
+            "valor": {
+              "es": "165:1",
+              "en": "165:1"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Impulso específico",
+              "en": "Specific impulse"
+            },
+            "valor": {
+              "es": "≈ 350 s",
+              "en": "≈ 350 s"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Encendido",
+              "en": "Burn time"
+            },
+            "valor": {
+              "es": "≈ 6 min",
+              "en": "≈ 6 min"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las aleaciones de niobio y titanio forman los cables superconductores de los imanes de las resonancias magnéticas.",
+          "en": "Niobium-titanium alloys make the superconducting wire in MRI scanner magnets."
+        },
+        "enCohetes": {
+          "es": "Merlin Vacuum en Falcon 9, RL10 en la etapa Centaur y Vinci en Ariane 6.",
+          "en": "Merlin Vacuum on Falcon 9, RL10 on the Centaur stage and Vinci on Ariane 6."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Nozzle Design",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/nozzle-design/"
+          },
+          {
+            "titulo": "NASA Glenn — Specific Impulse",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-impulse/"
+          }
+        ]
       }
     },
     {
@@ -93,6 +448,70 @@
       "resumen": {
         "es": "Guarda el oxidante a −183 °C",
         "en": "Holds the oxidizer at −183 °C"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Guarda el oxidante del motor de vacío: sin aire en el espacio, el cohete lleva su propio oxígeno.",
+          "en": "It holds the vacuum engine's oxidizer: with no air in space, the rocket carries its own oxygen."
+        },
+        "comoFunciona": {
+          "es": "El oxígeno se guarda líquido a −183 °C, así cabe mucho en poco volumen. Mientras se vacía entra helio caliente, que mantiene la presión para alimentar las bombas y da rigidez a las paredes.",
+          "en": "The oxygen is stored as a liquid at −183 °C, so a lot fits in a small volume. As it drains, heated helium flows in to keep the pressure that feeds the pumps and stiffens the walls."
+        },
+        "material": {
+          "es": "Paredes de aleación de aluminio-litio soldadas por fricción-agitación y domos de aluminio.",
+          "en": "Friction-stir-welded aluminum-lithium walls and aluminum domes."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Temperatura",
+              "en": "Temperature"
+            },
+            "valor": {
+              "es": "−183 °C",
+              "en": "−183 °C"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Densidad",
+              "en": "Density"
+            },
+            "valor": {
+              "es": "1,14 kg/L",
+              "en": "1.14 kg/L"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Mezcla",
+              "en": "Mixture ratio"
+            },
+            "valor": {
+              "es": "≈ 2,3 kg de oxígeno por kg de queroseno",
+              "en": "≈ 2.3 kg of oxygen per kg of kerosene"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Los hospitales guardan su oxígeno medicinal en tanques criogénicos de oxígeno líquido, y la industria del acero lo usa a gran escala.",
+          "en": "Hospitals store medical oxygen in cryogenic liquid-oxygen tanks, and the steel industry uses it in bulk."
+        },
+        "enCohetes": {
+          "es": "Las segundas etapas de Falcon 9 y Soyuz guardan oxígeno líquido y queroseno.",
+          "en": "The upper stages of Falcon 9 and Soyuz carry liquid oxygen and kerosene."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Liquid Rocket Engine",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/liquid-rocket-engine/"
+          },
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -101,10 +520,67 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 7,
-      "nombre": { "es": "Tanque de combustible", "en": "Fuel tank" },
+      "nombre": {
+        "es": "Tanque de combustible",
+        "en": "Fuel tank"
+      },
       "resumen": {
         "es": "Guarda el queroseno refinado",
         "en": "Holds the refined kerosene"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Guarda el queroseno refinado que quema el motor de vacío.",
+          "en": "It holds the refined kerosene the vacuum engine burns."
+        },
+        "comoFunciona": {
+          "es": "El combustible es RP-1, un queroseno muy purificado, sin azufre y con composición controlada, para que no deje residuos en los finos conductos del motor. Se mantiene líquido a temperatura ambiente y se presuriza con helio.",
+          "en": "The fuel is RP-1, a highly purified kerosene with no sulfur and a controlled makeup, so it leaves no deposits in the engine's fine passages. It stays liquid at room temperature and is pressurized with helium."
+        },
+        "material": {
+          "es": "Aleación de aluminio-litio, como el resto de los tanques.",
+          "en": "Aluminum-lithium alloy, like the other tanks."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Densidad",
+              "en": "Density"
+            },
+            "valor": {
+              "es": "≈ 0,81 kg/L",
+              "en": "≈ 0.81 kg/L"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Energía",
+              "en": "Energy"
+            },
+            "valor": {
+              "es": "≈ 43 MJ/kg",
+              "en": "≈ 43 MJ/kg"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Es pariente cercano del combustible de los aviones a reacción (Jet A), también derivado del queroseno.",
+          "en": "It is a close relative of jet airliner fuel (Jet A), also made from kerosene."
+        },
+        "enCohetes": {
+          "es": "Falcon 9, Soyuz y Electron queman RP-1 con oxígeno líquido.",
+          "en": "Falcon 9, Soyuz and Electron burn RP-1 with liquid oxygen."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Liquid Rocket Engine",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/liquid-rocket-engine/"
+          },
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -120,6 +596,60 @@
       "resumen": {
         "es": "Mantienen la presión de los tanques al vaciarse",
         "en": "Keep the tanks pressurized as they empty"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Guardan helio a muy alta presión para presurizar los tanques de propelente mientras se vacían.",
+          "en": "They store helium at very high pressure to pressurize the propellant tanks as they empty."
+        },
+        "comoFunciona": {
+          "es": "Al salir el oxígeno y el queroseno, el helio ocupa su lugar y mantiene la presión que alimenta las bombas. Se usa helio porque no se congela ni reacciona con el oxígeno líquido.",
+          "en": "As oxygen and kerosene flow out, helium takes their place and keeps up the pressure that feeds the pumps. Helium is used because it does not freeze or react with liquid oxygen."
+        },
+        "material": {
+          "es": "Son COPV: un forro metálico delgado envuelto en fibra de carbono, que aguanta la presión con mucho menos peso que el acero.",
+          "en": "They are COPVs: a thin metal liner wrapped in carbon fiber, which holds the pressure with far less weight than steel."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Presión",
+              "en": "Pressure"
+            },
+            "valor": {
+              "es": "≈ 300–400 bar",
+              "en": "≈ 300–400 bar"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Peso frente al acero",
+              "en": "Weight vs. steel"
+            },
+            "valor": {
+              "es": "≈ 40 % menos",
+              "en": "≈ 40% less"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "La NASA ayudó a crear tanques envueltos en compuesto para los equipos de respiración de los bomberos; hoy también llevan gas en autobuses y vehículos de hidrógeno.",
+          "en": "NASA helped create composite-wrapped tanks for firefighters' breathing gear; today they also hold gas on buses and hydrogen vehicles."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 los lleva dentro de sus tanques de oxígeno; Atlas V y el transbordador espacial también los usaban.",
+          "en": "Falcon 9 carries them inside its oxygen tanks; Atlas V and the Space Shuttle used them too."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Spinoff — Wrapped Tanks Cut Weight on Everything from Buses to Paintball Guns",
+            "url": "https://spinoff.nasa.gov/Spinoff2019/ps_4.html"
+          },
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -135,6 +665,60 @@
       "resumen": {
         "es": "Pequeños chorros que orientan la etapa sin motor",
         "en": "Small jets that point the stage without the engine"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Pequeños chorros que giran y apuntan la etapa cuando el motor está apagado, por ejemplo antes de soltar el satélite.",
+          "en": "Small jets that turn and point the stage while the engine is off, for example before releasing the satellite."
+        },
+        "comoFunciona": {
+          "es": "Hay grupos de toberas pequeñas mirando en distintas direcciones. Al soltar un chorro de gas, la etapa recibe un empujón en sentido contrario, por la tercera ley de Newton, y gira en cabeceo, guiñada o alabeo.",
+          "en": "Clusters of small nozzles point in different directions. Releasing a puff of gas gives the stage a push the other way, by Newton's third law, turning it in pitch, yaw or roll."
+        },
+        "material": {
+          "es": "Válvulas y toberas de acero inoxidable y titanio; el gas es nitrógeno frío a presión.",
+          "en": "Stainless steel and titanium valves and nozzles; the gas is cold pressurized nitrogen."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Gas",
+              "en": "Gas"
+            },
+            "valor": {
+              "es": "Nitrógeno frío",
+              "en": "Cold nitrogen"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Empuje por propulsor",
+              "en": "Thrust per thruster"
+            },
+            "valor": {
+              "es": "Decenas a cientos de newtons",
+              "en": "Tens to hundreds of newtons"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las máquinas clasificadoras de las plantas de reciclaje y de alimentos usan chorros de aire a presión para apartar objetos.",
+          "en": "Sorting machines in recycling and food plants use jets of compressed air to knock items aside."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 usa nitrógeno frío en ambas etapas; la etapa Centaur usa hidracina.",
+          "en": "Falcon 9 uses cold nitrogen on both stages; the Centaur stage uses hydrazine."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Newton's Laws of Motion",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/newtons-laws-of-motion/"
+          },
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -143,10 +727,71 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 10,
-      "nombre": { "es": "Computadora de vuelo", "en": "Flight computer" },
+      "nombre": {
+        "es": "Computadora de vuelo",
+        "en": "Flight computer"
+      },
       "resumen": {
         "es": "Guiado, navegación y control",
         "en": "Guidance, navigation and control"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Es el cerebro: decide hacia dónde apuntar los motores, cuándo apagarlos y cuándo separar las etapas.",
+          "en": "It is the brain: it decides where to point the engines, when to shut them down and when to separate the stages."
+        },
+        "comoFunciona": {
+          "es": "Lee unidades de medida inercial (giróscopos y acelerómetros) y GPS, calcula posición y velocidad muchas veces por segundo y las compara con la trayectoria prevista. Corrige moviendo el cardán y los propulsores. Va triplicada: si una falla, las otras siguen.",
+          "en": "It reads inertial measurement units (gyroscopes and accelerometers) and GPS, works out position and speed many times a second and compares them with the planned path. It corrects by moving the gimbals and thrusters. It is triplicated: if one fails, the others carry on."
+        },
+        "material": {
+          "es": "Electrónica en cajas de aluminio selladas, con componentes probados contra vibración, calor y radiación.",
+          "en": "Electronics in sealed aluminum boxes, with parts tested against vibration, heat and radiation."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Redundancia",
+              "en": "Redundancy"
+            },
+            "valor": {
+              "es": "Triple",
+              "en": "Triple"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Sensores",
+              "en": "Sensors"
+            },
+            "valor": {
+              "es": "Inerciales y GPS",
+              "en": "Inertial and GPS"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "En 1972 la NASA voló un avión F-8 controlado solo por una computadora del Apolo; ese mando digital (fly-by-wire) hoy dirige los aviones de pasajeros.",
+          "en": "In 1972 NASA flew an F-8 jet controlled only by an Apollo computer; that digital fly-by-wire control now flies airliners."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 usa una arquitectura de tres cadenas tolerante a fallos; el Saturno V tenía su propia computadora de guiado.",
+          "en": "Falcon 9 uses a fault-tolerant three-string design; the Saturn V had its own guidance computer."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA — F-8 Flies with Apollo Guidance Computer",
+            "url": "https://www.nasa.gov/image-article/f-8-flies-with-apollo-guidance-computer-2/"
+          },
+          {
+            "titulo": "NASA Spinoff — Fly-by-Wire Systems Enable Safer, More Efficient Flight",
+            "url": "https://spinoff.nasa.gov/Spinoff2011/t_5.html"
+          }
+        ]
       }
     },
     {
@@ -155,10 +800,67 @@
       "tipo": "pieza",
       "interior": false,
       "recorrido": 11,
-      "nombre": { "es": "Antenas", "en": "Antennas" },
+      "nombre": {
+        "es": "Antenas",
+        "en": "Antennas"
+      },
       "resumen": {
         "es": "Telemetría y seguimiento desde tierra",
         "en": "Telemetry and tracking from the ground"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Envían a tierra la telemetría (datos de cientos de sensores) y video, y permiten seguir el cohete en todo momento.",
+          "en": "They send telemetry (data from hundreds of sensors) and video to the ground, and let controllers track the rocket at all times."
+        },
+        "comoFunciona": {
+          "es": "Transmisores de radio en banda S emiten por antenas en lados opuestos del cohete, para que siempre una mire a una estación en tierra o a un satélite de retransmisión. Cada etapa sigue transmitiendo incluso después de separarse.",
+          "en": "S-band radio transmitters send through antennas on opposite sides of the rocket, so one always faces a ground station or a relay satellite. Each stage keeps transmitting even after separation."
+        },
+        "material": {
+          "es": "Antenas planas de parche y de cuchilla, de metal con cubiertas que dejan pasar las ondas de radio.",
+          "en": "Flat patch and blade antennas, metal with covers that let radio waves through."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Banda",
+              "en": "Band"
+            },
+            "valor": {
+              "es": "S (≈ 2,2 GHz)",
+              "en": "S (≈ 2.2 GHz)"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Contenido",
+              "en": "Carries"
+            },
+            "valor": {
+              "es": "Telemetría y video",
+              "en": "Telemetry and video"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las antenas planas de parche están dentro de los teléfonos móviles y de los receptores de GPS.",
+          "en": "Flat patch antennas sit inside mobile phones and GPS receivers."
+        },
+        "enCohetes": {
+          "es": "Todos los cohetes transmiten telemetría; la NASA usa su red de satélites TDRS para recibirla durante el ascenso.",
+          "en": "Every rocket sends telemetry; NASA uses its TDRS relay satellites to receive it during ascent."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA — Engineers' Telemetry Fix Preserves TDRS-L Launch",
+            "url": "https://www.nasa.gov/missions/tdrs/engineers-telemetry-fix-preserves-tdrs-l-launch/"
+          }
+        ]
       }
     },
     {
@@ -167,10 +869,63 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 12,
-      "nombre": { "es": "Baterías", "en": "Batteries" },
+      "nombre": {
+        "es": "Baterías",
+        "en": "Batteries"
+      },
       "resumen": {
         "es": "Energía para la electrónica",
         "en": "Power for the electronics"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Dan electricidad a la computadora, los sensores, las válvulas y las radios durante todo el vuelo.",
+          "en": "They power the computer, sensors, valves and radios for the whole flight."
+        },
+        "comoFunciona": {
+          "es": "En la plataforma el cohete se alimenta desde tierra; minutos antes del despegue pasa a sus baterías internas. Deben aguantar vibraciones fuertes, el vacío y, en misiones largas, horas de espera entre encendidos.",
+          "en": "On the pad the rocket runs on ground power; minutes before liftoff it switches to its internal batteries. They must survive heavy vibration, vacuum and, on long missions, hours of coasting between burns."
+        },
+        "material": {
+          "es": "Celdas de ion de litio en carcasas selladas; los cohetes antiguos usaban plata-zinc.",
+          "en": "Lithium-ion cells in sealed cases; older rockets used silver-zinc."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Voltaje típico",
+              "en": "Typical voltage"
+            },
+            "valor": {
+              "es": "28 V",
+              "en": "28 V"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Duración necesaria",
+              "en": "Needed endurance"
+            },
+            "valor": {
+              "es": "De minutos a horas",
+              "en": "Minutes to hours"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las mismas celdas de ion de litio de alta densidad están en los teléfonos y los autos eléctricos.",
+          "en": "The same high-density lithium-ion cells power phones and electric cars."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 usa baterías de litio; el Saturno V volaba con baterías de plata-zinc.",
+          "en": "Falcon 9 uses lithium batteries; the Saturn V flew silver-zinc batteries."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Rocket Parts",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/rocket-parts/"
+          }
+        ]
       }
     },
     {
@@ -179,10 +934,67 @@
       "tipo": "pieza",
       "interior": false,
       "recorrido": 13,
-      "nombre": { "es": "Interetapa", "en": "Interstage" },
+      "nombre": {
+        "es": "Interetapa",
+        "en": "Interstage"
+      },
       "resumen": {
         "es": "Une las etapas y cubre el motor de vacío",
         "en": "Joins the stages and covers the vacuum engine"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Une la primera y la segunda etapa, cubre el motor de vacío y transmite el empuje hacia arriba.",
+          "en": "It joins the first and second stages, covers the vacuum engine and carries the thrust upward."
+        },
+        "comoFunciona": {
+          "es": "Es un cilindro hueco fijado a la parte alta de la primera etapa. Arriba tiene el sistema de separación. Al separarse, se queda con la primera etapa y deja libre el motor de vacío.",
+          "en": "It is a hollow cylinder fixed to the top of the first stage. The separation system sits at its upper end. At staging it stays with the first stage and uncovers the vacuum engine."
+        },
+        "material": {
+          "es": "Compuesto: núcleo de aluminio en nido de abeja entre láminas de fibra de carbono.",
+          "en": "Composite: an aluminum honeycomb core between carbon fiber face sheets."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Largo",
+              "en": "Length"
+            },
+            "valor": {
+              "es": "≈ 6 m",
+              "en": "≈ 6 m"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Diámetro",
+              "en": "Diameter"
+            },
+            "valor": {
+              "es": "El del cohete",
+              "en": "Same as the rocket"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Estructuras de fibra de carbono como esta forman fuselajes de aviones modernos, cuadros de bicicleta y cascos de botes.",
+          "en": "Carbon fiber structures like this one make modern airliner fuselages, bicycle frames and boat hulls."
+        },
+        "enCohetes": {
+          "es": "La interetapa negra de Falcon 9 es de fibra de carbono; en ella van las aletas de rejilla.",
+          "en": "Falcon 9's black interstage is carbon fiber, and it carries the grid fins."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Rocket Parts",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/rocket-parts/"
+          }
+        ]
       }
     },
     {
@@ -198,6 +1010,66 @@
       "resumen": {
         "es": "Suelta la segunda etapa y la empuja",
         "en": "Releases the second stage and pushes it away"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Suelta la segunda etapa y la aleja de la primera sin que vuelvan a tocarse.",
+          "en": "It releases the second stage and pushes it clear of the first so they never touch again."
+        },
+        "comoFunciona": {
+          "es": "Tres cierres mecánicos sujetan las etapas. Cuando los motores principales se apagan, un circuito de helio abre los cierres y empujadores neumáticos, con uno central de reserva, separan las etapas. Segundos después enciende el motor de vacío.",
+          "en": "Three mechanical latches hold the stages together. When the main engines shut down, a helium circuit opens the latches and pneumatic pushers, with a spare one in the center, push the stages apart. Seconds later the vacuum engine lights."
+        },
+        "material": {
+          "es": "Cierres de acero y aluminio y empujadores neumáticos alimentados con helio.",
+          "en": "Steel and aluminum latches and helium-fed pneumatic pushers."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Cierres",
+              "en": "Latches"
+            },
+            "valor": {
+              "es": "3",
+              "en": "3"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Momento",
+              "en": "When"
+            },
+            "valor": {
+              "es": "≈ 2,5 min tras el despegue",
+              "en": "≈ 2.5 min after liftoff"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Altitud",
+              "en": "Altitude"
+            },
+            "valor": {
+              "es": "≈ 70 km",
+              "en": "≈ 70 km"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Los cilindros neumáticos son los mismos que mueven puertas automáticas y prensas en las fábricas.",
+          "en": "Pneumatic cylinders are the same devices that move automatic doors and factory presses."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 separa sus etapas con empujadores neumáticos; Soyuz y Starship encienden la etapa de arriba antes de soltarse (separación en caliente).",
+          "en": "Falcon 9 stages with pneumatic pushers; Soyuz and Starship light the upper stage before letting go (hot staging)."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -206,10 +1078,67 @@
       "tipo": "pieza",
       "interior": false,
       "recorrido": 15,
-      "nombre": { "es": "Aletas de rejilla", "en": "Grid fins" },
+      "nombre": {
+        "es": "Aletas de rejilla",
+        "en": "Grid fins"
+      },
       "resumen": {
         "es": "Guían la etapa al volver a tierra",
         "en": "Steer the stage on its way back to the ground"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Guían la primera etapa mientras cae de vuelta a la Tierra para aterrizar.",
+          "en": "They steer the first stage as it falls back to Earth to land."
+        },
+        "comoFunciona": {
+          "es": "Van plegadas y se despliegan después de la separación. Son rejillas, no aletas lisas: el aire pasa por sus celdas y, al girarlas, desvían el flujo y orientan la etapa como timones, incluso a velocidades supersónicas.",
+          "en": "They fold flat and deploy after separation. They are lattices, not plain fins: air flows through their cells, and rotating them deflects the flow and steers the stage like rudders, even at supersonic speeds."
+        },
+        "material": {
+          "es": "Titanio fundido de una sola pieza, que soporta el calor del regreso sin protección extra.",
+          "en": "Single-piece cast titanium, which takes the heat of reentry without extra protection."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Cantidad",
+              "en": "Number"
+            },
+            "valor": {
+              "es": "4",
+              "en": "4"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Tamaño",
+              "en": "Size"
+            },
+            "valor": {
+              "es": "≈ 1,5 × 1,2 m",
+              "en": "≈ 1.5 × 1.2 m"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las aletas de rejilla nacieron en misiles y bombas guiadas, que las usan para maniobrar a alta velocidad.",
+          "en": "Grid fins were born on missiles and guided bombs, which use them to steer at high speed."
+        },
+        "enCohetes": {
+          "es": "Falcon 9, Falcon Heavy y el propulsor Super Heavy de Starship; también el sistema de escape de Soyuz.",
+          "en": "Falcon 9, Falcon Heavy and Starship's Super Heavy booster; also the Soyuz launch escape system."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Rocket Parts",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/rocket-parts/"
+          }
+        ]
       }
     },
     {
@@ -225,6 +1154,70 @@
       "resumen": {
         "es": "El tanque más grande del cohete",
         "en": "The largest tank on the rocket"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Guarda casi todo el oxígeno del cohete: es el tanque más grande.",
+          "en": "It holds most of the rocket's oxygen: it is the largest tank."
+        },
+        "comoFunciona": {
+          "es": "El motor quema unas 2,3 veces más oxígeno que queroseno, en masa, así que este tanque es mucho mayor que el de combustible. Va arriba y su oxígeno baja por un conducto que atraviesa el tanque de queroseno. Se presuriza con helio caliente.",
+          "en": "The engines burn about 2.3 times more oxygen than kerosene by mass, so this tank is much bigger than the fuel tank. It sits on top, and its oxygen runs down a duct through the kerosene tank. It is pressurized with heated helium."
+        },
+        "material": {
+          "es": "Paredes de aluminio-litio soldadas por fricción-agitación; un domo común lo separa del tanque de combustible.",
+          "en": "Friction-stir-welded aluminum-lithium walls; a common dome separates it from the fuel tank."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Oxígeno a bordo",
+              "en": "Oxygen on board"
+            },
+            "valor": {
+              "es": "≈ 280 t",
+              "en": "≈ 280 t"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Temperatura",
+              "en": "Temperature"
+            },
+            "valor": {
+              "es": "−183 °C (más frío si se densifica)",
+              "en": "−183 °C (colder when densified)"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Largo",
+              "en": "Length"
+            },
+            "valor": {
+              "es": "≈ 21 m",
+              "en": "≈ 21 m"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Tanques criogénicos parecidos transportan oxígeno y nitrógeno líquidos para hospitales y fábricas.",
+          "en": "Similar cryogenic tanks carry liquid oxygen and nitrogen to hospitals and factories."
+        },
+        "enCohetes": {
+          "es": "Las primeras etapas de Falcon 9, Atlas V y el Saturno V guardan oxígeno líquido encima del queroseno.",
+          "en": "The first stages of Falcon 9, Atlas V and the Saturn V carry liquid oxygen above the kerosene."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Liquid Rocket Engine",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/liquid-rocket-engine/"
+          }
+        ]
       }
     },
     {
@@ -233,10 +1226,77 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 17,
-      "nombre": { "es": "Tanque de combustible", "en": "Fuel tank" },
+      "nombre": {
+        "es": "Tanque de combustible",
+        "en": "Fuel tank"
+      },
       "resumen": {
         "es": "Combustible de los motores principales",
         "en": "Fuel for the main engines"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Alimenta con queroseno a los nueve motores principales.",
+          "en": "It feeds kerosene to the nine main engines."
+        },
+        "comoFunciona": {
+          "es": "Va debajo del tanque de oxígeno, cerca de los motores. Por su centro pasa el conducto de oxígeno. A pleno empuje se vacía en unos dos minutos y medio; el helio a presión mantiene el flujo constante.",
+          "en": "It sits below the oxygen tank, close to the engines. The oxygen duct runs through its center. At full thrust it drains in about two and a half minutes, while pressurized helium keeps the flow steady."
+        },
+        "material": {
+          "es": "Aleación de aluminio-litio, con paredes reforzadas por largueros.",
+          "en": "Aluminum-lithium alloy, with stringer-stiffened walls."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Queroseno a bordo",
+              "en": "Kerosene on board"
+            },
+            "valor": {
+              "es": "≈ 115 t",
+              "en": "≈ 115 t"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Densidad",
+              "en": "Density"
+            },
+            "valor": {
+              "es": "≈ 0,81 kg/L",
+              "en": "≈ 0.81 kg/L"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Se vacía en",
+              "en": "Drains in"
+            },
+            "valor": {
+              "es": "≈ 2,5 min",
+              "en": "≈ 2.5 min"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "El queroseno refinado es la base de los combustibles de aviación.",
+          "en": "Refined kerosene is the basis of aviation fuels."
+        },
+        "enCohetes": {
+          "es": "Falcon 9, Soyuz y la primera etapa del Saturno V usaban queroseno RP-1.",
+          "en": "Falcon 9, Soyuz and the Saturn V's first stage used RP-1 kerosene."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Liquid Rocket Engine",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/liquid-rocket-engine/"
+          }
+        ]
       }
     },
     {
@@ -245,10 +1305,67 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 18,
-      "nombre": { "es": "Conducto de oxígeno", "en": "Oxygen downcomer" },
+      "nombre": {
+        "es": "Conducto de oxígeno",
+        "en": "Oxygen downcomer"
+      },
       "resumen": {
         "es": "Lleva el oxígeno atravesando el tanque de combustible",
         "en": "Carries the oxygen down through the fuel tank"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Lleva el oxígeno líquido desde el tanque de arriba hasta los motores, atravesando el tanque de combustible.",
+          "en": "It carries liquid oxygen from the upper tank down to the engines, straight through the fuel tank."
+        },
+        "comoFunciona": {
+          "es": "Rodear el tanque por fuera añadiría peso y resistencia al aire, así que el tubo baja por el centro. Tiene doble pared para que el oxígeno a −183 °C no congele el queroseno que lo rodea ni se caliente por él.",
+          "en": "Running around the outside would add weight and drag, so the pipe goes down the middle. It is double-walled so the −183 °C oxygen does not freeze the kerosene around it or get warmed by it."
+        },
+        "material": {
+          "es": "Tubo metálico de doble pared: el espacio entre ambas paredes aísla.",
+          "en": "Double-walled metal tube: the gap between the walls insulates."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Largo",
+              "en": "Length"
+            },
+            "valor": {
+              "es": "≈ 14 m",
+              "en": "≈ 14 m"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Caudal a pleno empuje",
+              "en": "Flow at full thrust"
+            },
+            "valor": {
+              "es": "≈ 2 t de oxígeno por segundo",
+              "en": "≈ 2 t of oxygen per second"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las tuberías de doble pared aisladas transportan nitrógeno líquido en hospitales, laboratorios y plantas de alimentos.",
+          "en": "Insulated double-walled pipes carry liquid nitrogen in hospitals, labs and food plants."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 lleva un tubo de transferencia central; el Saturno V tenía cinco que cruzaban su tanque de combustible.",
+          "en": "Falcon 9 has one central transfer tube; the Saturn V had five running through its fuel tank."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA History — Stages to Saturn, chapter 7",
+            "url": "https://history.nasa.gov/SP-4206/ch7.htm"
+          }
+        ]
       }
     },
     {
@@ -257,10 +1374,73 @@
       "tipo": "pieza",
       "interior": false,
       "recorrido": 19,
-      "nombre": { "es": "Patas de aterrizaje", "en": "Landing legs" },
+      "nombre": {
+        "es": "Patas de aterrizaje",
+        "en": "Landing legs"
+      },
       "resumen": {
         "es": "Se despliegan para posarse",
         "en": "Unfold to touch down"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Se despliegan en los últimos segundos para que la primera etapa se pose de pie y pueda volver a volar.",
+          "en": "They deploy in the final seconds so the first stage can stand on landing and fly again."
+        },
+        "comoFunciona": {
+          "es": "Durante el ascenso van plegadas contra el casco. Al acercarse al suelo, un sistema neumático las abre y amortiguadores en cada pata absorben el golpe. Reutilizar la etapa abarata mucho los lanzamientos.",
+          "en": "On the way up they fold against the hull. Close to the ground a pneumatic system swings them open, and shock absorbers in each leg soak up the touchdown. Reusing the stage makes launches far cheaper."
+        },
+        "material": {
+          "es": "Fibra de carbono con núcleo de aluminio en nido de abeja; pies y amortiguadores metálicos.",
+          "en": "Carbon fiber over an aluminum honeycomb core; metal feet and shock absorbers."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Cantidad",
+              "en": "Number"
+            },
+            "valor": {
+              "es": "4",
+              "en": "4"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Envergadura abiertas",
+              "en": "Span when deployed"
+            },
+            "valor": {
+              "es": "≈ 18 m",
+              "en": "≈ 18 m"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Masa total",
+              "en": "Total mass"
+            },
+            "valor": {
+              "es": "≈ 2 t",
+              "en": "≈ 2 t"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Los paneles de fibra de carbono con nido de abeja se usan en pisos de aviones y en autos de carreras.",
+          "en": "Carbon fiber honeycomb panels are used in aircraft floors and race cars."
+        },
+        "enCohetes": {
+          "es": "Falcon 9 y los propulsores de Falcon Heavy aterrizan sobre cuatro patas.",
+          "en": "Falcon 9 and the Falcon Heavy boosters land on four legs."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -269,10 +1449,91 @@
       "tipo": "pieza",
       "interior": false,
       "recorrido": 20,
-      "nombre": { "es": "Motores principales", "en": "Main engines" },
+      "nombre": {
+        "es": "Motores principales",
+        "en": "Main engines"
+      },
       "resumen": {
         "es": "Varios motores que dan el empuje del despegue",
         "en": "Several engines that give the liftoff thrust"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Dan el empuje para despegar y atravesar la parte densa de la atmósfera.",
+          "en": "They provide the thrust to lift off and punch through the dense lower atmosphere."
+        },
+        "comoFunciona": {
+          "es": "Nueve motores iguales, ocho en círculo alrededor de uno central, se encienden a la vez y juntos superan el peso del cohete. Se vigilan uno por uno: si alguno falla se puede apagar y los demás compensan. Algunos se reencienden para frenar y aterrizar.",
+          "en": "Nine identical engines, eight in a ring around a center one, light together and out-push the rocket's weight. Each is watched on its own: if one fails it can be shut down and the rest make up for it. Some relight to brake and land."
+        },
+        "material": {
+          "es": "Cámaras con camisa de aleación de cobre refrigerada por el combustible; partes calientes de aleaciones de níquel.",
+          "en": "Chambers with a fuel-cooled copper alloy liner; hot parts in nickel alloys."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Motores",
+              "en": "Engines"
+            },
+            "valor": {
+              "es": "9",
+              "en": "9"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Empuje total al nivel del mar",
+              "en": "Total sea-level thrust"
+            },
+            "valor": {
+              "es": "≈ 7.600 kN",
+              "en": "≈ 7,600 kN"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Empuje por motor",
+              "en": "Thrust per engine"
+            },
+            "valor": {
+              "es": "≈ 845 kN",
+              "en": "≈ 845 kN"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Funcionan",
+              "en": "Burn time"
+            },
+            "valor": {
+              "es": "≈ 2,5 min",
+              "en": "≈ 2.5 min"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "La impresión 3D de metal, muy usada hoy en motores de cohete, también fabrica implantes médicos y piezas de turbinas.",
+          "en": "Metal 3D printing, now common in rocket engines, also makes medical implants and turbine parts."
+        },
+        "enCohetes": {
+          "es": "Merlin 1D en Falcon 9, RD-180 en Atlas V, Raptor en Starship y F-1 en el Saturno V.",
+          "en": "Merlin 1D on Falcon 9, RD-180 on Atlas V, Raptor on Starship and F-1 on the Saturn V."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Liquid Rocket Engine",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/liquid-rocket-engine/"
+          },
+          {
+            "titulo": "NASA Glenn — Rocket Thrust",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/rocket-thrust/"
+          }
+        ]
       }
     },
     {
@@ -281,10 +1542,77 @@
       "tipo": "pieza",
       "interior": false,
       "recorrido": 21,
-      "nombre": { "es": "Tobera", "en": "Nozzle" },
+      "nombre": {
+        "es": "Tobera",
+        "en": "Nozzle"
+      },
       "resumen": {
         "es": "Acelera y dirige los gases de escape",
         "en": "Speeds up and directs the exhaust gases"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Convierte el calor y la presión de los gases en velocidad hacia atrás, y así produce el empuje.",
+          "en": "It turns the heat and pressure of the gases into rearward speed, and that makes the thrust."
+        },
+        "comoFunciona": {
+          "es": "Tiene forma de reloj de arena: los gases se aceleran hasta la velocidad del sonido en la garganta y, al ensancharse la campana, siguen acelerando hasta ser supersónicos. Su largo se elige según la presión de afuera: más corta al nivel del mar, mucho más larga en el vacío.",
+          "en": "It is shaped like an hourglass: the gases speed up to the speed of sound at the throat and, as the bell widens, keep accelerating until supersonic. Its length suits the outside pressure: shorter at sea level, much longer in a vacuum."
+        },
+        "material": {
+          "es": "Aleaciones de níquel o de cobre, refrigeradas por el propio combustible que circula por canales en la pared.",
+          "en": "Nickel or copper alloys, cooled by the fuel itself flowing through channels in the wall."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Velocidad de salida de los gases",
+              "en": "Exhaust speed"
+            },
+            "valor": {
+              "es": "≈ 3 km/s",
+              "en": "≈ 3 km/s"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Relación de expansión (nivel del mar)",
+              "en": "Expansion ratio (sea level)"
+            },
+            "valor": {
+              "es": "≈ 16:1",
+              "en": "≈ 16:1"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Gases",
+              "en": "Gas temperature"
+            },
+            "valor": {
+              "es": "> 3.000 °C",
+              "en": "> 3,000 °C"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las toberas convergentes-divergentes se usan en los motores de aviones supersónicos y en las máquinas de chorro de arena.",
+          "en": "Converging-diverging nozzles are used in supersonic jet engines and sandblasting machines."
+        },
+        "enCohetes": {
+          "es": "Todos los motores de cohete las tienen; la de Merlin 1D es de 16:1 y la del Merlin Vacuum, de 165:1.",
+          "en": "Every rocket engine has one; Merlin 1D's is 16:1 and Merlin Vacuum's is 165:1."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Nozzle Design",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/nozzle-design/"
+          },
+          {
+            "titulo": "NASA Glenn — Rocket Thrust",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/rocket-thrust/"
+          }
+        ]
       }
     },
     {
@@ -293,10 +1621,67 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 22,
-      "nombre": { "es": "Cámara de combustión", "en": "Combustion chamber" },
+      "nombre": {
+        "es": "Cámara de combustión",
+        "en": "Combustion chamber"
+      },
       "resumen": {
         "es": "Donde arde la mezcla a más de 3.000 °C",
         "en": "Where the mixture burns at over 3,000 °C"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Es donde el combustible y el oxígeno arden y se convierten en gases muy calientes a alta presión.",
+          "en": "It is where fuel and oxygen burn and become very hot gas at high pressure."
+        },
+        "comoFunciona": {
+          "es": "La mezcla entra por el inyector y arde a más de 3.000 °C. La presión empuja los gases hacia la tobera. Para que la pared no se funda, el combustible frío pasa por canales dentro de ella antes de entrar: se llama refrigeración regenerativa.",
+          "en": "The mixture enters through the injector and burns at over 3,000 °C. The pressure drives the gases into the nozzle. To keep the wall from melting, cold fuel runs through channels inside it before entering: this is called regenerative cooling."
+        },
+        "material": {
+          "es": "Camisa de aleación de cobre fresada, que saca bien el calor, con una carcasa exterior más resistente.",
+          "en": "A milled copper alloy liner, which draws heat away well, inside a stronger outer jacket."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Temperatura de la llama",
+              "en": "Flame temperature"
+            },
+            "valor": {
+              "es": "> 3.000 °C",
+              "en": "> 3,000 °C"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Presión",
+              "en": "Pressure"
+            },
+            "valor": {
+              "es": "≈ 100 bar",
+              "en": "≈ 100 bar"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las turbinas de gas de las centrales eléctricas y los quemadores industriales usan las mismas ideas de combustión a alta presión.",
+          "en": "Power-plant gas turbines and industrial burners use the same high-pressure combustion ideas."
+        },
+        "enCohetes": {
+          "es": "Merlin 1D tiene camisa de cobre fresado; el RS-25 del transbordador también usaba una aleación de cobre.",
+          "en": "Merlin 1D has a milled copper liner; the Space Shuttle's RS-25 also used a copper alloy."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Liquid Rocket Engine",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/liquid-rocket-engine/"
+          }
+        ]
       }
     },
     {
@@ -305,10 +1690,67 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 23,
-      "nombre": { "es": "Inyector", "en": "Injector" },
+      "nombre": {
+        "es": "Inyector",
+        "en": "Injector"
+      },
       "resumen": {
         "es": "Mezcla combustible y oxígeno en la proporción justa",
         "en": "Mixes fuel and oxygen in just the right ratio"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Mezcla el combustible y el oxígeno en la proporción justa al entrar a la cámara.",
+          "en": "It mixes fuel and oxygen in just the right ratio as they enter the chamber."
+        },
+        "comoFunciona": {
+          "es": "Rocía los dos líquidos para que choquen y se rompan en gotitas finas que arden de forma pareja. Un mal diseño provoca vibraciones de combustión capaces de romper el motor. El tipo aguja (pintle) usa una pieza central que reparte el flujo y es naturalmente estable.",
+          "en": "It sprays the two liquids so they collide and break into fine droplets that burn evenly. A poor design causes combustion vibrations that can wreck the engine. The pintle type uses a central post to spread the flow and is inherently stable."
+        },
+        "material": {
+          "es": "Acero inoxidable o aleaciones de níquel mecanizados con gran precisión.",
+          "en": "Precision-machined stainless steel or nickel alloys."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Mezcla (en masa)",
+              "en": "Mixture (by mass)"
+            },
+            "valor": {
+              "es": "≈ 2,3 de oxígeno : 1 de queroseno",
+              "en": "≈ 2.3 oxygen : 1 kerosene"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Caudal por motor",
+              "en": "Flow per engine"
+            },
+            "valor": {
+              "es": "≈ 300 kg/s",
+              "en": "≈ 300 kg/s"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Los inyectores de los motores diésel y de los quemadores de calderas también atomizan el combustible en gotas finas.",
+          "en": "Diesel engine injectors and boiler burners also atomize fuel into fine droplets."
+        },
+        "enCohetes": {
+          "es": "Merlin usa un inyector de aguja, el mismo tipo del motor de descenso del módulo lunar del Apolo.",
+          "en": "Merlin uses a pintle injector, the same type as the Apollo lunar module's descent engine."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Liquid Rocket Engine",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/liquid-rocket-engine/"
+          }
+        ]
       }
     },
     {
@@ -317,10 +1759,71 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 24,
-      "nombre": { "es": "Turbobomba", "en": "Turbopump" },
+      "nombre": {
+        "es": "Turbobomba",
+        "en": "Turbopump"
+      },
       "resumen": {
         "es": "Empuja los propelentes a gran presión",
         "en": "Drives the propellants in at high pressure"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Empuja el combustible y el oxígeno hacia la cámara con mucha presión y caudal.",
+          "en": "It forces fuel and oxygen into the chamber at high pressure and flow."
+        },
+        "comoFunciona": {
+          "es": "Un generador de gas quema un poco de propelente y mueve una turbina; en el mismo eje van la bomba de oxígeno y la de combustible. Sin ella, los tanques tendrían que empujar con su propia presión y necesitarían paredes gruesas y pesadas.",
+          "en": "A gas generator burns a little propellant to spin a turbine; the oxygen pump and the fuel pump sit on the same shaft. Without it the tanks would have to push with their own pressure and need thick, heavy walls."
+        },
+        "material": {
+          "es": "Aleaciones de níquel para la turbina caliente; acero y aluminio para las bombas.",
+          "en": "Nickel alloys for the hot turbine; steel and aluminum for the pumps."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Velocidad de giro",
+              "en": "Shaft speed"
+            },
+            "valor": {
+              "es": "≈ 36.000 rpm",
+              "en": "≈ 36,000 rpm"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Ciclo",
+              "en": "Cycle"
+            },
+            "valor": {
+              "es": "Generador de gas",
+              "en": "Gas generator"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Ingenieros de la NASA aplicaron lo aprendido con las bombas del transbordador para crear con el cirujano Michael DeBakey una pequeña bomba de asistencia cardíaca.",
+          "en": "NASA engineers applied what they learned from Space Shuttle pumps to create, with surgeon Michael DeBakey, a small heart-assist pump."
+        },
+        "enCohetes": {
+          "es": "Merlin 1D, el RS-25 del transbordador y el F-1 del Saturno V usan turbobombas.",
+          "en": "Merlin 1D, the Space Shuttle's RS-25 and the Saturn V's F-1 all use turbopumps."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Glenn — Liquid Rocket Engine",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/liquid-rocket-engine/"
+          },
+          {
+            "titulo": "NASA Spinoff — Keeping Hearts Pumping",
+            "url": "https://spinoff.nasa.gov/spinoff2002/hm_3.html"
+          }
+        ]
       }
     },
     {
@@ -329,10 +1832,67 @@
       "tipo": "pieza",
       "interior": true,
       "recorrido": 25,
-      "nombre": { "es": "Cardán", "en": "Gimbal" },
+      "nombre": {
+        "es": "Cardán",
+        "en": "Gimbal"
+      },
       "resumen": {
         "es": "Inclina el motor para dirigir el cohete",
         "en": "Tilts the engine to steer the rocket"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Inclina el motor unos grados para dirigir el empuje y así guiar el cohete.",
+          "en": "It tilts the engine a few degrees to aim the thrust and steer the rocket."
+        },
+        "comoFunciona": {
+          "es": "El motor cuelga de una articulación que le deja girar en dos ejes. Unos actuadores lo empujan según las órdenes de la computadora: al inclinar el chorro, el cohete gira como con un timón. Las correcciones son continuas durante el ascenso.",
+          "en": "The engine hangs from a joint that lets it swivel on two axes. Actuators push it as the computer commands: tilting the jet turns the rocket like a rudder. Corrections never stop during ascent."
+        },
+        "material": {
+          "es": "Titanio y acero de alta resistencia; actuadores hidráulicos.",
+          "en": "High-strength titanium and steel; hydraulic actuators."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Inclinación máxima",
+              "en": "Max tilt"
+            },
+            "valor": {
+              "es": "≈ ±5°",
+              "en": "≈ ±5°"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Ejes",
+              "en": "Axes"
+            },
+            "valor": {
+              "es": "2 (cabeceo y guiñada)",
+              "en": "2 (pitch and yaw)"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "La vectorización de empuje también hace más ágiles a algunos aviones de combate, como el F-22.",
+          "en": "Thrust vectoring also makes some fighter jets, such as the F-22, more agile."
+        },
+        "enCohetes": {
+          "es": "Todos los motores de Falcon 9 son orientables; el RS-25 del transbordador se inclinaba unos ±10°.",
+          "en": "Every Falcon 9 engine gimbals; the Space Shuttle's RS-25 tilted about ±10°."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Gimbaled Thrust",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/gimbal/"
+          },
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -341,10 +1901,67 @@
       "tipo": "pieza",
       "interior": false,
       "recorrido": 26,
-      "nombre": { "es": "Escudo térmico de la base", "en": "Base heat shield" },
+      "nombre": {
+        "es": "Escudo térmico de la base",
+        "en": "Base heat shield"
+      },
       "resumen": {
         "es": "Protege la base del calor de los motores",
         "en": "Shields the base from the engines' heat"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Protege la base de la primera etapa del calor de los motores y de los gases que vuelven al frenar.",
+          "en": "It protects the base of the first stage from engine heat and from the exhaust it flies through when braking."
+        },
+        "comoFunciona": {
+          "es": "Cubre la estructura alrededor de los motores y solo deja salir las toberas. En la subida, el calor radiado y los gases que recirculan entre los nueve chorros calientan la base; al regresar, la etapa enciende motores para frenar y atraviesa sus propios gases.",
+          "en": "It covers the structure around the engines and lets only the nozzles through. On the way up, radiated heat and exhaust recirculating between the nine jets heat the base; on the way back, the stage fires engines to brake and flies through its own exhaust."
+        },
+        "material": {
+          "es": "Placas metálicas con aislantes cerámicos y mantas térmicas; recubrimiento ablativo en las zonas más castigadas.",
+          "en": "Metal panels with ceramic insulation and thermal blankets; ablative coating in the hardest-hit areas."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Superficie",
+              "en": "Area"
+            },
+            "valor": {
+              "es": "≈ 20 m²",
+              "en": "≈ 20 m²"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Toberas que lo atraviesan",
+              "en": "Nozzles through it"
+            },
+            "valor": {
+              "es": "9",
+              "en": "9"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Las mantas cerámicas aislantes también protegen hornos industriales y el compartimento del motor de los autos de carreras.",
+          "en": "Ceramic insulating blankets also line industrial furnaces and race-car engine bays."
+        },
+        "enCohetes": {
+          "es": "Falcon 9, la primera etapa del Saturno V y el transbordador espacial tenían escudos en la base.",
+          "en": "Falcon 9, the Saturn V's first stage and the Space Shuttle all had base heat shields."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA Glenn — Rocket Parts",
+            "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/rocket-parts/"
+          },
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -367,6 +1984,70 @@
       "resumen": {
         "es": "Pared de los tanques: ligera y resistente al frío",
         "en": "Tank walls: light and tough in the cold"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Forma las paredes de los tanques, que también son la estructura que sostiene el cohete.",
+          "en": "It makes the tank walls, which are also the structure holding the rocket together."
+        },
+        "comoFunciona": {
+          "es": "Añadir un poco de litio al aluminio lo hace más liviano y más rígido, y además resiste mejor el frío del oxígeno líquido. Cuesta más soldarlo, por eso se une con soldadura por fricción-agitación, que no funde el metal.",
+          "en": "Adding a little lithium to aluminum makes it lighter and stiffer, and it copes better with liquid-oxygen cold. It is harder to weld, so it is joined by friction stir welding, which never melts the metal."
+        },
+        "material": {
+          "es": "Aluminio con cerca de un 1 % de litio y algo de cobre (aleaciones como la 2195).",
+          "en": "Aluminum with about 1% lithium and some copper (alloys such as 2195)."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Más liviana que la 2219",
+              "en": "Lighter than 2219"
+            },
+            "valor": {
+              "es": "≈ 5 %",
+              "en": "≈ 5%"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Más resistente que la 2219",
+              "en": "Stronger than 2219"
+            },
+            "valor": {
+              "es": "≈ 30 %",
+              "en": "≈ 30%"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Ahorro en el tanque del transbordador",
+              "en": "Saved on the Shuttle tank"
+            },
+            "valor": {
+              "es": "≈ 3,4 t",
+              "en": "≈ 3.4 t"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Aviones de pasajeros recientes usan aluminio-litio en partes del fuselaje y las alas.",
+          "en": "Recent airliners use aluminum-lithium in parts of the fuselage and wings."
+        },
+        "enCohetes": {
+          "es": "Los tanques de Falcon 9, el tanque externo superligero del transbordador y la cápsula Orion.",
+          "en": "Falcon 9's tanks, the Space Shuttle's super lightweight external tank and the Orion capsule."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA — Super Lightweight External Tank (fact sheet)",
+            "url": "https://www.nasa.gov/wp-content/uploads/2016/08/113020main_shuttle_lightweight.pdf"
+          },
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          }
+        ]
       }
     },
     {
@@ -376,10 +2057,67 @@
       "interior": false,
       "usadoEn": ["cofia", "interetapa", "patas-aterrizaje", "tanques-helio"],
       "recorrido": 28,
-      "nombre": { "es": "Fibra de carbono", "en": "Carbon fiber" },
+      "nombre": {
+        "es": "Fibra de carbono",
+        "en": "Carbon fiber"
+      },
       "resumen": {
         "es": "Cofia e interetapa: rigidez con poco peso",
         "en": "Fairing and interstage: stiffness with little weight"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Forma las piezas que deben ser rígidas y livianas: cofia, interetapa, patas y el envoltorio de los tanques de helio.",
+          "en": "It makes the parts that must be stiff and light: fairing, interstage, legs and the wrap of the helium tanks."
+        },
+        "comoFunciona": {
+          "es": "Hilos de carbono muy finos se ordenan en capas y se pegan con resina; luego se cuecen a presión. La dirección de las fibras se elige según las fuerzas que debe aguantar cada pieza.",
+          "en": "Very thin carbon threads are laid in layers and bonded with resin, then cured under pressure. The fiber directions are chosen to match the loads each part must carry."
+        },
+        "material": {
+          "es": "Fibras de carbono en resina epoxi, a menudo como láminas sobre un núcleo de aluminio en nido de abeja.",
+          "en": "Carbon fibers in epoxy resin, often as face sheets over an aluminum honeycomb core."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Densidad",
+              "en": "Density"
+            },
+            "valor": {
+              "es": "≈ 1,6 g/cm³ (acero: 7,8)",
+              "en": "≈ 1.6 g/cm³ (steel: 7.8)"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Resistencia de la fibra",
+              "en": "Fiber strength"
+            },
+            "valor": {
+              "es": "> 3.500 MPa",
+              "en": "> 3,500 MPa"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Bicicletas, raquetas, prótesis para correr y fuselajes de aviones modernos.",
+          "en": "Bicycles, rackets, running prostheses and modern aircraft fuselages."
+        },
+        "enCohetes": {
+          "es": "La cofia, la interetapa y las patas de Falcon 9; Electron tiene casi toda su estructura de fibra de carbono.",
+          "en": "Falcon 9's fairing, interstage and legs; Electron is built almost entirely of carbon fiber."
+        },
+        "fuentes": [
+          {
+            "titulo": "SpaceX — Falcon User's Guide (2025)",
+            "url": "https://www.spacex.com/assets/media/falcon-users-guide-2025-05-09.pdf"
+          },
+          {
+            "titulo": "NASA Spinoff — Wrapped Tanks Cut Weight on Everything from Buses to Paintball Guns",
+            "url": "https://spinoff.nasa.gov/Spinoff2019/ps_4.html"
+          }
+        ]
       }
     },
     {
@@ -389,10 +2127,63 @@
       "interior": false,
       "usadoEn": ["tanque-oxigeno-1", "tanque-oxigeno-2"],
       "recorrido": 29,
-      "nombre": { "es": "Aislamiento térmico", "en": "Thermal insulation" },
+      "nombre": {
+        "es": "Aislamiento térmico",
+        "en": "Thermal insulation"
+      },
       "resumen": {
         "es": "Evita que el oxígeno se caliente y que se forme hielo",
         "en": "Keeps the oxygen from warming up and ice from forming"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Evita que el oxígeno líquido se caliente y hierva, y que se forme hielo por fuera del tanque.",
+          "en": "It keeps the liquid oxygen from warming and boiling off, and stops ice forming on the outside of the tank."
+        },
+        "comoFunciona": {
+          "es": "Una espuma rígida de burbujas cerradas cubre el tanque; el gas atrapado conduce muy mal el calor. Así se pierde menos propelente antes del despegue y no se forma hielo que pueda soltarse y golpear otras partes.",
+          "en": "A rigid closed-cell foam covers the tank; the trapped gas conducts heat very poorly. Less propellant boils away before launch, and no ice forms that could break off and strike other parts."
+        },
+        "material": {
+          "es": "Espuma de poliisocianurato rociada directamente sobre el metal.",
+          "en": "Polyisocyanurate foam sprayed straight onto the metal."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Espesor típico",
+              "en": "Typical thickness"
+            },
+            "valor": {
+              "es": "≈ 2,5 cm",
+              "en": "≈ 2.5 cm"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Diferencia de temperatura",
+              "en": "Temperature difference"
+            },
+            "valor": {
+              "es": "> 200 °C entre adentro y afuera",
+              "en": "> 200 °C inside to outside"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Espumas aislantes parecidas se rocían en techos y paredes de edificios y rellenan las paredes de los refrigeradores.",
+          "en": "Similar insulating foams are sprayed on building roofs and walls and fill refrigerator walls."
+        },
+        "enCohetes": {
+          "es": "Le daba el color naranja al tanque externo del transbordador y hoy a la etapa central del SLS.",
+          "en": "It gave the Space Shuttle's external tank its orange color, and today the SLS core stage."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA — The Space Shuttle",
+            "url": "https://www.nasa.gov/reference/the-space-shuttle/"
+          }
+        ]
       }
     },
     {
@@ -402,10 +2193,67 @@
       "interior": false,
       "usadoEn": ["escudo-termico-base"],
       "recorrido": 30,
-      "nombre": { "es": "Recubrimiento ablativo", "en": "Ablative coating" },
+      "nombre": {
+        "es": "Recubrimiento ablativo",
+        "en": "Ablative coating"
+      },
       "resumen": {
         "es": "Se desgasta a propósito para llevarse el calor",
         "en": "Wears away on purpose to carry the heat off"
+      },
+      "ficha": {
+        "paraQue": {
+          "es": "Protege del calor extremo desgastándose a propósito.",
+          "en": "It protects against extreme heat by wearing away on purpose."
+        },
+        "comoFunciona": {
+          "es": "Al calentarse, la capa se carboniza y se convierte en gas; ese cambio absorbe calor, y el gas que sale forma un colchón que aísla. Se pierde material, pero lo que está debajo se mantiene frío.",
+          "en": "As it heats up, the layer chars and turns to gas; that change soaks up heat, and the escaping gas forms an insulating cushion. Material is lost, but whatever lies beneath stays cool."
+        },
+        "material": {
+          "es": "Resinas fenólicas con fibras de carbono o sílice; por ejemplo PICA, creado en el centro Ames de la NASA, o Avcoat.",
+          "en": "Phenolic resins with carbon or silica fibers; for example PICA, developed at NASA Ames, or Avcoat."
+        },
+        "datos": [
+          {
+            "etiqueta": {
+              "es": "Temperatura en un regreso desde la Luna",
+              "en": "Temperature on a lunar return"
+            },
+            "valor": {
+              "es": "≈ 2.760 °C (Orion)",
+              "en": "≈ 2,760 °C (Orion)"
+            }
+          },
+          {
+            "etiqueta": {
+              "es": "Peso de PICA frente a otros escudos",
+              "en": "PICA weight vs. other shields"
+            },
+            "valor": {
+              "es": "≈ una quinta parte",
+              "en": "≈ one fifth"
+            }
+          }
+        ],
+        "otrosUsos": {
+          "es": "Algunas pinturas contra incendios para estructuras de acero usan una idea parecida: se carbonizan y protegen el metal.",
+          "en": "Some fireproofing paints for steel structures use a similar idea: they char and shield the metal."
+        },
+        "enCohetes": {
+          "es": "El escudo de Orion usa Avcoat y la cápsula Dragon, PICA-X; también recubre toberas de motores de combustible sólido.",
+          "en": "Orion's heat shield uses Avcoat and the Dragon capsule PICA-X; it also lines solid rocket motor nozzles."
+        },
+        "fuentes": [
+          {
+            "titulo": "NASA — Orion's Heat Shield Ready to Take the Heat",
+            "url": "https://www.nasa.gov/humans-in-space/after-15-years-1000-tests-orions-heat-shield-ready-to-take-the-heat/"
+          },
+          {
+            "titulo": "NASA Spinoff — Heat Shield Paves the Way for Commercial Space",
+            "url": "https://spinoff.nasa.gov/Spinoff2013/t_5.html"
+          }
+        ]
       }
     }
   ]
