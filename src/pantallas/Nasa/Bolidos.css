@@ -248,3 +248,10 @@
   border-radius: 50%;
   background: var(--texto);
 }
+
+@media (max-width: 899px) {
+  .bolidos-ficha {
+    position: static;
+    margin-top: 12px;
+  }
+}
