@@ -33,7 +33,7 @@ const EN: typeof ES = {
 };
 
 /** Lado de cada imagen en la fila de cuerpos: más grande cuanto mayor es, sin llegar a la escala real. */
-const TAMANO_SELECTOR: Record<Astro, number> = {
+const TAMANO_SELECTOR: Partial<Record<Astro, number>> = {
   sol: 64,
   luna: 32,
   mercurio: 30,
@@ -80,7 +80,7 @@ export function Fichas({ fecha }: { fecha: Date }) {
           >
             <Retrato
               astro={x.clave as Astro}
-              tamano={TAMANO_SELECTOR[x.clave as Astro]}
+              tamano={TAMANO_SELECTOR[x.clave as Astro] ?? 40}
             />
             <span>{x.nombre}</span>
           </button>

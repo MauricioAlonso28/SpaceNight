@@ -52,9 +52,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ## ../texturas/*.webp
 
-- Fuente: [Solar System Scope](https://www.solarsystemscope.com/textures/), texturas de 2k del Sol, la Luna, Mercurio, Venus (atmósfera), Marte, Júpiter, Saturno y el anillo de Saturno.
+- Fuente: [Solar System Scope](https://www.solarsystemscope.com/textures/), texturas de 2k del Sol, la Luna, Mercurio, Venus (atmósfera), Marte, Júpiter, Saturno, el anillo de Saturno y la Tierra (mapa diurno).
 - Licencia: [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).
-- Cambios: reducidas a 1024 × 512 (el anillo a 1024 × 64) y pasadas a WebP.
+- Cambios: reducidas a 1024 × 512 (el anillo a 1024 × 64; la Tierra queda en 2048 × 1024 para el globo) y pasadas a WebP.
 
 ## ../modelos/*.glb
 

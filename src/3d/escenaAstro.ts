@@ -21,7 +21,14 @@ import { reducirMovimiento } from './movimiento';
 
 /** Cuerpos con textura real en public/texturas. */
 export type Astro =
-  'sol' | 'luna' | 'mercurio' | 'venus' | 'marte' | 'jupiter' | 'saturno';
+  | 'sol'
+  | 'luna'
+  | 'mercurio'
+  | 'venus'
+  | 'marte'
+  | 'jupiter'
+  | 'saturno'
+  | 'tierra';
 
 /** Inclinación del eje en radianes, para que cada uno se vea como en las fotos. */
 const INCLINACION: Record<Astro, number> = {
@@ -32,6 +39,7 @@ const INCLINACION: Record<Astro, number> = {
   marte: 0.44,
   jupiter: 0.05,
   saturno: 0.47,
+  tierra: 0.41,
 };
 
 /** Giro inicial en radianes: la cara que se muestra primero (la Gran Mancha Roja de Júpiter, Syrtis Major en Marte). */
@@ -43,6 +51,7 @@ const GIRO_INICIAL: Record<Astro, number> = {
   marte: 2.2,
   jupiter: 1.1,
   saturno: 0.3,
+  tierra: 1.4,
 };
 
 /** Radios interior y exterior de los anillos de Saturno, en radios del planeta. */
