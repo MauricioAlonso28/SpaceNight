@@ -20,7 +20,8 @@ export interface Ficha {
 }
 
 function decimal(n: number): string {
-  return n.toFixed(1).replace('.', ',').replace('-', '−');
+  const redondeado = Math.round(n * 10) / 10 || 0;
+  return redondeado.toFixed(1).replace('.', ',').replace('-', '−');
 }
 
 function posicionTexto(altura: number, azimut: number): [string, string][] {
@@ -35,9 +36,77 @@ function posicionTexto(altura: number, azimut: number): [string, string][] {
   ];
 }
 
+/** Nombre en español de la constelación de una estrella, por su abreviatura (Ori, Cru…). */
+export function nombreConstelacion(
+  abreviatura: string,
+  constelaciones: Constelacion[],
+): string {
+  return (
+    constelaciones.find((c) => c.id === abreviatura)?.nombre ?? abreviatura
+  );
+}
+
+function fichaCuerpo(c: CuerpoConDatos): Ficha {
+  const subtitulos = {
+    Planeta: 'Planeta',
+    Luna: 'Satélite de la Tierra',
+    Sol: 'Estrella',
+  };
+  return {
+    titulo: c.nombre,
+    subtitulo: subtitulos[c.tipo],
+    datos: [
+      ['Magnitud', decimal(c.magnitud)],
+      ...posicionTexto(c.altura, c.azimut),
+    ],
+  };
+}
+
+function fichaEstrella(
+  fila: FilaEstrella,
+  constelaciones: Constelacion[],
+  matriz: number[],
+): Ficha {
+  const [ar, dec, mag, , nombre, designacion, con] = fila;
+  const h = horizontalDe(aplicar(matriz, vectorEcuatorial(ar, dec)));
+  return {
+    titulo: nombre || designacion || 'Estrella',
+    subtitulo: [
+      nombre && designacion,
+      `Estrella de ${nombreConstelacion(con, constelaciones)}`,
+    ]
+      .filter(Boolean)
+      .join(' · '),
+    datos: [['Magnitud', decimal(mag)], ...posicionTexto(h.altura, h.azimut)],
+  };
+}
+
+function fichaConstelacion(
+  c: Constelacion,
+  estrellas: FilaEstrella[],
+  matriz: number[],
+): Ficha {
+  const h = horizontalDe(aplicar(matriz, vectorEcuatorial(...c.centro)));
+  const brillante = estrellas.find((e) => e[6] === c.id);
+  const estrella: [string, string][] = brillante
+    ? [
+        [
+          'Estrella más brillante',
+          `${brillante[4] || brillante[5]} (${decimal(brillante[2])})`,
+        ],
+      ]
+    : [];
+  return {
+    titulo: c.nombre,
+    subtitulo: `Constelación · ${c.latin}`,
+    datos: [...estrella, ...posicionTexto(h.altura, h.azimut)],
+  };
+}
+
 /**
- * Ficha de lo que se tocó: estrella del catálogo o cuerpo del sistema solar.
- * @param matriz la orientación actual del cielo, para la altura y la dirección de las estrellas
+ * Ficha de lo que se tocó: estrella del catálogo, constelación o cuerpo del sistema solar.
+ * @param estrellas ordenadas de la más brillante a la más débil, como vienen del JSON
+ * @param matriz la orientación actual del cielo, para la altura y la dirección
  */
 export function fichaDe(
   s: Seleccion,
@@ -48,31 +117,12 @@ export function fichaDe(
 ): Ficha | null {
   if (s.tipo === 'cuerpo') {
     const c = cuerpos.find((x) => x.clave === s.clave);
-    if (!c) return null;
-    return {
-      titulo: c.nombre,
-      subtitulo:
-        c.tipo === 'Planeta'
-          ? 'Planeta'
-          : c.tipo === 'Luna'
-            ? 'Satélite de la Tierra'
-            : 'Estrella',
-      datos: [
-        ['Magnitud', decimal(c.magnitud)],
-        ...posicionTexto(c.altura, c.azimut),
-      ],
-    };
+    return c ? fichaCuerpo(c) : null;
   }
-  const [ar, dec, mag, , nombre, designacion, con] = estrellas[s.indice];
-  const h = horizontalDe(aplicar(matriz, vectorEcuatorial(ar, dec)));
-  const constelacion =
-    constelaciones.find((c) => c.id === con || c.id.startsWith(con))?.nombre ??
-    con;
-  return {
-    titulo: nombre || designacion || 'Estrella',
-    subtitulo: [nombre && designacion, `Estrella de ${constelacion}`]
-      .filter(Boolean)
-      .join(' · '),
-    datos: [['Magnitud', decimal(mag)], ...posicionTexto(h.altura, h.azimut)],
-  };
+  if (s.tipo === 'constelacion') {
+    const c = constelaciones.find((x) => x.id === s.id);
+    return c ? fichaConstelacion(c, estrellas, matriz) : null;
+  }
+  const fila = estrellas[s.indice];
+  return fila ? fichaEstrella(fila, constelaciones, matriz) : null;
 }

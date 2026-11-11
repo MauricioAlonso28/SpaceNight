@@ -41,7 +41,7 @@ function destinos(
       nombres: [c.nombre, c.latin],
       prioridad: 1,
       direccion: () => aplicar(matriz, vectorEcuatorial(...c.centro)),
-      seleccion: null,
+      seleccion: { tipo: 'constelacion', id: c.id },
     });
   }
   datos.estrellas.forEach(([ar, dec, , , nombre, designacion], indice) => {
