@@ -51,13 +51,10 @@ const MS_HORA = 3_600_000;
 const HORAS_ATRAS = 12;
 
 /**
- * Pasos visibles de la Estación desde 12 horas antes de esta hora hasta 3 días después.
- * @param hora la hora actual en horas desde 1970, para recalcular una vez por hora
+ * TLE de la Estación, con la caché de 12 horas; se vuelve a mirar cada hora.
+ * @param hora la hora actual en horas desde 1970
  */
-export function usePasosISS(
-  ubicacion: Ubicacion,
-  hora: number,
-): PasosCalculados | null {
+export function useTleISS(hora: number): Carga<Tle> {
   const [carga, setCarga] = useState<Carga<Tle>>({ estado: 'cargando' });
   useEffect(() => {
     let vigente = true;
@@ -69,6 +66,18 @@ export function usePasosISS(
       vigente = false;
     };
   }, [hora]);
+  return carga;
+}
+
+/**
+ * Pasos visibles de la Estación desde 12 horas antes de esta hora hasta 3 días después.
+ * @param hora la hora actual en horas desde 1970, para recalcular una vez por hora
+ */
+export function usePasosISS(
+  ubicacion: Ubicacion,
+  hora: number,
+): PasosCalculados | null {
+  const carga = useTleISS(hora);
   return useMemo(() => {
     if (carga.estado !== 'listo') return null;
     const desde = new Date((hora - HORAS_ATRAS) * MS_HORA);
@@ -105,4 +114,38 @@ export function useLluvias(): Lluvia[] {
     };
   }, []);
   return lluvias;
+}
+
+const jsonPedidos = new Map<string, Promise<unknown>>();
+
+function pedirJson(archivo: string): Promise<unknown> {
+  let p = jsonPedidos.get(archivo);
+  if (!p) {
+    p = fetch(`${import.meta.env.BASE_URL}data/${archivo}`).then((r) => {
+      if (!r.ok) throw new Error(`DATA_HTTP_${r.status}`);
+      return r.json();
+    });
+    p.catch(() => jsonPedidos.delete(archivo));
+    jsonPedidos.set(archivo, p);
+  }
+  return p;
+}
+
+/**
+ * Un JSON de public/data, pedido una sola vez por sesión.
+ * @returns null mientras carga y 'error' si falla
+ */
+export function useJsonPublico<T>(archivo: string): T | null | 'error' {
+  const [datos, setDatos] = useState<T | null | 'error'>(null);
+  useEffect(() => {
+    let vigente = true;
+    pedirJson(archivo).then(
+      (d) => vigente && setDatos(d as T),
+      () => vigente && setDatos('error'),
+    );
+    return () => {
+      vigente = false;
+    };
+  }, [archivo]);
+  return datos;
 }

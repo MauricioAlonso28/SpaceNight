@@ -12,6 +12,24 @@ function formateador(
   return f;
 }
 
+const numeros = new Map<number, Intl.NumberFormat>();
+
+/**
+ * Número con punto de miles y coma decimal, como 402.263 o 1,5.
+ * @param decimales cuántos decimales como máximo
+ */
+export function formatearNumero(n: number, decimales = 0): string {
+  let f = numeros.get(decimales);
+  if (!f) {
+    f = new Intl.NumberFormat('es', {
+      maximumFractionDigits: decimales,
+      useGrouping: 'always',
+    });
+    numeros.set(decimales, f);
+  }
+  return f.format(n);
+}
+
 /** Hora local como 21:05 o 9:05 p. m. según el ajuste. */
 export function formatearHora(
   fecha: Date,
