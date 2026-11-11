@@ -1,27 +1,32 @@
 import { useEffect, useRef } from 'react';
 import type { ControlCohete } from '../../3d/cohete/escenaCohete';
+import type { Estado } from '../../3d/cohete/estados';
 import { soportaWebGL } from '../../3d/soporte';
 import { textos } from '../../idioma/idioma';
 
 /**
  * El cohete 3D; carga three.js aparte y entrega su control cuando está listo.
  * @param nombre nombre visible de una pieza por su id
+ * @param interior si una pieza va dentro del casco
+ * @param alCambiar recibe cada cambio de estado de la escena y la pieza abierta
  * @param alListo recibe el control de la escena, o null al desmontarla
  */
 export function EscenaCohete({
   nombre,
-  alElegir,
+  interior,
+  alCambiar,
   alListo,
 }: {
   nombre: (id: string) => string;
-  alElegir: (id: string | null) => void;
+  interior: (id: string) => boolean;
+  alCambiar: (estado: Estado, id: string | null) => void;
   alListo: (control: ControlCohete | null) => void;
 }) {
   const contenedor = useRef<HTMLDivElement>(null);
-  const ultimo = useRef({ nombre, alElegir });
+  const ultimo = useRef({ nombre, interior, alCambiar });
 
   useEffect(() => {
-    ultimo.current = { nombre, alElegir };
+    ultimo.current = { nombre, interior, alCambiar };
   });
 
   useEffect(() => {
@@ -33,7 +38,8 @@ export function EscenaCohete({
       if (!vigente) return;
       control = crearEscena(div, {
         nombre: (id) => ultimo.current.nombre(id),
-        alElegir: (id) => ultimo.current.alElegir(id),
+        interior: (id) => ultimo.current.interior(id),
+        alCambiar: (estado, id) => ultimo.current.alCambiar(estado, id),
       });
       alListo(control);
     });

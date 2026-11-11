@@ -360,3 +360,134 @@
   font-size: 0.72rem;
   vertical-align: 2px;
 }
+
+.cohete-carril.bloqueado {
+  opacity: 0.45;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cohete-escena {
+  overscroll-behavior-x: none;
+}
+
+.cohete-fundido {
+  animation: cohete-fundido 0.3s ease-out;
+}
+
+@keyframes cohete-fundido {
+  from {
+    opacity: 0.2;
+  }
+}
+
+.cohete-ficha {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  bottom: 16px;
+  width: min(430px, 46%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 20px 22px;
+  border-radius: 18px;
+  background: rgba(6, 14, 46, 0.9);
+  border: 1px solid var(--borde);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  animation: cohete-ficha 0.35s ease-out 0.55s both;
+  scrollbar-width: thin;
+}
+
+@keyframes cohete-ficha {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cohete-ficha {
+    animation: cohete-fundido 0.3s ease-out both;
+  }
+}
+
+.cohete-ficha h3 {
+  font-size: 2rem;
+  margin: 2px 0 6px;
+}
+
+.cohete-ficha h4 {
+  font-family: var(--fuente-texto);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dato);
+  margin: 16px 0 4px;
+}
+
+.cohete-ficha p {
+  margin: 0;
+}
+
+.cohete-ficha-zona {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--texto-suave);
+}
+
+.cohete-ficha-resumen {
+  color: var(--texto-suave);
+}
+
+.cohete-ficha dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+  margin: 4px 0 0;
+}
+
+.cohete-ficha dt {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+}
+
+.cohete-ficha dd {
+  margin: 0;
+  font-size: 1.05rem;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.cohete-ficha-nota {
+  margin-top: 16px !important;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+.cohete-ficha-fuentes {
+  margin: 0;
+  padding-left: 1.1em;
+  font-size: 0.85rem;
+}
+
+.cohete-ficha-fuentes a {
+  color: var(--dato);
+}
+
+.cohete-ficha-pie {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--borde);
+}
+
+.cohete-ficha-pie small {
+  color: var(--texto-suave);
+}
