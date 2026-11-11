@@ -37,6 +37,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,json,woff2}'],
+        globIgnores: ['assets/draco_*', 'modelos/**'],
         navigateFallback: 'index.html',
       },
     }),

@@ -16,6 +16,7 @@ import {
 import { EscenaCohete } from './EscenaCohete';
 import { Ficha } from './Ficha';
 import { ListaComponentes } from './ListaComponentes';
+import { VisorModelos } from './VisorModelos';
 
 const ES = {
   titulo: 'Cohete',
@@ -29,6 +30,7 @@ const ES = {
   corteAuto:
     'En el recorrido el corte se activa solo en las piezas interiores.',
   saltar: 'Ir a la lista de componentes, sin 3D',
+  modelos: 'Ver modelos reales',
   error: 'No se pudo cargar la lista de componentes.',
 };
 
@@ -44,6 +46,7 @@ const EN: typeof ES = {
   corteAuto:
     'During the tour the cutaway turns on by itself for inside pieces.',
   saltar: 'Skip to the list of components, without 3D',
+  modelos: 'See real models',
   error: 'Could not load the list of components.',
 };
 
@@ -68,6 +71,7 @@ export function VistaCohete() {
   const [enRecorrido, setEnRecorrido] = useState(false);
   const [corte, setCorte] = useState(false);
   const [activo, setActivo] = useState(0);
+  const [modelos, setModelos] = useState(false);
   const lienzo = useRef<HTMLDivElement>(null);
 
   const datos = catalogo && catalogo !== 'error' ? catalogo : null;
@@ -185,10 +189,23 @@ export function VistaCohete() {
           >
             {t.corte}
           </button>
+          <button
+            type="button"
+            className="cohete-boton"
+            aria-pressed={modelos}
+            disabled={enRecorrido || !libre}
+            onClick={() => setModelos(!modelos)}
+          >
+            {t.modelos}
+          </button>
         </div>
       </div>
 
-      <div className={`cohete-marco${enRecorrido ? ' con-carril' : ''}`}>
+      {modelos && <VisorModelos alCerrar={() => setModelos(false)} />}
+      <div
+        className={`cohete-marco${enRecorrido ? ' con-carril' : ''}`}
+        hidden={modelos}
+      >
         <div
           className={`cohete-lienzo${componente ? ' con-ficha' : ''}`}
           ref={lienzo}
