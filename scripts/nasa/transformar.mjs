@@ -279,3 +279,135 @@ export function baseLuna(api) {
     ? { base: m[1].replace('http://', 'https://'), digitos: m[2].length }
     : null;
 }
+
+/**
+ * Segundos de una duración ISO 8601 con signo, como «-PT38M» o «PT2M30S».
+ * @returns los segundos, negativos antes del despegue, o null si no se entiende
+ */
+export function duracionIso(texto) {
+  const m =
+    typeof texto === 'string'
+      ? texto.match(
+          /^(-)?P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$/,
+        )
+      : null;
+  if (!m) return null;
+  const s =
+    Number(m[2] ?? 0) * 86_400 +
+    Number(m[3] ?? 0) * 3600 +
+    Number(m[4] ?? 0) * 60 +
+    Number(m[5] ?? 0);
+  return m[1] ? -s : s;
+}
+
+const numero = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
+
+/** El mejor video de un lanzamiento: YouTube primero y, entre iguales, el de mayor prioridad. */
+function mejorVideo(videos) {
+  const lista = Array.isArray(videos) ? videos.filter((v) => v?.url) : [];
+  lista.sort(
+    (a, b) =>
+      Number(b.source?.includes('youtube') ?? 0) -
+        Number(a.source?.includes('youtube') ?? 0) ||
+      (b.priority ?? 0) - (a.priority ?? 0),
+  );
+  return lista[0]?.url ?? null;
+}
+
+/** Un lanzamiento de Launch Library 2 con lo que usa la app. */
+function recortarLanzamiento(l) {
+  const conf = l.rocket?.configuration ?? {};
+  const etapa = l.rocket?.launcher_stage?.[0] ?? null;
+  const aterrizaje = etapa?.landing?.attempt ? etapa.landing : null;
+  const pad = l.pad ?? {};
+  return {
+    id: l.id,
+    nombre: l.mission?.name ?? l.name,
+    cohete: conf.full_name ?? conf.name ?? l.name,
+    familia: conf.families?.[0]?.name ?? null,
+    proveedor: l.launch_service_provider?.name ?? null,
+    net: Date.parse(l.net),
+    precision: l.net_precision?.abbrev ?? null,
+    ventana:
+      l.window_start && l.window_end
+        ? [Date.parse(l.window_start), Date.parse(l.window_end)]
+        : null,
+    estado: l.status?.abbrev ?? 'TBD',
+    sitio: pad.location?.name ?? pad.name ?? null,
+    plataforma: pad.name ?? null,
+    pais: pad.country?.alpha_2_code ?? null,
+    lat: numero(Number(pad.latitude)),
+    lon: numero(Number(pad.longitude)),
+    orbita: l.mission?.orbit?.abbrev ?? null,
+    orbitaNombre: l.mission?.orbit?.name ?? null,
+    tipo: l.mission?.type ?? null,
+    descripcion: l.mission?.description ?? null,
+    video: mejorVideo(l.vid_urls),
+    enVivo: Boolean(l.webcast_live),
+    probabilidad: numero(l.probability),
+    propulsor: etapa?.launcher
+      ? {
+          serie: etapa.launcher.serial_number ?? null,
+          vuelo: numero(etapa.launcher_flight_number),
+          aterrizaje: aterrizaje
+            ? {
+                lugar:
+                  aterrizaje.landing_location?.abbrev ||
+                  aterrizaje.landing_location?.name ||
+                  null,
+                lugarNombre: aterrizaje.landing_location?.name ?? null,
+                tipo: aterrizaje.type?.abbrev ?? null,
+                km: numero(aterrizaje.downrange_distance),
+              }
+            : null,
+        }
+      : null,
+    perfil: {
+      alto: numero(conf.length),
+      diametro: numero(conf.diameter),
+      masa: numero(conf.launch_mass),
+      empuje: numero(conf.to_thrust),
+      leo: numero(conf.leo_capacity),
+      lanzamientos: numero(conf.total_launch_count),
+      exitos: numero(conf.successful_launches),
+      reutilizable: conf.reusable ?? null,
+    },
+    eventos: (l.timeline ?? [])
+      .map((e) => ({
+        id: e.type?.id ?? 0,
+        nombre: e.type?.abbrev ?? '',
+        t: duracionIso(e.relative_time),
+      }))
+      .filter((e) => e.t !== null)
+      .sort((a, b) => a.t - b.t),
+  };
+}
+
+/**
+ * Próximos lanzamientos y los últimos hechos, de Launch Library 2 (The Space Devs), ordenados por fecha.
+ * @param proximos respuesta de /launches/upcoming en modo detailed
+ * @param previos respuesta de /launches/previous, o null si no se pudo pedir
+ */
+export function recortarLanzamientos(proximos, previos) {
+  const lista = (r) => (Array.isArray(r?.results) ? r.results : []);
+  const futuros = lista(proximos)
+    .map(recortarLanzamiento)
+    .filter((l) => Number.isFinite(l.net))
+    .sort((a, b) => a.net - b.net);
+  if (!futuros.length) throw new Error('sin lanzamientos');
+  return {
+    proximos: futuros,
+    recientes: lista(previos)
+      .map((l) => ({
+        id: l.id,
+        nombre: l.mission?.name ?? l.name,
+        cohete: l.rocket?.configuration?.full_name ?? l.name,
+        net: Date.parse(l.net),
+        estado: l.status?.abbrev ?? 'TBD',
+        pais: l.pad?.country?.alpha_2_code ?? null,
+        video: mejorVideo(l.vid_urls),
+      }))
+      .filter((l) => Number.isFinite(l.net))
+      .sort((a, b) => b.net - a.net),
+  };
+}

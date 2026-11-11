@@ -1,5 +1,5 @@
 /**
- * Descarga y recorta los datos de la NASA que el navegador no puede pedir solo (sin CORS o con clave) en public/data/nasa/.
+ * Descarga y recorta los datos de la NASA y de los lanzamientos que el navegador no puede pedir solo (sin CORS o con clave) en public/data/nasa/.
  * Uso: npm run datos:nasa, con NASA_API_KEY en .env.local o en el entorno (sin clave usa DEMO_KEY, 10 consultas por hora)
  * Lo corre GitHub Actions cada 6 horas antes de publicar; si una fuente falla, deja la copia publicada anterior.
  */
@@ -13,6 +13,7 @@ import {
   recortarCad,
   recortarScout,
   recortarExoplanetas,
+  recortarLanzamientos,
   recortarNeo,
   recortarSentry,
   resumir,
@@ -109,7 +110,25 @@ async function apod() {
   throw ultimo;
 }
 
+const LL2 = 'https://ll.thespacedevs.com/2.3.0/launches';
+
+/** Próximos lanzamientos con detalle y los últimos seis; si los últimos fallan, siguen los próximos. */
+async function lanzamientos() {
+  const proximos = await pedir(
+    `${LL2}/upcoming/?limit=40&mode=detailed&hide_recent_previous=true`,
+  );
+  const previos = await pedir(`${LL2}/previous/?limit=6&mode=normal`).catch(
+    () => null,
+  );
+  return { proximos, previos };
+}
+
 const FUENTES = [
+  {
+    archivo: 'lanzamientos.json',
+    obtener: lanzamientos,
+    recortar: (j) => recortarLanzamientos(j.proximos, j.previos),
+  },
   {
     archivo: 'cercanos60.json',
     url: 'https://ssd-api.jpl.nasa.gov/cad.api?date-min=now&date-max=%2B60&dist-max=10LD&fullname=true',

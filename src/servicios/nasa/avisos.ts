@@ -1,5 +1,6 @@
 import { idioma } from '../../idioma/idioma';
-import { formatearNumero } from '../formato';
+import { formatearHora, formatearNumero } from '../formato';
+import { tieneHora, type Lanzamiento } from '../cohete/lanzamientos';
 import { NOMBRE_CATEGORIA, type EventoResumido } from './eonet';
 import { distanciaSuperficieKm } from './formato';
 
@@ -33,9 +34,9 @@ export interface ResumenNasa {
   exoplanetas: number | null;
 }
 
-/** Las cinco reglas de aviso. */
+/** Las seis reglas de aviso. */
 export type Regla =
-  'asteroide' | 'evento' | 'bolido' | 'tierra' | 'exoplanetas';
+  'asteroide' | 'evento' | 'bolido' | 'tierra' | 'exoplanetas' | 'lanzamiento';
 
 export const REGLAS: readonly Regla[] = [
   'asteroide',
@@ -43,6 +44,7 @@ export const REGLAS: readonly Regla[] = [
   'bolido',
   'tierra',
   'exoplanetas',
+  'lanzamiento',
 ];
 
 /**
@@ -66,10 +68,43 @@ export const RADIO_EVENTOS_KM = 500;
 
 const es = () => idioma() === 'es';
 
+const HORA = 3_600_000;
+
+/** Avisos de los lanzamientos con hora exacta que despegan en las próximas 6 horas o despegaron hace menos de una. */
+function avisosLanzamiento(
+  lanzamientos: Lanzamiento[],
+  ahora: number,
+  zona: string,
+): Aviso[] {
+  return lanzamientos
+    .filter(
+      (l) =>
+        tieneHora(l) &&
+        l.net > ahora - HORA &&
+        l.net <= ahora + 6 * HORA &&
+        !['Failure', 'Success', 'Partial Failure'].includes(l.estado),
+    )
+    .map((l) => {
+      const hora = formatearHora(new Date(l.net), zona, true);
+      return {
+        id: `lanzamiento-${l.id}`,
+        regla: 'lanzamiento' as const,
+        fecha: l.net,
+        titulo: es() ? `Despega ${l.cohete}` : `${l.cohete} lifts off`,
+        detalle: es()
+          ? `${l.nombre} · a las ${hora}${l.sitio ? ` desde ${l.sitio.split(',')[0]}` : ''}`
+          : `${l.nombre} · at ${hora}${l.sitio ? ` from ${l.sitio.split(',')[0]}` : ''}`,
+        ruta: 'cohete/lanzamientos',
+        ...(l.video ? { enlace: l.video } : {}),
+      };
+    });
+}
+
 /**
  * Los avisos de ahora a partir de los datos que haya (cada fuente puede faltar), del más reciente al más antiguo.
  * @param eventos eventos naturales abiertos de los últimos días
  * @param ultimaFotoTierra fecha («2026-11-09») de la última tanda de fotos de EPIC
+ * @param lanzamientos próximos lanzamientos; avisa de los que despegan en las próximas 6 horas
  */
 export function calcularAvisos({
   resumen,
@@ -78,6 +113,8 @@ export function calcularAvisos({
   lat,
   lon,
   ahora,
+  lanzamientos = [],
+  zona = 'UTC',
 }: {
   resumen: ResumenNasa | null;
   eventos: EventoResumido[];
@@ -85,8 +122,11 @@ export function calcularAvisos({
   lat: number;
   lon: number;
   ahora: number;
+  lanzamientos?: Lanzamiento[];
+  zona?: string;
 }): Aviso[] {
   const avisos: Aviso[] = [];
+  avisos.push(...avisosLanzamiento(lanzamientos, ahora, zona));
   for (const a of resumen?.neo?.cercanos ?? []) {
     if (a.fecha < ahora - 86_400_000) continue;
     avisos.push({

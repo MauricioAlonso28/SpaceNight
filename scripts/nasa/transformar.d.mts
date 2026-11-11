@@ -66,3 +66,11 @@ export function recortarApod(a: unknown): {
 export function baseLuna(
   api: unknown,
 ): { base: string; digitos: number } | null;
+export function duracionIso(texto: unknown): number | null;
+export function recortarLanzamientos(
+  proximos: unknown,
+  previos: unknown,
+): Omit<
+  import('../../src/servicios/cohete/lanzamientos').DatosLanzamientos,
+  'generado'
+>;

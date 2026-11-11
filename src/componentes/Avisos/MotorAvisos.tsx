@@ -5,6 +5,7 @@ import { useAvisos } from '../../estado/avisos';
 import { useEstado } from '../../estado/store';
 import { calcularAvisos, type ResumenNasa } from '../../servicios/nasa/avisos';
 import { useApiEnVivo } from '../../servicios/nasa/datos';
+import { useLanzamientos } from '../../servicios/cohete/lanzamientos';
 import {
   resumirEvento,
   type EventoEonet,
@@ -30,7 +31,7 @@ function notificar(titulo: string, cuerpo: string, etiqueta: string): void {
 }
 
 /**
- * Calcula los avisos de NASA en vivo en todas las pantallas: lee el resumen publicado, los eventos de la última semana y la última tanda de EPIC.
+ * Calcula los avisos de NASA en vivo en todas las pantallas: lee el resumen publicado, los eventos de la última semana, la última tanda de EPIC y los próximos lanzamientos.
  * Con permiso, avisa con una notificación del sistema cuando la pestaña está en segundo plano, una vez cada 6 horas por regla.
  */
 export function MotorAvisos() {
@@ -39,6 +40,7 @@ export function MotorAvisos() {
   const resumen = useJsonPublico<ResumenNasa>('nasa/resumen.json');
   const eonet = useApiEnVivo<{ events: EventoEonet[] }>(EONET, 10 * 60_000);
   const epic = useApiEnVivo<{ date: string }[]>(EPIC, 30 * 60_000);
+  const lanzamientos = useLanzamientos();
   const fijarAvisos = useAvisos((s) => s.fijarAvisos);
 
   const eventos = useMemo(
@@ -63,8 +65,20 @@ export function MotorAvisos() {
         lat: ubicacion.latitud,
         lon: ubicacion.longitud,
         ahora: hora * 3_600_000,
+        lanzamientos:
+          lanzamientos && lanzamientos !== 'error' ? lanzamientos.proximos : [],
+        zona: ubicacion.zona,
       }),
-    [resumen, eventos, epic, ubicacion.latitud, ubicacion.longitud, hora],
+    [
+      resumen,
+      eventos,
+      epic,
+      lanzamientos,
+      ubicacion.latitud,
+      ubicacion.longitud,
+      ubicacion.zona,
+      hora,
+    ],
   );
 
   useEffect(() => {
