@@ -11,6 +11,7 @@ export interface Almacen {
   setItem(clave: string, valor: string): void;
 }
 
+/** Prefijo de las claves guardadas; mantiene el nombre anterior de la app para no perder la caché. */
 const PREFIJO = 'tu-cielo:cache:';
 
 function almacenPorDefecto(): Almacen | null {
