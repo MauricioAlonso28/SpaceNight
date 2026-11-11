@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 function reducirMovimiento(): boolean {
   return (
@@ -7,21 +7,25 @@ function reducirMovimiento(): boolean {
   );
 }
 
-/** Un número que sube desde cero hasta su valor en menos de un segundo al aparecer. */
+/** Un número que sube desde cero al aparecer y, si el valor cambia después, pasa del que mostraba al nuevo en menos de un segundo. */
 export function useContar(objetivo: number, ms = 900): number {
   const [valor, setValor] = useState(() =>
     reducirMovimiento() ? objetivo : 0,
   );
+  const mostrado = useRef(valor);
   useEffect(() => {
     if (reducirMovimiento()) {
       const id = requestAnimationFrame(() => setValor(objetivo));
       return () => cancelAnimationFrame(id);
     }
     let cuadro = 0;
+    const desde = mostrado.current;
     const inicio = performance.now();
     const paso = (t: number) => {
       const k = Math.min((t - inicio) / ms, 1);
-      setValor(objetivo * (1 - (1 - k) ** 3));
+      const v = desde + (objetivo - desde) * (1 - (1 - k) ** 3);
+      mostrado.current = v;
+      setValor(v);
       if (k < 1) cuadro = requestAnimationFrame(paso);
     };
     cuadro = requestAnimationFrame(paso);

@@ -172,3 +172,12 @@
     transform: translateY(6px);
   }
 }
+
+.nasa-rotulo {
+  margin: 0;
+  color: var(--dato);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}

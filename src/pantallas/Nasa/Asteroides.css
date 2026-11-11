@@ -154,15 +154,6 @@
   align-content: start;
 }
 
-.asteroides-rotulo {
-  margin: 0;
-  color: var(--dato);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
 .asteroides-cuenta {
   margin: 4px 0 2px;
   font-family: var(--fuente-titulo);

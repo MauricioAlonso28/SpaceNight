@@ -411,7 +411,7 @@ export function Asteroides() {
         />
         <div className="asteroides-lado">
           <div className="asteroides-proximo" aria-live="polite">
-            <p className="asteroides-rotulo">{t.proximo}</p>
+            <p className="nasa-rotulo">{t.proximo}</p>
             {proximo ? (
               <>
                 <p className="asteroides-cuenta">
