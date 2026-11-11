@@ -52,6 +52,10 @@ export const RUTAS_COHETE: readonly Ruta[] = [
     path: 'cohete/motores',
     nombre: { es: 'Motores por dentro', en: 'Engines from inside' },
   },
+  {
+    path: 'cohete/historia',
+    nombre: { es: 'Historia y Pedro Paulet', en: 'History and Pedro Paulet' },
+  },
 ];
 
 /** Portada de NASA en vivo, con una línea viva de cada vista. */

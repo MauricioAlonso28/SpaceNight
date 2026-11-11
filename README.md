@@ -77,3 +77,7 @@ escala junto a la Estatua de la Libertad, con sus cifras públicas aproximadas
 «Motores por dentro» (`#/cohete/motores`) anima los seis ciclos de motor
 (presión, bomba eléctrica, generador de gas, combustión por etapas, flujo
 completo y expansor) a partir de `src/servicios/cohete/ciclos.ts`.
+
+«Historia y Pedro Paulet» (`#/cohete/historia`) recorre los hitos del cohete,
+con los de Perú resaltados y una sección sobre Pedro Paulet que separa lo
+documentado de lo que se sabe solo por su relato de 1927.
