@@ -13,6 +13,7 @@ import {
   SearchMoonPhase,
 } from 'astronomy-engine';
 import type { Ubicacion } from '../../tipos/ubicacion';
+import type { PasoISS } from '../satelites/iss';
 import { MS_DIA, medianocheLocal, sumarDias } from '../tiempo';
 import { posicion, ventanaNoche } from './noche';
 import { observador } from './observador';
@@ -42,6 +43,7 @@ export type Evento =
     }
   | { tipo: 'eclipse-sol'; fecha: Date; clase: string; oscurecimiento: number }
   | { tipo: 'superluna'; fecha: Date; distanciaKm: number }
+  | { tipo: 'iss'; fecha: Date; paso: PasoISS }
   | {
       tipo: 'conjuncion';
       fecha: Date;
@@ -221,6 +223,17 @@ export function conjuncionesEntre(
     ),
   );
   return lista;
+}
+
+/** Pasos de la Estación que aparecen entre dos fechas, como eventos. */
+export function pasosEntre(
+  pasos: PasoISS[],
+  desde: Date,
+  hasta: Date,
+): Evento[] {
+  return pasos
+    .filter((p) => p.aparece.fecha >= desde && p.aparece.fecha < hasta)
+    .map((paso) => ({ tipo: 'iss' as const, fecha: paso.aparece.fecha, paso }));
 }
 
 /**

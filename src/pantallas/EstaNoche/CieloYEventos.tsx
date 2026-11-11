@@ -1,7 +1,11 @@
 import { useMemo } from 'react';
 import { ListaEventos } from '../../componentes/ListaEventos/ListaEventos';
-import { useLluvias, usePronostico } from '../../estado/datos';
-import { eventosEntre } from '../../servicios/astro/eventos';
+import {
+  useLluvias,
+  usePronostico,
+  type PasosCalculados,
+} from '../../estado/datos';
+import { eventosEntre, pasosEntre } from '../../servicios/astro/eventos';
 import { fraccionIluminada } from '../../servicios/astro/luna';
 import { nocheSol } from '../../servicios/astro/sol';
 import { inicioDelDia, sumarDias } from '../../servicios/tiempo';
@@ -12,10 +16,12 @@ import { itemEvento } from './textosEventos';
 
 export const DIAS_EVENTOS = 30;
 const MS_HORA = 3_600_000;
+const HORAS_ORBITA_VIEJA = 24;
 
 /**
  * Paneles ¿Se ve bien hoy? y Próximos eventos de la noche que se está mirando.
  * @param inicioNoche las 18:00 de esa noche, en milisegundos
+ * @param iss pasos de la Estación ya calculados, o null mientras carga la órbita
  */
 export function CieloYEventos({
   fecha,
@@ -23,12 +29,14 @@ export function CieloYEventos({
   ahora,
   ubicacion,
   formato24h,
+  iss,
 }: {
   fecha: Date;
   inicioNoche: number;
   ahora: Date;
   ubicacion: Ubicacion;
   formato24h: boolean;
+  iss: PasosCalculados | null;
 }) {
   const carga = usePronostico(ubicacion, Math.floor(ahora.getTime() / MS_HORA));
   const lluvias = useLluvias();
@@ -43,16 +51,14 @@ export function CieloYEventos({
   }, [inicioNoche, ubicacion]);
 
   const hoy = inicioDelDia(fecha, ubicacion.zona).getTime();
-  const eventos = useMemo(
-    () =>
-      eventosEntre(
-        new Date(hoy),
-        sumarDias(new Date(hoy), DIAS_EVENTOS),
-        ubicacion,
-        lluvias,
-      ),
-    [hoy, ubicacion, lluvias],
-  );
+  const eventos = useMemo(() => {
+    const desde = new Date(hoy);
+    const hasta = sumarDias(desde, DIAS_EVENTOS);
+    return [
+      ...eventosEntre(desde, hasta, ubicacion, lluvias),
+      ...(iss ? pasosEntre(iss.pasos, desde, hasta) : []),
+    ].sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
+  }, [hoy, ubicacion, lluvias, iss]);
 
   const vista = vistaCondiciones(
     carga,
@@ -62,6 +68,7 @@ export function CieloYEventos({
     ubicacion.bortle,
     formato,
   );
+  const orbitaVieja = iss && iss.horasDescarga > HORAS_ORBITA_VIEJA;
 
   return (
     <div className="dos">
@@ -75,6 +82,13 @@ export function CieloYEventos({
           items={eventos.map((e) => itemEvento(e, new Date(hoy), formato))}
           vacia={`Nada destacado en los próximos ${DIAS_EVENTOS} días.`}
         />
+        {orbitaVieja && (
+          <p className="condiciones-aviso">
+            Sin conexión: la órbita de la Estación es de hace{' '}
+            {Math.round(iss.horasDescarga)} horas y sus pasos pueden tener
+            minutos de error.
+          </p>
+        )}
       </section>
     </div>
   );

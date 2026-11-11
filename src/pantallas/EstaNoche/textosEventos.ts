@@ -1,8 +1,14 @@
 import type { ItemEvento } from '../../componentes/ListaEventos/ListaEventos';
 import type { Evento, Lluvia } from '../../servicios/astro/eventos';
-import { formatearDiaMes, formatearHora } from '../../servicios/formato';
-import { MS_DIA } from '../../servicios/tiempo';
-import { NOMBRE_PLANETA, articuloHora } from './textosPlanetas';
+import { rumbo } from '../../servicios/astro/planetas';
+import {
+  formatearDiaMes,
+  formatearDiaSemana,
+  formatearHora,
+} from '../../servicios/formato';
+import type { PasoISS } from '../../servicios/satelites/iss';
+import { MS_DIA, inicioDelDia } from '../../servicios/tiempo';
+import { NOMBRE_PLANETA, RUMBO_LARGO, articuloHora } from './textosPlanetas';
 
 const CLASE_ECLIPSE: Record<string, string> = {
   penumbral: 'penumbral',
@@ -24,6 +30,43 @@ function aLaHora(fecha: Date, f: FormatoEventos): string {
 
 function decimal(n: number): string {
   return n.toFixed(1).replace('.', ',');
+}
+
+const RUMBO_SIN_ARTICULO: Record<string, string> = Object.fromEntries(
+  Object.entries(RUMBO_LARGO).map(([k, v]) => [k, v.replace(/^el /, '')]),
+);
+
+function cuandoPasa(fecha: Date, hoy: Date, f: FormatoEventos): string {
+  const dia = inicioDelDia(fecha, f.zona).getTime();
+  const dias = Math.round((dia - hoy.getTime()) / MS_DIA);
+  if (dias === 0) return 'hoy';
+  if (dias === 1) return 'mañana';
+  return `el ${formatearDiaSemana(fecha, f.zona)}`;
+}
+
+/**
+ * Paso visible de la Estación: cuándo, cuánto dura, de dónde a dónde y a qué altura.
+ * @param hoy medianoche del día que se está mirando
+ */
+export function itemPasoISS(
+  paso: PasoISS,
+  hoy: Date,
+  f: FormatoEventos,
+): ItemEvento {
+  const inicio = paso.aparece.fecha;
+  const minutos = Math.max(
+    1,
+    Math.round((paso.desaparece.fecha.getTime() - inicio.getTime()) / 60_000),
+  );
+  const de = RUMBO_SIN_ARTICULO[rumbo(paso.aparece.azimut)];
+  const a = RUMBO_SIN_ARTICULO[rumbo(paso.desaparece.azimut)];
+  const recorrido = de === a ? `por el ${de}` : `del ${de} al ${a}`;
+  return {
+    clave: `iss-${inicio.getTime()}`,
+    icono: '🛰️',
+    titulo: `La Estación Espacial pasa ${cuandoPasa(inicio, hoy, f)} ${aLaHora(inicio, f)}`,
+    detalle: `${minutos === 1 ? 'Se ve apenas un minuto' : `Se ve unos ${minutos} minutos`}, ${recorrido}, hasta ${Math.round(paso.maximo.altura)}° de altura. Es el punto brillante que cruza sin parpadear.`,
+  };
 }
 
 function tituloLluvia(dias: number, nombre: string): string {
@@ -69,6 +112,8 @@ export function itemEvento(
   switch (e.tipo) {
     case 'lluvia':
       return itemLluvia(e.fecha, e.lluvia, e.alturaRadiante, hoy, f);
+    case 'iss':
+      return itemPasoISS(e.paso, hoy, f);
     case 'eclipse-luna':
       return {
         clave,

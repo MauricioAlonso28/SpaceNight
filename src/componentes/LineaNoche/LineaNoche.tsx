@@ -13,6 +13,7 @@ export interface FilaLinea {
   descripcion: string;
   color?: string;
   tramos?: TramoLinea[];
+  puntos?: number[];
   degradado?: string;
 }
 
@@ -55,6 +56,9 @@ export function LineaNoche({
                   } as CSSProperties
                 }
               />
+            ))}
+            {f.puntos?.map((p) => (
+              <span key={p} className="linea-punto" style={{ left: pct(p) }} />
             ))}
           </div>
         </div>
