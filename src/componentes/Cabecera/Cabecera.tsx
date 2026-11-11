@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { RUTA_AJUSTES, nombreRuta } from '../../app/rutas';
 import { useAhora } from '../../estado/hooks';
@@ -7,15 +8,28 @@ import { textos } from '../../idioma/idioma';
 import { formatearFechaLarga, formatearHora } from '../../servicios/formato';
 import './Cabecera.css';
 
-/** Título, lugar y fecha de hoy, reloj local y acceso a Ajustes. */
+/** Si la página ya bajó algo: la franja de arriba solo se vuelve sólida entonces. */
+function useDesplazada(): boolean {
+  const [desplazada, setDesplazada] = useState(false);
+  useEffect(() => {
+    const revisar = () => setDesplazada(window.scrollY > 4);
+    revisar();
+    window.addEventListener('scroll', revisar, { passive: true });
+    return () => window.removeEventListener('scroll', revisar);
+  }, []);
+  return desplazada;
+}
+
+/** Título, lugar y fecha de hoy, reloj local y acceso a Ajustes; en escritorio es la franja fija de arriba. */
 export function Cabecera() {
+  const desplazada = useDesplazada();
   const ahora = useAhora();
   const ubicacion = useEstado((s) => s.ubicacion);
   const formato24h = useEstado((s) => s.ajustes.formato24h);
   const lugar = nombreLugar(ubicacion);
 
   return (
-    <header className="cabecera">
+    <header className={`cabecera${desplazada ? ' desplazada' : ''}`}>
       <div>
         <h1>SpaceNight</h1>
         <p className="cabecera-lugar">

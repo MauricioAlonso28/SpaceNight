@@ -2,20 +2,29 @@ import { resolvePath } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import {
   DESTINO_INICIAL,
+  GRUPOS,
   RUTA_AJUSTES,
   RUTA_INICIAL,
   RUTAS_BARRA,
+  RUTAS_NASA,
 } from '../src/app/rutas';
 
 describe('rutas', () => {
-  it('la barra de navegación tiene las cinco pantallas en orden', () => {
+  it('la barra del móvil tiene las cuatro pantallas del cielo en orden', () => {
     expect(RUTAS_BARRA.map((r) => r.path)).toEqual([
       'esta-noche',
       'mapa',
       'camara',
       'explorar',
-      'cohete',
     ]);
+  });
+
+  it('el panel lista cielo, cohete y NASA en vivo con sus seis vistas', () => {
+    expect(GRUPOS.map((g) => g.id)).toEqual(['cielo', 'cohete', 'nasa']);
+    expect(RUTAS_NASA).toHaveLength(6);
+    const todas = GRUPOS.flatMap((g) => g.rutas.map((r) => r.path));
+    expect(new Set(todas).size).toBe(todas.length);
+    expect(todas).toContain('cohete');
   });
 
   it('la ruta inicial es una pantalla de la barra', () => {
