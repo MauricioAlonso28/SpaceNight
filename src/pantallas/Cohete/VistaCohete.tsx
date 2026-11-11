@@ -1,9 +1,14 @@
 import { useCallback, useMemo, useState } from 'react';
-import type { ControlCohete } from '../../3d/cohete/escenaCohete';
+import type {
+  ControlCohete,
+  PasoRecorrido,
+} from '../../3d/cohete/escenaCohete';
 import { useJsonPublico } from '../../estado/datos';
 import { textos } from '../../idioma/idioma';
+import { Carril } from './Carril';
 import {
   ARCHIVO_CATALOGO,
+  enOrdenDeRecorrido,
   type CatalogoCohete,
   type ComponenteCohete,
 } from './catalogo';
@@ -16,6 +21,10 @@ const ES = {
   gestos:
     'Arrastra para girar · rueda o pellizco para acercar · clic derecho o Mayús + arrastre para subir y bajar · clic para elegir',
   general: 'Vista general',
+  recorrido: 'Recorrido',
+  corte: 'Vista de corte',
+  corteAuto:
+    'En el recorrido el corte se activa solo en las piezas interiores.',
   componentes: 'Componentes',
   interior: 'interior',
   material: 'material',
@@ -29,25 +38,48 @@ const EN: typeof ES = {
   gestos:
     'Drag to turn · wheel or pinch to zoom · right-click or Shift + drag to move up and down · click to pick',
   general: 'Overview',
+  recorrido: 'Tour',
+  corte: 'Cutaway view',
+  corteAuto:
+    'During the tour the cutaway turns on by itself for inside pieces.',
   componentes: 'Components',
   interior: 'inside',
   material: 'material',
   error: 'Could not load the list of components.',
 };
 
-/** Vista de escritorio de la sección Cohete: el cohete 3D y la lista de sus componentes. */
+type Modo = 'general' | 'recorrido';
+
+/** Paso de la escena para un componente: encuadra la pieza, o el cohete entero si es un material. */
+function pasoDe(c: ComponenteCohete): PasoRecorrido {
+  const pieza = c.tipo === 'pieza';
+  return {
+    nombre: textos(c.nombre),
+    interior: c.interior,
+    foco: pieza ? c.id : null,
+    resalta: pieza ? [c.id] : (c.usadoEn ?? []),
+  };
+}
+
+/** Vista de escritorio de la sección Cohete: el cohete 3D, el recorrido y la lista de componentes. */
 export function VistaCohete() {
   const t = textos({ es: ES, en: EN });
   const catalogo = useJsonPublico<CatalogoCohete>(ARCHIVO_CATALOGO);
   const [control, setControl] = useState<ControlCohete | null>(null);
   const [elegida, setElegida] = useState<string | null>(null);
+  const [modo, setModo] = useState<Modo>('general');
+  const [corte, setCorte] = useState(false);
+  const [activo, setActivo] = useState(0);
 
-  const porId = useMemo(() => {
-    const m = new Map<string, ComponenteCohete>();
-    if (catalogo && catalogo !== 'error')
-      catalogo.componentes.forEach((c) => m.set(c.id, c));
-    return m;
-  }, [catalogo]);
+  const datos = catalogo && catalogo !== 'error' ? catalogo : null;
+  const ordenados = useMemo(
+    () => (datos ? enOrdenDeRecorrido(datos.componentes) : []),
+    [datos],
+  );
+  const porId = useMemo(
+    () => new Map(ordenados.map((c) => [c.id, c])),
+    [ordenados],
+  );
 
   const nombre = useCallback(
     (id: string) => {
@@ -60,6 +92,29 @@ export function VistaCohete() {
   const elegir = (id: string | null) => {
     setElegida(id);
     control?.elegir(id);
+  };
+
+  const empezarRecorrido = () => {
+    if (!control || !ordenados.length) return;
+    setElegida(null);
+    setActivo(0);
+    setModo('recorrido');
+    control.iniciarRecorrido(ordenados.map(pasoDe));
+  };
+
+  const terminarRecorrido = () => {
+    setModo('general');
+    control?.salirRecorrido();
+  };
+
+  const alProgreso = (p: number) => {
+    control?.irAlPaso(p);
+    setActivo(Math.round(Math.min(Math.max(p, 0), ordenados.length - 1)));
+  };
+
+  const cambiarCorte = () => {
+    setCorte(!corte);
+    control?.fijarCorte(!corte);
   };
 
   const componente = elegida ? porId.get(elegida) : undefined;
@@ -77,38 +132,75 @@ export function VistaCohete() {
           <button
             type="button"
             className="cohete-boton"
-            onClick={() => control?.vistaGeneral()}
+            onClick={() =>
+              modo === 'recorrido'
+                ? terminarRecorrido()
+                : control?.vistaGeneral()
+            }
           >
             {t.general}
+          </button>
+          <button
+            type="button"
+            className="cohete-boton"
+            aria-pressed={modo === 'recorrido'}
+            disabled={!control || !ordenados.length}
+            onClick={() =>
+              modo === 'recorrido' ? terminarRecorrido() : empezarRecorrido()
+            }
+          >
+            {t.recorrido}
+          </button>
+          <button
+            type="button"
+            className="cohete-boton"
+            aria-pressed={corte}
+            disabled={!control || modo === 'recorrido'}
+            title={modo === 'recorrido' ? t.corteAuto : undefined}
+            onClick={cambiarCorte}
+          >
+            {t.corte}
           </button>
         </div>
       </div>
 
-      <div className="cohete-marco">
-        <EscenaCohete
-          nombre={nombre}
-          alElegir={setElegida}
-          alListo={setControl}
-        />
-        {componente && (
-          <div className="cohete-elegida" aria-live="polite">
-            <strong>{textos(componente.nombre)}</strong>
-            <span>{textos(componente.resumen)}</span>
-          </div>
+      <div
+        className={`cohete-marco${modo === 'recorrido' ? ' con-carril' : ''}`}
+      >
+        <div className="cohete-lienzo">
+          <EscenaCohete
+            nombre={nombre}
+            alElegir={setElegida}
+            alListo={setControl}
+          />
+          {componente && (
+            <div className="cohete-elegida" aria-live="polite">
+              <strong>{textos(componente.nombre)}</strong>
+              <span>{textos(componente.resumen)}</span>
+            </div>
+          )}
+        </div>
+        {modo === 'recorrido' && datos && (
+          <Carril
+            componentes={ordenados}
+            zonas={datos.zonas}
+            activo={activo}
+            alProgreso={alProgreso}
+          />
         )}
       </div>
       <p className="cohete-gestos">{t.gestos}</p>
 
       {catalogo === 'error' && <p>{t.error}</p>}
-      {catalogo && catalogo !== 'error' && (
+      {datos && (
         <>
           <h3 className="cohete-subtitulo">{t.componentes}</h3>
           <div className="cohete-zonas">
-            {catalogo.zonas.map((zona) => (
+            {datos.zonas.map((zona) => (
               <section key={zona.id} className="cohete-zona">
                 <h4>{textos(zona.nombre)}</h4>
                 <ol>
-                  {catalogo.componentes
+                  {ordenados
                     .filter((c) => c.zona === zona.id)
                     .map((c) => (
                       <li key={c.id} value={c.recorrido}>
