@@ -5,7 +5,7 @@
 }
 
 :root {
-  --vw: calc(100vw - var(--barra-scroll, 0px));
+  --vw: calc(100vw - var(--barra-scroll, 0px) - var(--riel, 0px));
 }
 
 html {
@@ -30,6 +30,13 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
+}
+
+@media (min-width: 1024px) and (pointer: fine) {
+  body {
+    padding-left: var(--riel, 0px);
+    transition: padding-left 0.25s ease;
+  }
 }
 
 h1,

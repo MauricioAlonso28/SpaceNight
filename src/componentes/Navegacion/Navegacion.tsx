@@ -1,65 +1,158 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import { NavLink } from 'react-router';
-import { RUTAS_BARRA, nombreRuta } from '../../app/rutas';
+import { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router';
+import { GRUPOS, RUTAS_BARRA, nombreRuta } from '../../app/rutas';
+import { useEsEscritorio } from '../../app/escritorio';
 import { textos } from '../../idioma/idioma';
+import { ICONOS } from './iconos';
 import './Navegacion.css';
 
-const ICONOS: Record<string, ReactNode> = {
-  'esta-noche': <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" />,
-  mapa: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M8.5 10l6.5-2.5-1 7.5-5.5-1z" />
-    </>
-  ),
-  camara: (
-    <>
-      <path d="M4 8h3l2-3h6l2 3h3v11H4z" />
-      <circle cx="12" cy="13" r="3.5" />
-    </>
-  ),
-  explorar: (
-    <>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M15.5 8.5l-2 5-5 2 2-5z" />
-    </>
-  ),
-  cohete: (
-    <>
-      <path d="M12 2.5c2.9 2.3 4.4 5.8 4.4 9.9v4.1H7.6v-4.1c0-4.1 1.5-7.6 4.4-9.9z" />
-      <circle cx="12" cy="10" r="1.8" />
-      <path d="M7.6 13.2 5 16.4v3.1h2.6M16.4 13.2l2.6 3.2v3.1h-2.6M10.4 19.2 12 21.8l1.6-2.6" />
-    </>
-  ),
+const CLAVE_ABIERTO = 'tu-cielo:panel-abierto';
+
+/** Ancho que ocupa el panel en escritorio, abierto o en riel. */
+const ANCHO = { abierto: '256px', riel: '68px' };
+
+const ES = {
+  pantallas: 'Pantallas',
+  abrir: 'Abrir el menú',
+  cerrar: 'Cerrar el menú',
+  mas: 'Más',
 };
 
-/** Si la página ya bajó algo: la barra de arriba solo se vuelve sólida entonces. */
-function useDesplazada(): boolean {
-  const [desplazada, setDesplazada] = useState(false);
-  useEffect(() => {
-    const revisar = () => setDesplazada(window.scrollY > 4);
-    revisar();
-    window.addEventListener('scroll', revisar, { passive: true });
-    return () => window.removeEventListener('scroll', revisar);
-  }, []);
-  return desplazada;
+const EN: typeof ES = {
+  pantallas: 'Screens',
+  abrir: 'Open the menu',
+  cerrar: 'Close the menu',
+  mas: 'More',
+};
+
+function leerAbierto(): boolean {
+  try {
+    return localStorage.getItem(CLAVE_ABIERTO) !== '0';
+  } catch {
+    return true;
+  }
 }
 
-/** Navegación entre pantallas: barra inferior en el móvil y barra superior en escritorio, transparente arriba del todo. */
-export function Navegacion() {
-  const desplazada = useDesplazada();
+function guardarAbierto(si: boolean): void {
+  try {
+    localStorage.setItem(CLAVE_ABIERTO, si ? '1' : '0');
+  } catch {
+    return;
+  }
+}
+
+/** Icono de una pantalla por su ruta. */
+function Icono({ clave }: { clave: string }) {
   return (
-    <div className={`navegacion${desplazada ? ' desplazada' : ''}`}>
-      <nav aria-label={textos({ es: 'Pantallas', en: 'Screens' })}>
-        {RUTAS_BARRA.map((ruta) => (
-          <NavLink key={ruta.path} to={`/${ruta.path}`}>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              {ICONOS[ruta.path]}
-            </svg>
-            <span>{nombreRuta(ruta)}</span>
-          </NavLink>
-        ))}
-      </nav>
-    </div>
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      {ICONOS[clave]}
+    </svg>
+  );
+}
+
+/**
+ * Navegación: en escritorio un panel a la izquierda que el botón ☰ abre y deja en riel de iconos, y recuerda cómo quedó;
+ * en el móvil la barra inferior con las cuatro pantallas del cielo y Más, que abre el mismo panel por encima.
+ */
+export function Navegacion() {
+  const t = textos({ es: ES, en: EN });
+  const escritorio = useEsEscritorio();
+  const ruta = useLocation().pathname;
+  const [abiertoEscritorio, setAbiertoEscritorio] = useState(leerAbierto);
+  const [abiertoEn, setAbiertoEn] = useState<string | null>(null);
+  const abiertoMovil = abiertoEn === ruta;
+  const setAbiertoMovil = (si: boolean) => setAbiertoEn(si ? ruta : null);
+  const abierto = escritorio ? abiertoEscritorio : abiertoMovil;
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--riel',
+      escritorio ? ANCHO[abiertoEscritorio ? 'abierto' : 'riel'] : '0px',
+    );
+    window.dispatchEvent(new Event('resize'));
+  }, [escritorio, abiertoEscritorio]);
+
+  useEffect(() => {
+    if (escritorio || !abiertoMovil) return;
+    const alTeclear = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape') setAbiertoEn(null);
+    };
+    window.addEventListener('keydown', alTeclear);
+    return () => window.removeEventListener('keydown', alTeclear);
+  }, [escritorio, abiertoMovil]);
+
+  const alternar = () => {
+    if (escritorio) {
+      guardarAbierto(!abiertoEscritorio);
+      setAbiertoEscritorio(!abiertoEscritorio);
+    } else setAbiertoMovil(!abiertoMovil);
+  };
+
+  return (
+    <>
+      <aside
+        className={`panel-nav${abierto ? ' abierto' : ''}`}
+        aria-label={t.pantallas}
+        hidden={!escritorio && !abiertoMovil}
+      >
+        <button
+          type="button"
+          className="panel-boton"
+          aria-expanded={abierto}
+          aria-controls="panel-lista"
+          aria-label={abierto ? t.cerrar : t.abrir}
+          onClick={alternar}
+        >
+          <Icono clave="mas" />
+        </button>
+        <nav id="panel-lista">
+          {GRUPOS.map((g) => (
+            <div key={g.id} className="panel-grupo">
+              <p className="panel-titulo">{textos(g.nombre)}</p>
+              {g.rutas.map((r) => (
+                <NavLink
+                  key={r.path}
+                  to={`/${r.path}`}
+                  end
+                  title={abierto ? undefined : nombreRuta(r)}
+                >
+                  <Icono clave={r.path} />
+                  <span>{nombreRuta(r)}</span>
+                </NavLink>
+              ))}
+            </div>
+          ))}
+        </nav>
+      </aside>
+      {!escritorio && abiertoMovil && (
+        <div
+          className="panel-velo"
+          aria-hidden="true"
+          onClick={() => setAbiertoMovil(false)}
+        />
+      )}
+      {!escritorio && (
+        <div className="navegacion">
+          <nav aria-label={t.pantallas}>
+            {RUTAS_BARRA.map((r) => (
+              <NavLink key={r.path} to={`/${r.path}`}>
+                <Icono clave={r.path} />
+                <span>{nombreRuta(r)}</span>
+              </NavLink>
+            ))}
+            <button
+              type="button"
+              className="navegacion-mas"
+              aria-expanded={abiertoMovil}
+              aria-controls="panel-lista"
+              onClick={alternar}
+            >
+              <Icono clave="mas" />
+              <span>{t.mas}</span>
+            </button>
+          </nav>
+        </div>
+      )}
+    </>
   );
 }

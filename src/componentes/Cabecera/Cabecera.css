@@ -62,12 +62,34 @@
   .cabecera {
     position: fixed;
     top: 0;
-    left: max(24px, calc(50% - 632px));
-    right: max(24px, calc(50% - 632px));
+    left: calc(var(--riel, 0px) + max(0px, (var(--vw) - 1312px) / 2) + 24px);
+    right: calc(max(0px, (var(--vw) - 1312px) / 2) + 24px);
     z-index: 6;
     height: 61px;
     align-items: center;
     pointer-events: none;
+    transition: left 0.25s ease;
+  }
+
+  .cabecera::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: var(--riel, 0px);
+    right: 0;
+    height: 61px;
+    z-index: -1;
+    border-bottom: 1px solid transparent;
+    transition:
+      background 0.25s,
+      border-color 0.25s;
+  }
+
+  .cabecera.desplazada::before {
+    background: var(--barra);
+    border-bottom-color: var(--borde);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
   }
 
   .cabecera > * {
