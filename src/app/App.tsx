@@ -39,6 +39,11 @@ const Eventos = lazy(() =>
 const Bolidos = lazy(() =>
   import('../pantallas/Nasa/Bolidos').then((m) => ({ default: m.Bolidos })),
 );
+const Exoplanetas = lazy(() =>
+  import('../pantallas/Nasa/Exoplanetas').then((m) => ({
+    default: m.Exoplanetas,
+  })),
+);
 const Ajustes = lazy(() =>
   import('../pantallas/Ajustes/Ajustes').then((m) => ({ default: m.Ajustes })),
 );
@@ -68,7 +73,7 @@ export function App() {
           <Route path="nasa/tierra" element={<Tierra />} />
           <Route path="nasa/eventos" element={<Eventos />} />
           <Route path="nasa/bolidos" element={<Bolidos />} />
-          <Route path="nasa/exoplanetas" element={<Pendiente />} />
+          <Route path="nasa/exoplanetas" element={<Exoplanetas />} />
           <Route path="nasa/archivo" element={<Pendiente />} />
           <Route path={RUTA_AJUSTES.path} element={<Ajustes />} />
           <Route path="*" element={<Navigate to={DESTINO_INICIAL} replace />} />

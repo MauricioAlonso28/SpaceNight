@@ -1,0 +1,232 @@
+.exo-controles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.exo-buscar {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  padding: 8px 16px;
+  min-width: 260px;
+}
+
+.exo-cuerpo {
+  display: grid;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .exo-cuerpo {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 40px;
+  }
+}
+
+.exo-diagrama {
+  position: relative;
+  height: clamp(380px, 56vh, 560px);
+}
+
+.exo-diagrama canvas,
+.exo-ejes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.exo-ejes {
+  pointer-events: none;
+  overflow: visible;
+}
+
+.exo-ejes line {
+  stroke: rgba(150, 170, 255, 0.1);
+}
+
+.exo-ejes text {
+  fill: var(--texto-suave);
+  font-size: 11px;
+}
+
+.exo-titulo-eje {
+  font-size: 12px !important;
+  letter-spacing: 0.04em;
+}
+
+.exo-zona {
+  position: absolute;
+  border-radius: 6px;
+  background: rgba(143, 180, 255, 0.04);
+  border: 1px dashed rgba(143, 180, 255, 0.14);
+  pointer-events: none;
+}
+
+.exo-zona span {
+  position: absolute;
+  right: 8px;
+  top: 6px;
+  color: rgba(159, 168, 207, 0.75);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.exo-zona.tierra {
+  background: rgba(46, 196, 182, 0.06);
+  border-color: rgba(46, 196, 182, 0.3);
+}
+
+.exo-solar circle {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.4;
+}
+
+.exo-solar text {
+  fill: var(--texto) !important;
+  font-size: 11px;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: rgba(4, 9, 30, 0.85);
+  stroke-width: 3px;
+}
+
+.exo-marca circle {
+  fill: none;
+  stroke: var(--acento);
+  stroke-width: 2;
+}
+
+.exo-marca text {
+  fill: var(--texto) !important;
+  font-size: 13px !important;
+  font-weight: 600;
+  paint-order: stroke;
+  stroke: rgba(4, 9, 30, 0.9);
+  stroke-width: 4px;
+}
+
+.exo-ficha {
+  align-self: center;
+}
+
+.exo-ficha article {
+  animation: nasa-fundido 0.3s ease-out;
+}
+
+.exo-ficha h3 {
+  font-size: 2rem;
+  margin: 4px 0 10px;
+  overflow-wrap: anywhere;
+}
+
+.exo-ficha dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 18px;
+  margin: 0 0 12px;
+}
+
+.exo-ficha dl > div {
+  padding: 8px 0 10px;
+  border-top: 1px solid var(--borde);
+}
+
+.exo-ficha dt {
+  color: var(--texto-suave);
+  font-size: 0.75rem;
+}
+
+.exo-ficha dd {
+  margin: 2px 0 0;
+  font-family: var(--fuente-titulo);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.exo-pista {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+}
+
+.exo-anios {
+  margin-top: 32px;
+}
+
+.exo-anios-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.exo-anios-cabeza p {
+  margin: 0;
+  color: var(--texto-suave);
+}
+
+.exo-anios-cabeza strong {
+  font-family: var(--fuente-titulo);
+  font-size: 1.6rem;
+  color: var(--texto);
+}
+
+.exo-barras {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 110px;
+  margin-top: 12px;
+}
+
+.exo-barra {
+  flex: 1;
+  display: flex;
+  flex-direction: column-reverse;
+  height: var(--h);
+  min-height: 1px;
+  overflow: hidden;
+  border-radius: 2px 2px 0 0;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+
+.exo-barra.apagada {
+  opacity: 0.1;
+}
+
+.exo-barra span {
+  display: block;
+  min-height: 1px;
+}
+
+.exo-eje {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.exo-nota {
+  grid-column: 1;
+  margin: -8px 0 0;
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+  max-width: 80ch;
+}
+
+@media (min-width: 900px) {
+  .exo-ficha {
+    grid-row: 1;
+    grid-column: 2;
+  }
+}
