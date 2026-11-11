@@ -56,6 +56,7 @@ const FUENTES = [
 ];
 
 mkdirSync(SALIDA, { recursive: true });
+console.log(`NeoWs: ${process.env.NASA_API_KEY ? 'clave propia' : 'DEMO_KEY'}`);
 const estado = { generado: new Date(ahora).toISOString(), fuentes: {} };
 
 for (const f of FUENTES) {

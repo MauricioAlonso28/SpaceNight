@@ -47,6 +47,5 @@ el archivo de imágenes. Hay avisos en vivo en la campana de la cabecera.
 - La clave de NeoWs sale de `NASA_API_KEY`, en `.env.local` (ignorado por git) o en el entorno. Sin ella se usa
   `DEMO_KEY`, que admite 10 consultas por hora.
 
-Pendiente por permisos del token (falta el alcance `workflow`): añadir al flujo
-de despliegue un `schedule` cada 6 horas y pasar `NASA_API_KEY` desde los
-secretos del repo.
+El flujo de despliegue corre también cada 6 horas (`schedule`) y pasa
+`NASA_API_KEY` desde los secretos del repo al paso de build.
