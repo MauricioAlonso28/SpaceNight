@@ -1,4 +1,6 @@
 import {
+  Suspense,
+  lazy,
   useEffect,
   useRef,
   useState,
@@ -20,8 +22,16 @@ import {
 import { CabezaNasa, Cifra, SinDatos } from './CabezaNasa';
 import './Tierra.css';
 
+const TierraSatelite = lazy(() =>
+  import('./TierraSatelite').then((m) => ({ default: m.TierraSatelite })),
+);
+
 const ES = {
   titulo: 'La Tierra hoy',
+  modoDscovr: 'Desde DSCOVR',
+  modoSatelite: 'Por satélite',
+  leadSatelite:
+    'Toda la Tierra fotografiada ayer por el satélite Terra de la NASA, pasada a pasada. Acércate a cualquier lugar; los puntos son los eventos naturales activos.',
   lead: 'Las fotos de la Tierra entera que toma la cámara EPIC desde la nave DSCOVR, a 1,5 millones de km, en el punto donde la gravedad del Sol y la de la Tierra se equilibran. Desde ahí siempre ve la cara iluminada.',
   fotos: 'fotos ese día',
   distancia: 'de la cámara a la Tierra',
@@ -42,6 +52,10 @@ const ES = {
 
 const EN: typeof ES = {
   titulo: 'Earth today',
+  modoDscovr: 'From DSCOVR',
+  modoSatelite: 'By satellite',
+  leadSatelite:
+    'The whole Earth photographed yesterday by NASA’s Terra satellite, pass by pass. Zoom into any place; the dots are the active natural events.',
   lead: 'Whole-Earth photos from the EPIC camera aboard DSCOVR, 1.5 million km away at the point where the Sun’s and Earth’s gravity balance. From there it always sees the sunlit side.',
   fotos: 'photos that day',
   distancia: 'from the camera to Earth',
@@ -126,8 +140,8 @@ function MapaRecorrido({
   );
 }
 
-/** Vista La Tierra hoy: el time-lapse del día de EPIC, sus cifras, el mapa de lo que miró y los días anteriores. */
-export function Tierra() {
+/** Pestaña Desde DSCOVR: el time-lapse del día de EPIC, sus cifras, el mapa de lo que miró y los días anteriores. */
+function TierraDscovr() {
   const t = textos({ es: ES, en: EN });
   const zona = useEstado((s) => s.ubicacion.zona);
   const formato24h = useEstado((s) => s.ajustes.formato24h);
@@ -180,24 +194,8 @@ export function Tierra() {
     ir(arrastre.current.i - pasos);
   };
 
-  const cabeza = (
-    <CabezaNasa
-      id="t-tierra"
-      titulo={t.titulo}
-      lead={t.lead}
-      fuentes={[
-        { nombre: 'NASA EPIC', url: 'https://epic.gsfc.nasa.gov/' },
-        { nombre: 'NOAA DSCOVR', url: 'https://www.nesdis.noaa.gov/dscovr' },
-      ]}
-    />
-  );
   if (!n) {
-    return (
-      <section className="nasa" aria-labelledby="t-tierra">
-        {cabeza}
-        <SinDatos error={fotos === 'error'} />
-      </section>
-    );
+    return <SinDatos error={fotos === 'error'} />;
   }
 
   const foto = lista[Math.min(indice, n - 1)];
@@ -215,136 +213,192 @@ export function Tierra() {
   ).format(instante);
 
   return (
-    <section className="nasa tierra" aria-labelledby="t-tierra">
-      {cabeza}
-      <div className="tierra-cuerpo">
-        <div className="tierra-escena">
-          <div
-            className="tierra-foto"
-            onPointerDown={alPulsar}
-            onPointerMove={alMover}
-            onPointerUp={() => (arrastre.current = null)}
-            role="img"
-            aria-label={t.foto(hora)}
-          >
-            {lista.map((f, i) =>
-              cargadas.has(i) ? (
-                <img
-                  key={f.identifier}
-                  src={urlFoto(f)}
-                  alt=""
-                  draggable={false}
-                  className={i === indice ? 'visible' : undefined}
-                  onLoad={() =>
-                    setCargadas((c) =>
-                      c.has((i + 1) % n) ? c : new Set(c).add((i + 1) % n),
-                    )
-                  }
-                />
-              ) : null,
-            )}
-            <img
-              src={urlFoto(foto, 'thumbs')}
-              alt=""
-              className="tierra-miniatura"
-            />
-          </div>
-          <div className="tierra-control">
-            <button
-              type="button"
-              className="nasa-chip"
-              onClick={() => setJugando(!jugando)}
-              aria-pressed={jugando}
-            >
-              {jugando ? `❚❚ ${t.pausar}` : `▶ ${t.reproducir}`}
-            </button>
-            <input
-              type="range"
-              min={0}
-              max={n - 1}
-              value={indice}
-              aria-label={t.tomada}
-              onChange={(e) => {
-                setJugando(false);
-                ir(Number(e.target.value));
-              }}
-            />
-            <output>{hora}</output>
-          </div>
-          <p className="tierra-ayuda">{t.arrastra}</p>
+    <div className="tierra-cuerpo">
+      <div className="tierra-escena">
+        <div
+          className="tierra-foto"
+          onPointerDown={alPulsar}
+          onPointerMove={alMover}
+          onPointerUp={() => (arrastre.current = null)}
+          role="img"
+          aria-label={t.foto(hora)}
+        >
+          {lista.map((f, i) =>
+            cargadas.has(i) ? (
+              <img
+                key={f.identifier}
+                src={urlFoto(f)}
+                alt=""
+                draggable={false}
+                className={i === indice ? 'visible' : undefined}
+                onLoad={() =>
+                  setCargadas((c) =>
+                    c.has((i + 1) % n) ? c : new Set(c).add((i + 1) % n),
+                  )
+                }
+              />
+            ) : null,
+          )}
+          <img
+            src={urlFoto(foto, 'thumbs')}
+            alt=""
+            className="tierra-miniatura"
+          />
         </div>
-        <div className="tierra-lado">
-          <div className="tierra-dia">
-            <button
-              type="button"
-              className="nasa-chip"
-              aria-label={t.anterior}
-              disabled={posicion < 0 || posicion + 1 >= fechasLista.length}
-              onClick={() => cambiarDia(1)}
-            >
-              ‹
-            </button>
-            <h3>{fechaLarga}</h3>
-            <button
-              type="button"
-              className="nasa-chip"
-              aria-label={t.siguiente}
-              disabled={posicion <= 0}
-              onClick={() => cambiarDia(-1)}
-            >
-              ›
-            </button>
-          </div>
-          <dl className="nasa-cifras">
-            <Cifra valor={n} etiqueta={t.fotos} />
-            <Cifra
-              valor={modulo(foto.dscovr_j2000_position) / 1e6}
-              decimales={2}
-              unidad={idioma() === 'es' ? 'millones de km' : 'million km'}
-              etiqueta={t.distancia}
-            />
-            <Cifra
-              valor={anguloSolNave(foto)}
-              decimales={1}
-              unidad="°"
-              etiqueta={t.angulo}
-            />
-          </dl>
-          <div className="tierra-centro">
-            <p className="nasa-rotulo">{t.centro}</p>
-            <p className="tierra-coordenadas">
-              {coordenada(foto.centroid_coordinates.lat, 'lat')} ·{' '}
-              {coordenada(foto.centroid_coordinates.lon, 'lon')}
-            </p>
-            <p className="tierra-nota">
-              {t.horaSolar(
-                horaDecimal(horaSolar(instante, foto.centroid_coordinates.lon)),
-              )}
-              {' · '}
-              {t.tomada} {hora} ({foto.date.slice(11, 16)} UTC)
-            </p>
-          </div>
-          <div>
-            <p className="nasa-rotulo">{t.recorrido}</p>
-            <MapaRecorrido
-              fotos={lista}
-              indice={indice}
-              alElegir={(i) => {
-                setJugando(false);
-                ir(i);
-              }}
-            />
-          </div>
-          <a
-            className="nasa-enlace"
-            href={`https://epic.gsfc.nasa.gov/?date=${foto.date.slice(0, 10)}`}
-            target="_blank"
-            rel="noreferrer"
+        <div className="tierra-control">
+          <button
+            type="button"
+            className="nasa-chip"
+            onClick={() => setJugando(!jugando)}
+            aria-pressed={jugando}
           >
-            {t.ver} ↗
-          </a>
+            {jugando ? `❚❚ ${t.pausar}` : `▶ ${t.reproducir}`}
+          </button>
+          <input
+            type="range"
+            min={0}
+            max={n - 1}
+            value={indice}
+            aria-label={t.tomada}
+            onChange={(e) => {
+              setJugando(false);
+              ir(Number(e.target.value));
+            }}
+          />
+          <output>{hora}</output>
         </div>
+        <p className="tierra-ayuda">{t.arrastra}</p>
       </div>
+      <div className="tierra-lado">
+        <div className="tierra-dia">
+          <button
+            type="button"
+            className="nasa-chip"
+            aria-label={t.anterior}
+            disabled={posicion < 0 || posicion + 1 >= fechasLista.length}
+            onClick={() => cambiarDia(1)}
+          >
+            ‹
+          </button>
+          <h3>{fechaLarga}</h3>
+          <button
+            type="button"
+            className="nasa-chip"
+            aria-label={t.siguiente}
+            disabled={posicion <= 0}
+            onClick={() => cambiarDia(-1)}
+          >
+            ›
+          </button>
+        </div>
+        <dl className="nasa-cifras">
+          <Cifra valor={n} etiqueta={t.fotos} />
+          <Cifra
+            valor={modulo(foto.dscovr_j2000_position) / 1e6}
+            decimales={2}
+            unidad={idioma() === 'es' ? 'millones de km' : 'million km'}
+            etiqueta={t.distancia}
+          />
+          <Cifra
+            valor={anguloSolNave(foto)}
+            decimales={1}
+            unidad="°"
+            etiqueta={t.angulo}
+          />
+        </dl>
+        <div className="tierra-centro">
+          <p className="nasa-rotulo">{t.centro}</p>
+          <p className="tierra-coordenadas">
+            {coordenada(foto.centroid_coordinates.lat, 'lat')} ·{' '}
+            {coordenada(foto.centroid_coordinates.lon, 'lon')}
+          </p>
+          <p className="tierra-nota">
+            {t.horaSolar(
+              horaDecimal(horaSolar(instante, foto.centroid_coordinates.lon)),
+            )}
+            {' · '}
+            {t.tomada} {hora} ({foto.date.slice(11, 16)} UTC)
+          </p>
+        </div>
+        <div>
+          <p className="nasa-rotulo">{t.recorrido}</p>
+          <MapaRecorrido
+            fotos={lista}
+            indice={indice}
+            alElegir={(i) => {
+              setJugando(false);
+              ir(i);
+            }}
+          />
+        </div>
+        <a
+          className="nasa-enlace"
+          href={`https://epic.gsfc.nasa.gov/?date=${foto.date.slice(0, 10)}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {t.ver} ↗
+        </a>
+      </div>
+    </div>
+  );
+}
+
+/** Vista La Tierra hoy: la Tierra entera desde DSCOVR o el mapa por satélite de ayer. */
+export function Tierra() {
+  const t = textos({ es: ES, en: EN });
+  const [modo, setModo] = useState<'dscovr' | 'satelite'>('dscovr');
+  return (
+    <section className="nasa tierra" aria-labelledby="t-tierra">
+      <CabezaNasa
+        id="t-tierra"
+        titulo={t.titulo}
+        lead={modo === 'dscovr' ? t.lead : t.leadSatelite}
+        fuentes={
+          modo === 'dscovr'
+            ? [
+                { nombre: 'NASA EPIC', url: 'https://epic.gsfc.nasa.gov/' },
+                {
+                  nombre: 'NOAA DSCOVR',
+                  url: 'https://www.nesdis.noaa.gov/dscovr',
+                },
+              ]
+            : [
+                {
+                  nombre: 'NASA GIBS',
+                  url: 'https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api',
+                },
+                { nombre: 'NASA EONET', url: 'https://eonet.gsfc.nasa.gov/' },
+              ]
+        }
+      />
+      <div className="segmentos tierra-modos" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          className="segmento"
+          aria-selected={modo === 'dscovr'}
+          onClick={() => setModo('dscovr')}
+        >
+          {t.modoDscovr}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          className="segmento"
+          aria-selected={modo === 'satelite'}
+          onClick={() => setModo('satelite')}
+        >
+          {t.modoSatelite}
+        </button>
+      </div>
+      {modo === 'dscovr' ? (
+        <TierraDscovr />
+      ) : (
+        <Suspense fallback={<SinDatos error={false} />}>
+          <TierraSatelite />
+        </Suspense>
+      )}
     </section>
   );
 }

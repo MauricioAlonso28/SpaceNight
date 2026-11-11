@@ -17,6 +17,7 @@ import {
   type RespuestaImagenes,
 } from '../../servicios/nasa/imagenes';
 import { CabezaNasa, Cifra, SinDatos } from './CabezaNasa';
+import { FotoDelDia } from './FotoDelDia';
 import './Archivo.css';
 
 const ES = {
@@ -226,6 +227,7 @@ export function Archivo() {
           },
         ]}
       />
+      <FotoDelDia />
       <form className="archivo-buscar" role="search" onSubmit={buscar}>
         <label htmlFor="archivo-q" className="oculto">
           {t.buscar}
