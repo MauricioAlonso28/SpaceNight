@@ -8,7 +8,9 @@ import {
   SRGBColorSpace,
   Scene,
   SphereGeometry,
+  TextureLoader,
   WebGLRenderer,
+  type Texture,
 } from 'three';
 import { densidadPixeles } from './comun';
 import {
@@ -137,7 +139,9 @@ export function lienzoLuna(): HTMLCanvasElement {
 }
 
 /**
- * Monta la Luna 3D en un canvas; solo se redibuja al cambiar de fase, al arrastrarla o al inclinar el móvil. */
+ * Monta la Luna 3D en un canvas; solo se redibuja al cambiar de fase, al arrastrarla o al inclinar el móvil.
+ * Empieza con la textura dibujada y la cambia por el mapa real de la Luna en cuanto llega.
+ */
 export function crearEscenaLuna(
   canvas: HTMLCanvasElement,
   lienzo: HTMLCanvasElement = lienzoLuna(),
@@ -232,6 +236,23 @@ export function crearEscenaLuna(
   canvas.addEventListener('pointercancel', alSoltar);
   const dejarDeSeguir = seguirInclinacion(pedirCuadro);
 
+  let vivo = true;
+  let real: Texture | null = null;
+  new TextureLoader()
+    .loadAsync(`${import.meta.env.BASE_URL}texturas/luna.webp`)
+    .then((tex) => {
+      if (!vivo) return tex.dispose();
+      tex.colorSpace = SRGBColorSpace;
+      tex.anisotropy = 4;
+      real = tex;
+      material.map = tex;
+      material.bumpMap = tex;
+      material.bumpScale = 1.4;
+      material.needsUpdate = true;
+      pedirCuadro();
+    })
+    .catch(() => undefined);
+
   return {
     fijarFase: (anguloGrados, hemisferioSur) => {
       objetivo = (anguloGrados * Math.PI) / 180;
@@ -246,9 +267,11 @@ export function crearEscenaLuna(
       canvas.removeEventListener('pointermove', alMover);
       canvas.removeEventListener('pointerup', alSoltar);
       canvas.removeEventListener('pointercancel', alSoltar);
+      vivo = false;
       geometria.dispose();
       material.dispose();
       mapa.dispose();
+      real?.dispose();
       renderer.dispose();
     },
   };

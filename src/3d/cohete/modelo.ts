@@ -7,7 +7,6 @@ import {
   LatheGeometry,
   Mesh,
   MeshBasicMaterial,
-  MeshLambertMaterial,
   MeshStandardMaterial,
   SphereGeometry,
   TorusGeometry,
@@ -40,6 +39,22 @@ const COLORES = {
 } as const;
 
 type Acabado = keyof typeof COLORES;
+
+/** Cuánto brilla y cuánto refleja cada acabado, de 0 a 1: pintura mate, metal pulido, lámina de oro, fibra de carbono. */
+const SUPERFICIE: Record<Acabado, { rugosidad: number; metal: number }> = {
+  aluminio: { rugosidad: 0.42, metal: 0.55 },
+  carbono: { rugosidad: 0.38, metal: 0.15 },
+  cofia: { rugosidad: 0.32, metal: 0 },
+  oxigeno: { rugosidad: 0.4, metal: 0.35 },
+  combustible: { rugosidad: 0.4, metal: 0.35 },
+  acero: { rugosidad: 0.3, metal: 0.85 },
+  titanio: { rugosidad: 0.45, metal: 0.9 },
+  oscuro: { rugosidad: 0.6, metal: 0.2 },
+  oro: { rugosidad: 0.22, metal: 1 },
+  panel: { rugosidad: 0.25, metal: 0.4 },
+  escudo: { rugosidad: 0.85, metal: 0 },
+  tobera: { rugosidad: 0.38, metal: 0.75 },
+};
 
 /** Hacia dónde sale una pieza al desarmarla. */
 export type Salida = 'radial' | 'camara' | 'abajo' | 'arriba';
@@ -80,15 +95,12 @@ interface Definicion {
 const grados = (g: number) => (g * Math.PI) / 180;
 
 function material(acabado: Acabado): Material {
-  if (acabado === 'tobera') {
-    return new MeshStandardMaterial({
-      color: COLORES.tobera,
-      metalness: 0.75,
-      roughness: 0.38,
-      side: DoubleSide,
-    });
-  }
-  return new MeshLambertMaterial({ color: COLORES[acabado], side: DoubleSide });
+  return new MeshStandardMaterial({
+    color: COLORES[acabado],
+    metalness: SUPERFICIE[acabado].metal,
+    roughness: SUPERFICIE[acabado].rugosidad,
+    side: DoubleSide,
+  });
 }
 
 /** Mueve una pieza a cierta distancia del eje, a cierta altura y en cierto ángulo (en grados). */

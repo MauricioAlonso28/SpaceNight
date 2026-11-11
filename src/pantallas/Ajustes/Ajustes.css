@@ -2,11 +2,11 @@
   margin-top: 14px;
   max-width: 560px;
   display: grid;
-  gap: 16px;
 }
 
 .ajustes h2 {
-  font-size: 1.8rem;
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
+  margin-bottom: 14px;
 }
 
 .ajustes fieldset {
@@ -14,6 +14,31 @@
   gap: 10px;
   margin: 0;
   min-width: 0;
+  padding: 20px 0;
+  border: 0;
+  border-top: 1px solid var(--borde);
+}
+
+@media (min-width: 900px) {
+  .ajustes {
+    max-width: 920px;
+  }
+
+  .ajustes fieldset {
+    position: relative;
+    padding: 24px 0 24px 300px;
+  }
+
+  .ajustes legend {
+    position: absolute;
+    left: 0;
+    top: 24px;
+    width: 260px !important;
+  }
+
+  .ajustes select {
+    max-width: 420px;
+  }
 }
 
 .ajustes legend {

@@ -3,8 +3,59 @@
 }
 
 .mapa-titulo {
-  font-size: 1.8rem;
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
   margin-bottom: 12px;
+}
+
+@media (min-width: 1024px) and (pointer: fine) {
+  .mapa {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto;
+    gap: 0 32px;
+    align-items: center;
+  }
+
+  .mapa > :not(.mapa-buscar, .mapa-horas, .mapa-interruptor) {
+    grid-column: 1 / -1;
+  }
+
+  .mapa-marco {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+  }
+
+  .mapa .mapa-escena {
+    height: max(440px, calc(100dvh - 340px));
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    -webkit-mask-image: radial-gradient(
+      ellipse 62% 70% at 50% 50%,
+      #000 62%,
+      transparent 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 62% 70% at 50% 50%,
+      #000 62%,
+      transparent 100%
+    );
+  }
+
+  .mapa .mapa-ficha {
+    left: auto;
+    right: max(24px, calc(50vw - 632px));
+    bottom: 24px;
+  }
+
+  .mapa-ayuda {
+    text-align: center;
+  }
+
+  .mapa .mapa-buscar,
+  .mapa .mapa-horas,
+  .mapa .mapa-interruptor {
+    margin-top: 18px;
+  }
 }
 
 .mapa-marco {

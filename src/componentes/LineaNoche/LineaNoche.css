@@ -1,15 +1,49 @@
 .linea {
+  --col-nombre: 92px;
+  --hueco: 10px;
   position: relative;
   display: grid;
-  gap: 12px;
-  padding-top: 24px;
+  padding-top: 26px;
+}
+
+@media (min-width: 820px) {
+  .linea {
+    --col-nombre: 300px;
+    --hueco: 28px;
+  }
 }
 
 .linea-fila {
   display: grid;
-  grid-template-columns: 92px 1fr;
+  grid-template-columns: var(--col-nombre) 1fr;
   align-items: center;
-  gap: 10px;
+  gap: 4px var(--hueco);
+  padding: 8px 0;
+}
+
+.linea-fila.con-notas {
+  padding: 14px 0;
+  border-top: 1px solid var(--borde);
+}
+
+@media (max-width: 819px) {
+  .linea-fila.con-notas .linea-cabeza,
+  .linea-fila.con-notas .linea-pista {
+    grid-column: 1 / -1;
+  }
+}
+
+.linea-cabeza {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.linea-cabeza > div {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
 }
 
 .linea-nombre {
@@ -17,18 +51,59 @@
   color: var(--texto-suave);
 }
 
+.con-notas .linea-nombre {
+  font-family: var(--fuente-titulo);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--texto);
+}
+
+.linea-nota {
+  font-size: 0.86rem;
+  font-weight: 500;
+}
+
+.linea-pista-texto {
+  font-size: 0.8rem;
+  color: var(--texto-suave);
+}
+
+.linea-brillo {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.linea-brillo i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--pista);
+}
+
+.linea-brillo i.on {
+  background: var(--dato);
+  box-shadow: 0 0 6px var(--dato);
+}
+
 .linea-pista {
   position: relative;
-  height: 12px;
-  border-radius: 6px;
+  height: 10px;
+  border-radius: 5px;
   background: var(--pista);
+}
+
+.con-notas .linea-pista {
+  height: 14px;
+  border-radius: 7px;
 }
 
 .linea-tramo {
   position: absolute;
   top: 0;
   bottom: 0;
-  border-radius: 6px;
+  border-radius: inherit;
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.12);
 }
 
@@ -43,6 +118,10 @@
   box-shadow:
     0 0 0 4px rgba(143, 180, 255, 0.25),
     0 0 14px var(--dato);
+}
+
+.linea-eje {
+  border-top: 1px solid var(--borde);
 }
 
 .linea-horas {
@@ -70,9 +149,9 @@
 
 .linea-capa {
   position: absolute;
-  top: 18px;
-  bottom: 28px;
-  left: 102px;
+  top: 20px;
+  bottom: 34px;
+  left: calc(var(--col-nombre) + var(--hueco));
   right: 0;
   pointer-events: none;
 }

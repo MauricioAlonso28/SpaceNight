@@ -1,0 +1,81 @@
+.retrato {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--tam);
+  height: var(--tam);
+}
+
+.retrato img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: retrato-aparece 0.4s ease-out;
+}
+
+@keyframes retrato-aparece {
+  from {
+    opacity: 0;
+  }
+}
+
+.retrato-esfera {
+  width: 96%;
+  height: 96%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 36% 34%,
+    var(--claro, #ddd) 0,
+    var(--oscuro, #555) 70%,
+    #05081c 100%
+  );
+}
+
+.retrato-saturno .retrato-esfera {
+  width: 42%;
+  height: 42%;
+}
+
+.retrato-sol {
+  --claro: #fff3c4;
+  --oscuro: #f08a24;
+  filter: drop-shadow(0 0 calc(var(--tam) * 0.14) rgba(255, 170, 60, 0.55));
+}
+
+.retrato-luna {
+  --claro: #e6e2d8;
+  --oscuro: #77736b;
+}
+
+.retrato-mercurio {
+  --claro: #cfc8bd;
+  --oscuro: #6f6961;
+}
+
+.retrato-venus {
+  --claro: #fbf0cf;
+  --oscuro: #b99a5c;
+}
+
+.retrato-marte {
+  --claro: #e88a5a;
+  --oscuro: #8a3014;
+}
+
+.retrato-jupiter {
+  --claro: #f1dfbf;
+  --oscuro: #9d6a42;
+}
+
+.retrato-saturno {
+  --claro: #f3e2b8;
+  --oscuro: #a98a55;
+}
+
+.retrato-saturno img {
+  width: 165%;
+  height: 165%;
+  max-width: none;
+  margin: -32.5%;
+}

@@ -94,7 +94,7 @@ export function Estacion({
 
   return (
     <div className="estacion">
-      <figure className="estacion-mapa panel">
+      <figure className="estacion-mapa">
         <svg
           viewBox="0 0 360 180"
           role="img"
@@ -145,11 +145,13 @@ export function Estacion({
             )}
         </figcaption>
       </figure>
-      <h3 className="estacion-titulo">{t.proximos}</h3>
-      <ListaEventos
-        items={proximos.map((e) => itemEvento(e, hoy, formato))}
-        vacia={pasos ? t.noPasa : t.calculando}
-      />
+      <div className="estacion-pasos">
+        <h3 className="estacion-titulo">{t.proximos}</h3>
+        <ListaEventos
+          items={proximos.map((e) => itemEvento(e, hoy, formato))}
+          vacia={pasos ? t.noPasa : t.calculando}
+        />
+      </div>
     </div>
   );
 }

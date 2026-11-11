@@ -50,6 +50,12 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 - Cormorant Garamond, de Christian Thalmann, e IBM Plex Sans, de IBM. Archivos `woff2` del subconjunto latino, tomados de Fontsource.
 - Licencia: [SIL Open Font License 1.1](https://openfontlicense.org).
 
+## ../texturas/*.webp
+
+- Fuente: [Solar System Scope](https://www.solarsystemscope.com/textures/), texturas de 2k del Sol, la Luna, Mercurio, Venus (atmósfera), Marte, Júpiter, Saturno y el anillo de Saturno.
+- Licencia: [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Cambios: reducidas a 1024 × 512 (el anillo a 1024 × 64) y pasadas a WebP.
+
 ## ../modelos/*.glb
 
 - Fuente: [NASA 3D Resources](https://science.nasa.gov/3d-resources/), descargados el 11 de noviembre de 2026. Todos van sin cambios salvo el Saturno V.

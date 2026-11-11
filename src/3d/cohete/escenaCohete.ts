@@ -5,6 +5,7 @@ import {
   Mesh,
   Object3D,
   PerspectiveCamera,
+  PMREMGenerator,
   Plane,
   Raycaster,
   Scene,
@@ -13,8 +14,9 @@ import {
   WebGLRenderer,
   type Intersection,
   type Material,
-  type MeshLambertMaterial,
+  type MeshStandardMaterial,
 } from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { DURACION_DESPIECE, anguloCorto, fases } from './despiece';
 import {
   SITUACION_INICIAL,
@@ -112,7 +114,7 @@ function materiales(malla: Mesh): Material[] {
 
 function brillo(malla: Mesh, color: number | Color): void {
   for (const m of materiales(malla)) {
-    const emisivo = (m as MeshLambertMaterial).emissive;
+    const emisivo = (m as MeshStandardMaterial).emissive;
     if (typeof color === 'number') emisivo?.setHex(color);
     else emisivo?.copy(color);
   }
@@ -198,6 +200,10 @@ export function crearEscena(
   renderer.setClearColor(0x000000, 0);
   renderer.localClippingEnabled = true;
   const escena = new Scene();
+  const pmrem = new PMREMGenerator(renderer);
+  const entorno = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  escena.environment = entorno;
+  escena.environmentIntensity = 0.55;
   const camara = new PerspectiveCamera(35, 1, 0.5, 600);
   const luz = new DirectionalLight(0xffffff, 2.2);
   luz.position.set(-1, 0.7, 0.55);
@@ -215,7 +221,7 @@ export function crearEscena(
   ];
   const coloresBase = new Map<Material, Color>();
   for (const m of visibles.flatMap(materiales)) {
-    coloresBase.set(m, (m as MeshLambertMaterial).color.clone());
+    coloresBase.set(m, (m as MeshStandardMaterial).color.clone());
   }
 
   const plano = new Plane(new Vector3(0, 0, -1), LEJOS);
@@ -365,7 +371,7 @@ export function crearEscena(
       if (malla === enVuelo) continue;
       for (const m of materiales(malla)) {
         const base = coloresBase.get(m);
-        if (base) (m as MeshLambertMaterial).color.copy(base).lerp(SILUETA, k);
+        if (base) (m as MeshStandardMaterial).color.copy(base).lerp(SILUETA, k);
       }
     }
   };
@@ -856,6 +862,8 @@ export function crearEscena(
         o.geometry.dispose();
         materiales(o).forEach((m) => m.dispose());
       });
+      entorno.dispose();
+      pmrem.dispose();
       renderer.dispose();
       canvas.remove();
       pista.remove();

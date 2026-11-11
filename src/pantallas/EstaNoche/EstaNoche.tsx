@@ -12,7 +12,6 @@ import { inicioDelDia, sumarDias } from '../../servicios/tiempo';
 import { CieloYEventos } from './CieloYEventos';
 import { DeslizadorNoches } from './DeslizadorNoches';
 import { NocheHoraPorHora } from './NocheHoraPorHora';
-import { PlanetasVisibles } from './PlanetasVisibles';
 import { nombreFase, notaFase } from './textos';
 import './EstaNoche.css';
 
@@ -31,9 +30,7 @@ const ES = {
   nueva: 'Luna nueva',
   sol: (puesta: string, inicio: string, fin: string) =>
     `El Sol se pone a las ${puesta}. Noche cerrada de ${inicio} a ${fin}.`,
-  planetas: 'Planetas visibles',
-  calculandoPlanetas: 'Calculando los planetas…',
-  noche: 'Tu noche, hora por hora',
+  noche: 'Planetas y cielo, hora por hora',
   calculandoNoche: 'Calculando la noche…',
   pie: 'Clima de Open-Meteo, con una hora de caché. Órbita de la Estación de CelesTrak, con 12 horas de caché. Lluvias de meteoros según la IMO.',
 };
@@ -51,9 +48,7 @@ const EN: typeof ES = {
   nueva: 'New Moon',
   sol: (puesta, inicio, fin) =>
     `The Sun sets at ${puesta}. Full darkness from ${inicio} to ${fin}.`,
-  planetas: 'Visible planets',
-  calculandoPlanetas: 'Working out the planets…',
-  noche: 'Your night, hour by hour',
+  noche: 'Planets and sky, hour by hour',
   calculandoNoche: 'Working out the night…',
   pie: 'Weather from Open-Meteo, cached for an hour. Space Station orbit from CelesTrak, cached for 12 hours. Meteor showers from the IMO.',
 };
@@ -128,18 +123,6 @@ export function EstaNoche() {
           </p>
           <DeslizadorNoches />
         </div>
-      </section>
-      <section className="seccion" aria-labelledby="t-planetas">
-        <h2 id="t-planetas">{t.planetas}</h2>
-        {noche ? (
-          <PlanetasVisibles
-            planetas={noche.planetas}
-            zona={ubicacion.zona}
-            formato24h={formato24h}
-          />
-        ) : (
-          <p className="aviso">{t.calculandoPlanetas}</p>
-        )}
       </section>
       <section className="seccion" aria-labelledby="t-noche">
         <h2 id="t-noche">{t.noche}</h2>

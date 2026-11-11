@@ -96,7 +96,7 @@ export function Ajustes() {
     <section className="ajustes" aria-labelledby="t-ajustes">
       <h2 id="t-ajustes">{t.titulo}</h2>
 
-      <fieldset className="panel">
+      <fieldset>
         <legend>{t.ubicacion}</legend>
         <p className="ajustes-actual">
           {nombreLugar(ubicacion)}:{' '}
@@ -129,7 +129,7 @@ export function Ajustes() {
         {aviso && <p className="ajustes-aviso">{aviso}</p>}
       </fieldset>
 
-      <fieldset className="panel">
+      <fieldset>
         <legend>{t.idioma}</legend>
         <label htmlFor="idioma" className="oculto">
           {t.idioma}
@@ -153,7 +153,7 @@ export function Ajustes() {
         </select>
       </fieldset>
 
-      <fieldset className="panel">
+      <fieldset>
         <legend>{t.pantalla}</legend>
         <label className="interruptor">
           <input
@@ -168,7 +168,7 @@ export function Ajustes() {
         </label>
       </fieldset>
 
-      <fieldset className="panel">
+      <fieldset>
         <legend>{t.formato}</legend>
         <label className="opcion">
           <input
@@ -190,7 +190,7 @@ export function Ajustes() {
         </label>
       </fieldset>
 
-      <fieldset className="panel">
+      <fieldset>
         <legend>{t.brujula}</legend>
         <p className="ajustes-actual">
           {ajustes.calibracionBrujula === 0
