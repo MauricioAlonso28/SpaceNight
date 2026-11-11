@@ -1,0 +1,293 @@
+.paulet {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.3fr) minmax(0, 0.6fr);
+  gap: 24px 48px;
+  align-items: center;
+  padding: 28px 0 34px;
+  border-top: 1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
+  background: radial-gradient(
+    ellipse at 15% 40%,
+    rgba(255, 125, 102, 0.12),
+    transparent 60%
+  );
+}
+
+.paulet-nombre h3 {
+  margin: 8px 0 6px;
+  font-size: clamp(2.8rem, 6vw, 4.6rem);
+  line-height: 0.95;
+}
+
+.paulet-nombre h3 span {
+  display: block;
+  color: var(--acento);
+}
+
+.paulet-vida {
+  margin: 0 0 14px;
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+}
+
+.paulet-ruta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8rem;
+  color: var(--dato);
+}
+
+.paulet-ruta li + li::before {
+  content: '→';
+  margin: 0 8px;
+  color: var(--texto-suave);
+}
+
+.paulet-hechos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.paulet-hechos li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 0.95rem;
+}
+
+.paulet-hechos li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--acento);
+}
+
+.paulet-hechos .paulet-debate {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.paulet-hechos .paulet-debate::before {
+  background: var(--texto-suave);
+}
+
+.paulet-motor {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  justify-self: center;
+}
+
+.paulet-tubo {
+  fill: none;
+  stroke-width: 5;
+  stroke-dasharray: 6 6;
+  animation: motor-fluir 0.9s linear infinite;
+}
+
+.paulet-tubo.f {
+  stroke: #ffd166;
+}
+
+.paulet-tubo.o {
+  stroke: #ff9f6b;
+}
+
+.paulet-camara {
+  fill: #23356d;
+  stroke: #9fb3ee;
+  stroke-width: 2;
+}
+
+.paulet-chispa {
+  fill: #fff6c8;
+  animation: paulet-chispa 0.6s steps(2) infinite;
+}
+
+.paulet-llama {
+  fill: var(--acento);
+  filter: drop-shadow(0 0 10px var(--acento));
+  transform-origin: 100px 156px;
+  animation: paulet-pulso 0.6s ease-out infinite;
+}
+
+.paulet-motor text {
+  fill: var(--texto-suave);
+  font-size: 12px;
+  font-family: var(--fuente-texto);
+}
+
+@keyframes paulet-chispa {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes paulet-pulso {
+  0% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  70% {
+    transform: scaleY(0.25);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+@keyframes motor-fluir {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+.historia-filtro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px 20px;
+  margin: 34px 0 16px;
+}
+
+.historia-filtro h3 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.historia-linea {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.historia-linea::before {
+  content: '';
+  position: absolute;
+  left: 9.5em;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(var(--borde), var(--dato), var(--borde));
+}
+
+.historia-linea li {
+  display: grid;
+  grid-template-columns: 8.5em minmax(0, 1fr);
+  gap: 2em;
+  padding: 14px 0;
+  animation: nasa-fundido 0.35s ease-out;
+}
+
+.historia-anio {
+  margin: 0;
+  text-align: right;
+  font-family: var(--fuente-titulo);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: lining-nums;
+}
+
+.historia-anio small {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--fuente-texto);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--texto-suave);
+}
+
+.historia-hito {
+  position: relative;
+  max-width: 64ch;
+}
+
+.historia-hito::before {
+  content: '';
+  position: absolute;
+  left: calc(-1em - 5px);
+  top: 0.55em;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--dato);
+  box-shadow: 0 0 0 4px var(--cielo-alto);
+}
+
+.historia-linea li.peru .historia-hito::before {
+  background: var(--acento);
+  box-shadow:
+    0 0 0 4px var(--cielo-alto),
+    0 0 12px var(--acento);
+}
+
+.historia-linea li.peru .historia-anio {
+  color: var(--acento);
+}
+
+.historia-hito h4 {
+  margin: 4px 0 4px;
+  font-size: 1.15rem;
+}
+
+.historia-hito p {
+  margin: 0 0 4px;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+}
+
+.historia-hito .nasa-etiqueta {
+  margin-right: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paulet-tubo,
+  .paulet-chispa,
+  .paulet-llama {
+    animation: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .paulet {
+    grid-template-columns: 1fr;
+  }
+
+  .paulet-motor {
+    max-width: 150px;
+  }
+
+  .historia-linea::before {
+    left: 4.6em;
+  }
+
+  .historia-linea li {
+    grid-template-columns: 3.8em minmax(0, 1fr);
+    gap: 1.6em;
+  }
+
+  .historia-anio {
+    font-size: 1.35rem;
+  }
+
+  .historia-hito::before {
+    left: calc(-0.8em - 5px);
+  }
+}

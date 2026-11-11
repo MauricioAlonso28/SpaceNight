@@ -39,6 +39,11 @@ const Comparador = lazy(() =>
 const Motores = lazy(() =>
   import('../pantallas/Cohete/Motores').then((m) => ({ default: m.Motores })),
 );
+const Historia = lazy(() =>
+  import('../pantallas/Cohete/Historia').then((m) => ({
+    default: m.Historia,
+  })),
+);
 const NasaInicio = lazy(() =>
   import('../pantallas/Nasa/NasaInicio').then((m) => ({
     default: m.NasaInicio,
@@ -101,6 +106,7 @@ export function App() {
           <Route path="cohete/arma" element={<Arma />} />
           <Route path="cohete/escala" element={<Comparador />} />
           <Route path="cohete/motores" element={<Motores />} />
+          <Route path="cohete/historia" element={<Historia />} />
           <Route path="nasa" element={<NasaInicio />} />
           <Route path="nasa/asteroides" element={<Asteroides />} />
           <Route path="nasa/tierra" element={<Tierra />} />
