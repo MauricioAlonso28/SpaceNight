@@ -1,0 +1,310 @@
+.vuelo-ajustes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 18px 40px;
+  margin-bottom: 18px;
+}
+
+.vuelo-carga {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 4px 14px;
+  min-width: min(100%, 320px);
+}
+
+.vuelo-carga output {
+  justify-self: end;
+  font-family: var(--fuente-titulo);
+  font-size: 1.8rem;
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.vuelo-carga output small {
+  font-family: var(--fuente-texto);
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.vuelo-carga input {
+  grid-column: 1 / -1;
+  width: 100%;
+  accent-color: var(--acento);
+}
+
+.vuelo-modos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.vuelo-modos legend {
+  margin-bottom: 8px;
+}
+
+.vuelo-modos .nasa-chip {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  border-radius: 14px;
+  padding: 8px 14px;
+}
+
+.vuelo-modos .nasa-chip small {
+  font-size: 0.72rem;
+  color: var(--texto-suave);
+}
+
+.vuelo-hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 34px;
+  margin: 0;
+  padding: 14px 0;
+  border-top: 1px solid var(--borde);
+}
+
+.vuelo-hud div {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.vuelo-hud dt {
+  color: var(--texto-suave);
+  font-size: 0.72rem;
+}
+
+.vuelo-hud dd {
+  margin: 0;
+  font-size: 1.35rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.vuelo-hud dd small {
+  font-size: 0.78rem;
+  color: var(--texto-suave);
+}
+
+.vuelo-reloj dd {
+  font-size: 1.9rem;
+  font-weight: 300;
+  color: var(--texto);
+  text-shadow: 0 0 20px rgba(143, 180, 255, 0.4);
+}
+
+.vuelo-perfil {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 46vh;
+  overflow: visible;
+}
+
+.vuelo-karman {
+  stroke: var(--borde);
+  stroke-dasharray: 4 6;
+}
+
+.vuelo-rotulo,
+.vuelo-objetivo text {
+  fill: var(--texto-suave);
+  font-family: var(--fuente-texto);
+}
+
+.vuelo-suelo {
+  stroke: rgba(143, 180, 255, 0.5);
+  stroke-width: 2;
+}
+
+.vuelo-objetivo rect {
+  fill: #ffd166;
+}
+
+.vuelo-previsto,
+.vuelo-fondo {
+  fill: none;
+  stroke: var(--borde);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 5;
+}
+
+.vuelo-fondo {
+  stroke: rgba(150, 170, 255, 0.28);
+  stroke-dasharray: none;
+}
+
+.vuelo-hecho {
+  fill: none;
+  stroke: var(--dato);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 4px rgba(143, 180, 255, 0.6));
+}
+
+.vuelo-hito {
+  fill: var(--cielo-alto);
+  stroke: var(--texto-suave);
+  stroke-width: 1.5;
+}
+
+.vuelo-hito.pasado {
+  fill: var(--dato);
+  stroke: var(--dato);
+}
+
+.vuelo-nave path {
+  fill: var(--texto);
+}
+
+.vuelo-nave .vuelo-llama {
+  fill: var(--acento);
+  filter: drop-shadow(0 0 6px var(--acento));
+}
+
+.vuelo-controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 12px 0 8px;
+}
+
+.vuelo-play {
+  color: var(--texto);
+  border-color: var(--acento);
+}
+
+.vuelo-barra {
+  flex: 1 1 240px;
+  accent-color: var(--acento);
+}
+
+.vuelo-pie {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px 40px;
+  margin-top: 14px;
+}
+
+.vuelo-ahora h4 {
+  font-size: 1.4rem;
+  margin: 6px 0;
+}
+
+.vuelo-ahora p {
+  color: var(--texto-suave);
+  margin: 0;
+}
+
+.vuelo-resultado p {
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.vuelo-resultado .bien {
+  color: #7bd389;
+}
+
+.vuelo-resultado .mal {
+  color: var(--acento);
+}
+
+.vuelo-graficos {
+  display: grid;
+  gap: 14px;
+}
+
+.vuelo-grafico {
+  margin: 0;
+}
+
+.vuelo-grafico figcaption {
+  color: var(--texto-suave);
+  font-size: 0.74rem;
+  margin-bottom: 4px;
+}
+
+.vuelo-grafico svg {
+  display: block;
+  width: 100%;
+  height: 70px;
+}
+
+.vuelo-grafico-todo,
+.vuelo-grafico-hecho {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.vuelo-grafico-todo {
+  stroke: var(--borde);
+  stroke-width: 1.5;
+}
+
+.vuelo-grafico-hecho {
+  stroke: var(--dato);
+  stroke-width: 2;
+}
+
+.vuelo-grafico-cursor {
+  stroke: var(--acento);
+  vector-effect: non-scaling-stroke;
+}
+
+.vuelo-hitos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vuelo-hitos button {
+  display: grid;
+  grid-template-columns: 4.2em 1fr;
+  gap: 10px;
+  width: 100%;
+  padding: 5px 4px;
+  font: inherit;
+  font-size: 0.84rem;
+  color: var(--texto-suave);
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--borde);
+  cursor: pointer;
+}
+
+.vuelo-hitos button.pasado {
+  color: var(--texto);
+}
+
+.vuelo-hitos button[aria-current='true'] {
+  color: var(--acento);
+}
+
+.vuelo-hitos time {
+  font-variant-numeric: tabular-nums;
+}
+
+.vuelo-nota {
+  margin-top: 22px;
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 899px) {
+  .vuelo-pie {
+    grid-template-columns: 1fr;
+  }
+
+  .vuelo-hud {
+    gap: 8px 22px;
+  }
+
+  .vuelo-hud dd {
+    font-size: 1.1rem;
+  }
+}

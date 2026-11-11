@@ -17,6 +17,7 @@ export interface FuenteNasa {
  * @param generado cuándo se descargaron los datos (ISO); sin él, dice que se piden en vivo
  * @param extra lo que va a la derecha del título, como los filtros
  * @param kicker la sección sobre el título; por defecto NASA en vivo
+ * @param vivo false en las vistas sin datos que se actualicen: solo cita las fuentes
  */
 export function CabezaNasa({
   id,
@@ -26,6 +27,7 @@ export function CabezaNasa({
   generado,
   extra,
   kicker,
+  vivo = true,
 }: {
   id: string;
   titulo: string;
@@ -34,6 +36,7 @@ export function CabezaNasa({
   generado?: string | null;
   extra?: ReactNode;
   kicker?: string;
+  vivo?: boolean;
 }) {
   const ahora = useAhora();
   return (
@@ -48,12 +51,14 @@ export function CabezaNasa({
         </h2>
         <p className="nasa-lead">{lead}</p>
         <p className="nasa-meta">
-          {generado
-            ? textos({
-                es: `Actualizado ${haceCuanto(Date.parse(generado), ahora)}`,
-                en: `Updated ${haceCuanto(Date.parse(generado), ahora)}`,
-              })
-            : textos({ es: 'Datos en vivo', en: 'Live data' })}
+          {!vivo
+            ? textos({ es: 'Fuentes', en: 'Sources' })
+            : generado
+              ? textos({
+                  es: `Actualizado ${haceCuanto(Date.parse(generado), ahora)}`,
+                  en: `Updated ${haceCuanto(Date.parse(generado), ahora)}`,
+                })
+              : textos({ es: 'Datos en vivo', en: 'Live data' })}
           {' · '}
           {fuentes.map((f, i) => (
             <span key={f.url}>
