@@ -1,6 +1,6 @@
 /**
  * Descarga y recorta los datos de la NASA que el navegador no puede pedir solo (sin CORS o con clave) en public/data/nasa/.
- * Uso: NASA_API_KEY=<clave> node scripts/datos-nasa.mjs   (sin clave usa DEMO_KEY, 10 consultas por hora)
+ * Uso: npm run datos:nasa, con NASA_API_KEY en .env.local o en el entorno (sin clave usa DEMO_KEY, 10 consultas por hora)
  * Lo corre GitHub Actions cada 6 horas antes de publicar; si una fuente falla, deja la copia publicada anterior.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -56,6 +56,7 @@ const FUENTES = [
 ];
 
 mkdirSync(SALIDA, { recursive: true });
+console.log(`NeoWs: ${process.env.NASA_API_KEY ? 'clave propia' : 'DEMO_KEY'}`);
 const estado = { generado: new Date(ahora).toISOString(), fuentes: {} };
 
 for (const f of FUENTES) {
