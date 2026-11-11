@@ -15,6 +15,7 @@ import {
   semanaDe,
   tamanoPunto,
 } from './relojAsteroides';
+import { Proximos60, RecienDescubiertos } from './AsteroidesMas';
 import './Asteroides.css';
 
 const ES = {
@@ -485,6 +486,10 @@ export function Asteroides() {
           ))}
         </ol>
       </section>
+      <div className="asteroides-extras">
+        <Proximos60 />
+        <RecienDescubiertos />
+      </div>
     </section>
   );
 }

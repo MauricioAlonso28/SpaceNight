@@ -75,3 +75,13 @@ export function semanaDe(desde: string, hasta: string) {
     fin: Date.parse(`${hasta}T00:00:00Z`) + 86_400_000,
   };
 }
+
+/**
+ * Diámetro aproximado en metros a partir de la magnitud absoluta H, para un albedo entre 0,25 (claro) y 0,05 (oscuro).
+ * @returns [mínimo, máximo] en metros
+ */
+export function diametroDesdeH(h: number): [number, number] {
+  const d = (albedo: number) =>
+    (1329 / Math.sqrt(albedo)) * 10 ** (-h / 5) * 1000;
+  return [Math.round(d(0.25)), Math.round(d(0.05))];
+}

@@ -94,6 +94,21 @@ async function luna() {
   return { anios };
 }
 
+/** La foto del día de la NASA: prueba hoy y, si la API falla, los tres días anteriores. */
+async function apod() {
+  let ultimo;
+  for (let i = 0; i < 4; i++) {
+    try {
+      return await pedir(
+        `https://api.nasa.gov/planetary/apod?thumbs=true&date=${dia(ahora - i * DIA)}&api_key=${CLAVE}`,
+      );
+    } catch (e) {
+      ultimo = e;
+    }
+  }
+  throw ultimo;
+}
+
 const FUENTES = [
   {
     archivo: 'cercanos60.json',
@@ -105,11 +120,7 @@ const FUENTES = [
     url: 'https://ssd-api.jpl.nasa.gov/scout.api',
     recortar: recortarScout,
   },
-  {
-    archivo: 'apod.json',
-    url: `https://api.nasa.gov/planetary/apod?thumbs=true&api_key=${CLAVE}`,
-    recortar: recortarApod,
-  },
+  { archivo: 'apod.json', obtener: apod, recortar: recortarApod },
   { archivo: 'naves.json', obtener: naves, recortar: (j) => j },
   { archivo: 'luna.json', obtener: luna, recortar: (j) => j },
   {

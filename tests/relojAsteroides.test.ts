@@ -75,3 +75,15 @@ describe('reloj de acercamientos', () => {
     expect(proximoAcercamiento(lista, 99)).toBeNull();
   });
 });
+
+describe('tamaño desde la magnitud absoluta', () => {
+  it('H 22 es del orden de 100 a 250 m', async () => {
+    const { diametroDesdeH } =
+      await import('../src/pantallas/Nasa/relojAsteroides');
+    const [a, b] = diametroDesdeH(22);
+    expect(a).toBeGreaterThan(90);
+    expect(a).toBeLessThan(120);
+    expect(b).toBeGreaterThan(200);
+    expect(b).toBeLessThan(270);
+  });
+});

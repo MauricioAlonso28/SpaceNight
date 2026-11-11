@@ -34,9 +34,10 @@ Earth). Las fuentes y licencias están en `public/data/LICENCIAS.md`.
 
 ## NASA en vivo
 
-Seis vistas con datos de la NASA (`#/nasa`): asteroides de la semana, la Tierra
-desde EPIC, eventos naturales de EONET, bólidos y la lista Sentry, exoplanetas y
-el archivo de imágenes. Hay avisos en vivo en la campana de la cabecera.
+Ocho vistas con datos de la NASA (`#/nasa`): asteroides (semana, 60 días y
+recién descubiertos), la Tierra (EPIC y mapa por satélite de GIBS), Sol y Luna
+(SDO y Dial-A-Moon), naves lejanas (Horizons), eventos naturales, bólidos y
+Sentry, exoplanetas y el archivo de imágenes con la foto del día. Hay avisos en vivo en la campana de la cabecera.
 
 - EONET, EPIC y la biblioteca de imágenes se piden en vivo desde el navegador.
 - NeoWs, JPL Fireball, JPL Sentry y el Exoplanet Archive no se pueden pedir

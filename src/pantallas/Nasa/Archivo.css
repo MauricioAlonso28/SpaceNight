@@ -188,3 +188,71 @@
   top: 14px;
   right: 14px;
 }
+
+.apod {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+  margin: 0 0 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--borde);
+}
+
+@media (min-width: 900px) {
+  .apod {
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr);
+    gap: 48px;
+  }
+}
+
+.apod-imagen {
+  position: relative;
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.apod-imagen img {
+  display: block;
+  width: 100%;
+  max-height: 560px;
+  object-fit: cover;
+  animation: nasa-fundido 0.6s ease-out;
+}
+
+.apod-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(2, 6, 22, 0.8);
+  color: var(--texto);
+}
+
+.apod-texto h3 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  margin: 6px 0 6px;
+}
+
+.apod-credito {
+  margin: 0 0 10px;
+  color: var(--texto-suave);
+  font-size: 0.82rem;
+}
+
+.apod-explicacion {
+  margin: 0 0 14px;
+  color: var(--texto-suave);
+  font-size: 0.92rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.apod-explicacion.abierta {
+  display: block;
+}
