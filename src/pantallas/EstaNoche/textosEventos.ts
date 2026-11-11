@@ -5,6 +5,7 @@ import {
   formatearDiaMes,
   formatearDiaSemana,
   formatearHora,
+  formatearNumero,
 } from '../../servicios/formato';
 import type { PasoISS } from '../../servicios/satelites/iss';
 import { MS_DIA, inicioDelDia } from '../../servicios/tiempo';
@@ -133,7 +134,7 @@ export function itemEvento(
         clave,
         icono: '🌕',
         titulo: `Superluna el ${dia}`,
-        detalle: `La luna llena coincide con su punto más cercano a la Tierra, a ${Math.round(e.distanciaKm).toLocaleString('es-PE')} km: se ve algo más grande y brillante.`,
+        detalle: `La luna llena coincide con su punto más cercano a la Tierra, a ${formatearNumero(e.distanciaKm)} km: se ve algo más grande y brillante.`,
       };
     case 'conjuncion':
       return {

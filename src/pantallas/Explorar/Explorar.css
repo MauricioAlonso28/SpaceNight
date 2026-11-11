@@ -1,0 +1,284 @@
+.explorar {
+  margin-top: 14px;
+}
+
+.explorar-titulo {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.segmentos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  margin-bottom: 18px;
+}
+
+.segmento {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  padding: 8px 4px;
+  min-height: 40px;
+  cursor: pointer;
+}
+
+.segmento[aria-selected='true'] {
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.fichas {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.ficha {
+  display: grid;
+  gap: 12px;
+}
+
+.ficha-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ficha-esfera {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  flex: none;
+}
+
+.ficha-esfera .esfera {
+  scale: 0.72;
+}
+
+.ficha h3 {
+  font-size: 1.6rem;
+}
+
+.ficha-tipo {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  margin: 2px 0 0;
+}
+
+.ficha dl {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+
+.ficha dl div {
+  display: grid;
+  grid-template-columns: 104px 1fr;
+  gap: 10px;
+  font-size: 0.88rem;
+}
+
+.ficha dt {
+  color: var(--texto-suave);
+}
+
+.ficha dd {
+  margin: 0;
+}
+
+.ficha-dato {
+  font-size: 0.9rem;
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--borde);
+}
+
+.esfera-sol {
+  width: 84px;
+  height: 84px;
+  background: radial-gradient(circle at 45% 45%, #fff3c4, #ffc04d 55%, #f28a1e);
+  box-shadow: 0 0 40px rgba(255, 190, 80, 0.55);
+}
+
+.esfera-luna {
+  width: 70px;
+  height: 70px;
+  background:
+    radial-gradient(circle at 35% 40%, #8e8a80 0 9%, transparent 16%),
+    radial-gradient(circle at 60% 62%, #8a867c 0 12%, transparent 20%), #c9c4b8;
+}
+
+.calendario-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.calendario-cabecera h3 {
+  font-size: 1.5rem;
+  text-transform: capitalize;
+}
+
+.calendario-cabecera .boton {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 1.3rem;
+}
+
+.calendario-tabla {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 3px;
+  table-layout: fixed;
+}
+
+.calendario-tabla th {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--texto-suave);
+  padding-bottom: 4px;
+}
+
+.calendario-tabla td {
+  text-align: center;
+  padding: 6px 0 4px;
+  border-radius: 10px;
+  background: var(--panel);
+  vertical-align: top;
+}
+
+.calendario-tabla td.fuera {
+  opacity: 0.35;
+}
+
+.calendario-tabla td.hoy {
+  outline: 2px solid var(--dato);
+}
+
+.calendario-tabla td.con-evento .calendario-dia {
+  color: var(--acento);
+  font-weight: 600;
+}
+
+.calendario-dia {
+  display: block;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 2px;
+}
+
+.icono-fase {
+  display: inline-block;
+}
+
+.calendario-lista {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 6px 16px;
+}
+
+.calendario-lista li {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--borde);
+  font-size: 0.92rem;
+}
+
+.calendario-lista li:first-child {
+  border-top: 0;
+}
+
+.calendario-fecha {
+  color: var(--texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.estacion-mapa {
+  margin: 0;
+  padding: 10px;
+}
+
+.estacion-mapa svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.estacion-mar {
+  fill: #071338;
+}
+
+.estacion-tierra {
+  fill: #1b2e6b;
+  stroke: #2c4590;
+  stroke-width: 0.3;
+}
+
+.estacion-traza {
+  fill: none;
+  stroke: var(--dato);
+  stroke-width: 0.8;
+  stroke-dasharray: 2 1.5;
+}
+
+.estacion-tu {
+  fill: var(--texto);
+}
+
+.estacion-iss {
+  fill: var(--acento);
+  stroke: #fff;
+  stroke-width: 0.8;
+}
+
+.estacion-mapa figcaption {
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  margin-top: 10px;
+}
+
+.estacion-titulo {
+  font-size: 1.4rem;
+  margin: 22px 0 12px;
+}
+
+.fuentes {
+  margin-top: 34px;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+.fuentes h3 {
+  font-size: 1.2rem;
+  color: var(--texto);
+  margin-bottom: 8px;
+}
+
+.fuentes ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.fuentes li {
+  margin: 4px 0;
+}
+
+.fuentes b {
+  font-weight: 500;
+  color: var(--texto);
+}

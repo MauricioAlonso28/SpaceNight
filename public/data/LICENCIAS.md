@@ -34,3 +34,13 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 - Fechas de pico y tasas típicas del calendario de la [International Meteor Organization](https://www.imo.net/), copiadas a mano.
 ````
+
+## mundo.json
+
+- Fuente: [Natural Earth](https://www.naturalearthdata.com), capa `ne_110m_land`.
+- Licencia: dominio público.
+- Generado con `node scripts/preparar-mundo.mjs <ne_110m_land.geojson>` (proyección equirrectangular de 360 × 180).
+
+## planetas.json
+
+- Datos de las [NASA Planetary Fact Sheets](https://nssdc.gsfc.nasa.gov/planetary/factsheet/), redactados a mano. La distancia a la Tierra no está aquí: se calcula en el momento con Astronomy Engine.

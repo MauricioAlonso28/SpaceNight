@@ -1,0 +1,75 @@
+{
+  "fuente": "NASA Planetary Fact Sheets (nssdc.gsfc.nasa.gov/planetary/factsheet). Redactado a mano.",
+  "cuerpos": [
+    {
+      "clave": "sol",
+      "nombre": "Sol",
+      "tipo": "Estrella",
+      "diametroKm": 1392700,
+      "dia": "unos 25 días en el ecuador",
+      "anio": "unos 230 millones de años alrededor de la Vía Láctea",
+      "lunas": "8 planetas lo orbitan",
+      "dato": "Dentro cabrían más de un millón de Tierras, y aun así es una estrella mediana."
+    },
+    {
+      "clave": "luna",
+      "nombre": "Luna",
+      "tipo": "Satélite de la Tierra",
+      "diametroKm": 3474,
+      "dia": "29,5 días de luz y sombra",
+      "anio": "27,3 días alrededor de la Tierra",
+      "lunas": "ninguna",
+      "dato": "Siempre nos enseña la misma cara: gira sobre sí misma en el mismo tiempo que tarda en dar la vuelta a la Tierra."
+    },
+    {
+      "clave": "mercurio",
+      "nombre": "Mercurio",
+      "tipo": "Planeta rocoso",
+      "diametroKm": 4879,
+      "dia": "176 días terrestres de amanecer a amanecer",
+      "anio": "88 días",
+      "lunas": "ninguna",
+      "dato": "Un día suyo, de amanecer a amanecer, dura lo mismo que dos de sus años."
+    },
+    {
+      "clave": "venus",
+      "nombre": "Venus",
+      "tipo": "Planeta rocoso",
+      "diametroKm": 12104,
+      "dia": "117 días terrestres de amanecer a amanecer",
+      "anio": "225 días",
+      "lunas": "ninguna",
+      "dato": "Gira al revés que casi todos los planetas: allí el Sol sale por el oeste."
+    },
+    {
+      "clave": "marte",
+      "nombre": "Marte",
+      "tipo": "Planeta rocoso",
+      "diametroKm": 6779,
+      "dia": "24 horas y 40 minutos",
+      "anio": "687 días",
+      "lunas": "2, Fobos y Deimos",
+      "dato": "Tiene el volcán más alto del sistema solar, el Olympus Mons, de unos 22 km."
+    },
+    {
+      "clave": "jupiter",
+      "nombre": "Júpiter",
+      "tipo": "Gigante gaseoso",
+      "diametroKm": 139820,
+      "dia": "9 horas y 56 minutos",
+      "anio": "11,9 años",
+      "lunas": "más de 90",
+      "dato": "Su Gran Mancha Roja es una tormenta más grande que la Tierra que dura desde hace siglos."
+    },
+    {
+      "clave": "saturno",
+      "nombre": "Saturno",
+      "tipo": "Gigante gaseoso",
+      "diametroKm": 116460,
+      "dia": "10 horas y 34 minutos",
+      "anio": "29,4 años",
+      "lunas": "más de 270",
+      "dato": "Es menos denso que el agua: en una bañera lo bastante grande, flotaría."
+    }
+  ]
+}

@@ -1,4 +1,7 @@
 import {
+  degreesLat,
+  degreesLong,
+  eciToGeodetic,
   degreesToRadians,
   ecfToLookAngles,
   eciToEcf,
@@ -145,4 +148,42 @@ export function pasosVisibles(
   return tramosSobreMinimo(muestras)
     .map((tramo) => parteVisible(tramo, ubicacion))
     .filter((p): p is PasoISS => p !== null);
+}
+
+/** Punto de la superficie que la Estación tiene justo debajo y a qué altura vuela. */
+export interface PuntoOrbita {
+  fecha: Date;
+  latitud: number;
+  longitud: number;
+  alturaKm: number;
+}
+
+/** Dónde está la Estación en un instante, sobre el mapa del mundo; null si el TLE no sirve. */
+export function posicionISS(tle: Tle, fecha: Date): PuntoOrbita | null {
+  const pv = propagate(twoline2satrec(tle.linea1, tle.linea2), fecha);
+  if (!pv || typeof pv.position === 'boolean') return null;
+  const g = eciToGeodetic(pv.position, gstime(fecha));
+  return {
+    fecha,
+    latitud: degreesLat(g.latitude),
+    longitud: degreesLong(g.longitude),
+    alturaKm: g.height,
+  };
+}
+
+/**
+ * Traza de la órbita alrededor de un instante, cada minuto.
+ * @param minutos cuántos minutos antes y después
+ */
+export function trazaISS(
+  tle: Tle,
+  fecha: Date,
+  minutos: number,
+): PuntoOrbita[] {
+  const puntos: PuntoOrbita[] = [];
+  for (let m = -minutos; m <= minutos; m++) {
+    const p = posicionISS(tle, new Date(fecha.getTime() + m * 60_000));
+    if (p) puntos.push(p);
+  }
+  return puntos;
 }

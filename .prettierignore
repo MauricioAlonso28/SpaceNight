@@ -2,3 +2,4 @@ dist
 package-lock.json
 public/data/estrellas.json
 public/data/constelaciones.json
+public/data/mundo.json
