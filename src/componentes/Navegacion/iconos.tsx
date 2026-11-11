@@ -48,6 +48,12 @@ export const ICONOS: Record<string, ReactNode> = {
       <path d="M10 5.5 12 2.5l2 3M7 20h10M17 8h4M19 6v4" />
     </>
   ),
+  'cohete/escala': (
+    <>
+      <path d="M5 20V9l1.5-4L8 9v11M11 20V12l1.5-3 1.5 3v8M17 20V5l1.5-2.5L20 5v15" />
+      <path d="M3 20.5h18" />
+    </>
+  ),
   nasa: (
     <>
       <path d="M3 12h3l2.5-6 4 13 3-9 1.5 2H21" />
