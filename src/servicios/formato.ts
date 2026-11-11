@@ -38,6 +38,15 @@ export function formatearFechaLarga(fecha: Date, zona: string): string {
     .replace(',', '');
 }
 
+/** Día y mes como «17 de noviembre». */
+export function formatearDiaMes(fecha: Date, zona: string): string {
+  return formateador(`diames|${zona}`, {
+    timeZone: zona,
+    day: 'numeric',
+    month: 'long',
+  }).format(fecha);
+}
+
 /** Fecha corta como «24 nov». */
 export function formatearDiaCorto(fecha: Date, zona: string): string {
   return formateador(`corta|${zona}`, {

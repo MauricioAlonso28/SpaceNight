@@ -1,0 +1,141 @@
+{
+  "fuente": "International Meteor Organization (IMO), Meteor Shower Calendar. Fechas de pico y tasa horaria zenital (ZHR) típicas; el pico real puede moverse un día. Revisar con el calendario IMO de cada año.",
+  "lluvias": [
+    {
+      "codigo": "NTA",
+      "nombre": "Táuridas del Norte",
+      "pico": "2026-11-12",
+      "tasa": 5,
+      "ar": 58,
+      "dec": 22
+    },
+    {
+      "codigo": "LEO",
+      "nombre": "Leónidas",
+      "pico": "2026-11-17",
+      "tasa": 15,
+      "ar": 152,
+      "dec": 22
+    },
+    {
+      "codigo": "GEM",
+      "nombre": "Gemínidas",
+      "pico": "2026-12-14",
+      "tasa": 150,
+      "ar": 112,
+      "dec": 33
+    },
+    {
+      "codigo": "URS",
+      "nombre": "Úrsidas",
+      "pico": "2026-12-22",
+      "tasa": 10,
+      "ar": 217,
+      "dec": 76
+    },
+    {
+      "codigo": "QUA",
+      "nombre": "Cuadrántidas",
+      "pico": "2027-01-04",
+      "tasa": 80,
+      "ar": 230,
+      "dec": 49
+    },
+    {
+      "codigo": "ACE",
+      "nombre": "Alfa Centáuridas",
+      "pico": "2027-02-08",
+      "tasa": 6,
+      "ar": 210,
+      "dec": -59
+    },
+    {
+      "codigo": "LYR",
+      "nombre": "Líridas",
+      "pico": "2027-04-23",
+      "tasa": 18,
+      "ar": 271,
+      "dec": 34
+    },
+    {
+      "codigo": "ETA",
+      "nombre": "Eta Acuáridas",
+      "pico": "2027-05-06",
+      "tasa": 50,
+      "ar": 338,
+      "dec": -1
+    },
+    {
+      "codigo": "SDA",
+      "nombre": "Delta Acuáridas del Sur",
+      "pico": "2027-07-30",
+      "tasa": 25,
+      "ar": 340,
+      "dec": -16
+    },
+    {
+      "codigo": "CAP",
+      "nombre": "Alfa Capricórnidas",
+      "pico": "2027-07-30",
+      "tasa": 5,
+      "ar": 307,
+      "dec": -10
+    },
+    {
+      "codigo": "PER",
+      "nombre": "Perseidas",
+      "pico": "2027-08-13",
+      "tasa": 100,
+      "ar": 48,
+      "dec": 58
+    },
+    {
+      "codigo": "ORI",
+      "nombre": "Oriónidas",
+      "pico": "2027-10-21",
+      "tasa": 20,
+      "ar": 95,
+      "dec": 16
+    },
+    {
+      "codigo": "STA",
+      "nombre": "Táuridas del Sur",
+      "pico": "2027-11-05",
+      "tasa": 5,
+      "ar": 52,
+      "dec": 15
+    },
+    {
+      "codigo": "NTA",
+      "nombre": "Táuridas del Norte",
+      "pico": "2027-11-12",
+      "tasa": 5,
+      "ar": 58,
+      "dec": 22
+    },
+    {
+      "codigo": "LEO",
+      "nombre": "Leónidas",
+      "pico": "2027-11-17",
+      "tasa": 15,
+      "ar": 152,
+      "dec": 22
+    },
+    {
+      "codigo": "GEM",
+      "nombre": "Gemínidas",
+      "pico": "2027-12-14",
+      "tasa": 150,
+      "ar": 112,
+      "dec": 33
+    },
+    {
+      "codigo": "URS",
+      "nombre": "Úrsidas",
+      "pico": "2027-12-22",
+      "tasa": 10,
+      "ar": 217,
+      "dec": 76
+    }
+  ]
+}
