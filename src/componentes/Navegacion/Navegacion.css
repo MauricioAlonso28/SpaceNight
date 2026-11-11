@@ -55,7 +55,20 @@
     bottom: auto;
     padding: 10px 24px;
     border-top: 0;
-    border-bottom: 1px solid var(--borde);
+    border-bottom: 1px solid transparent;
+    background: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transition:
+      background 0.25s,
+      border-color 0.25s;
+  }
+
+  .navegacion.desplazada {
+    background: var(--barra);
+    border-bottom-color: var(--borde);
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
   }
 
   .navegacion nav {

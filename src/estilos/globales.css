@@ -4,8 +4,13 @@
   box-sizing: border-box;
 }
 
+:root {
+  --vw: calc(100vw - var(--barra-scroll, 0px));
+}
+
 html {
   color-scheme: dark;
+  scrollbar-gutter: stable;
   -webkit-text-size-adjust: 100%;
 }
 

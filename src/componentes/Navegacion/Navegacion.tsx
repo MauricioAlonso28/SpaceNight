@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { NavLink } from 'react-router';
 import { RUTAS_BARRA, nombreRuta } from '../../app/rutas';
 import { textos } from '../../idioma/idioma';
@@ -33,10 +33,23 @@ const ICONOS: Record<string, ReactNode> = {
   ),
 };
 
-/** Navegación entre pantallas: barra inferior en el móvil y barra superior en escritorio. */
+/** Si la página ya bajó algo: la barra de arriba solo se vuelve sólida entonces. */
+function useDesplazada(): boolean {
+  const [desplazada, setDesplazada] = useState(false);
+  useEffect(() => {
+    const revisar = () => setDesplazada(window.scrollY > 4);
+    revisar();
+    window.addEventListener('scroll', revisar, { passive: true });
+    return () => window.removeEventListener('scroll', revisar);
+  }, []);
+  return desplazada;
+}
+
+/** Navegación entre pantallas: barra inferior en el móvil y barra superior en escritorio, transparente arriba del todo. */
 export function Navegacion() {
+  const desplazada = useDesplazada();
   return (
-    <div className="navegacion">
+    <div className={`navegacion${desplazada ? ' desplazada' : ''}`}>
       <nav aria-label={textos({ es: 'Pantallas', en: 'Screens' })}>
         {RUTAS_BARRA.map((ruta) => (
           <NavLink key={ruta.path} to={`/${ruta.path}`}>

@@ -56,3 +56,47 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* Escritorio: la cabecera se vuelve parte de la barra superior; título y fecha a la izquierda, hora y Ajustes a la derecha. */
+@media (min-width: 1024px) and (pointer: fine) {
+  .cabecera {
+    position: fixed;
+    top: 0;
+    left: max(24px, calc(50% - 632px));
+    right: max(24px, calc(50% - 632px));
+    z-index: 6;
+    height: 61px;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .cabecera > * {
+    pointer-events: auto;
+  }
+
+  .cabecera h1 {
+    font-size: 1.35rem;
+    line-height: 1.1;
+  }
+
+  .cabecera-lugar {
+    font-size: 0.75rem;
+    margin: 1px 0 0;
+  }
+
+  .cabecera-derecha {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cabecera-reloj {
+    font-size: 1.35rem;
+  }
+
+  .cabecera-ajustes {
+    width: 40px;
+    height: 40px;
+    margin-right: -8px;
+  }
+}
