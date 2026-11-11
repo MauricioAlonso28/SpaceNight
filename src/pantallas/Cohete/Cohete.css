@@ -107,11 +107,11 @@
 }
 
 .cohete-escenario {
-  --alto-escena: max(520px, calc(100dvh - 262px));
-  --margen-pagina: max(24px, calc(50vw - 632px));
+  --alto-escena: max(520px, calc(100dvh - 200px));
+  --margen-pagina: max(24px, calc(var(--vw) / 2 - 632px));
   position: relative;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: var(--vw);
+  margin: 22px 0 64px calc(50% - var(--vw) / 2);
   height: var(--alto-escena);
 }
 
@@ -323,8 +323,8 @@
 }
 
 .cohete-subtitulo {
-  font-size: 1.5rem;
-  margin-top: 28px;
+  font-size: clamp(1.6rem, 2.6vw, 2rem);
+  margin-top: 0;
 }
 
 .cohete-etiqueta {
@@ -361,7 +361,7 @@
   width: calc(var(--margen-pagina) + clamp(380px, 34vw, 560px));
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 34px var(--margen-pagina) 34px 72px;
+  padding: 64px var(--margen-pagina) 34px 72px;
   background: linear-gradient(
     90deg,
     rgba(4, 9, 30, 0),
@@ -606,7 +606,7 @@ html[data-tema='rojo'] .cohete-canvas {
   bottom: 0;
   left: 0;
   width: calc(var(--margen-pagina) + var(--ancho-lista) + 56px);
-  padding: 10px 56px 24px var(--margen-pagina);
+  padding: 64px 56px 24px var(--margen-pagina);
   overflow-y: auto;
   background: linear-gradient(
     270deg,

@@ -20,8 +20,8 @@
   }
 
   .mapa-marco {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    width: var(--vw);
+    margin-left: calc(50% - var(--vw) / 2);
   }
 
   .mapa .mapa-escena {
@@ -43,7 +43,7 @@
 
   .mapa .mapa-ficha {
     left: auto;
-    right: max(24px, calc(50vw - 632px));
+    right: max(24px, calc(var(--vw) / 2 - 632px));
     bottom: 24px;
   }
 
