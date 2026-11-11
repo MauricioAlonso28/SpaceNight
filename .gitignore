@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Datos de la NASA: los genera scripts/datos-nasa.mjs en cada despliegue
+public/data/nasa/

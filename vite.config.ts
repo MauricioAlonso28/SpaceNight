@@ -37,8 +37,35 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,json,woff2,webp}'],
-        globIgnores: ['assets/draco_*', 'modelos/**'],
+        globIgnores: ['assets/draco_*', 'modelos/**', 'data/nasa/**'],
         navigateFallback: 'index.html',
+        runtimeCaching: [
+          {
+            urlPattern: ({ url }) => url.pathname.includes('/data/nasa/'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'nasa-datos',
+              networkTimeoutSeconds: 6,
+              expiration: { maxEntries: 20 },
+            },
+          },
+          {
+            urlPattern: ({ url }) =>
+              [
+                'eonet.gsfc.nasa.gov',
+                'epic.gsfc.nasa.gov',
+                'images-api.nasa.gov',
+                'images-assets.nasa.gov',
+              ].includes(url.hostname),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'nasa-en-vivo',
+              networkTimeoutSeconds: 8,
+              expiration: { maxEntries: 400, maxAgeSeconds: 7 * 86_400 },
+              cacheableResponse: { statuses: [0, 200] },
+            },
+          },
+        ],
       },
     }),
   ],
