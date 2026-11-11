@@ -18,3 +18,12 @@ export function recortarSentry(
 export function recortarExoplanetas(
   filas: unknown[],
 ): Omit<DatosExoplanetas, 'generado'> & { campos: string[] };
+export function resumir(
+  datos: {
+    neo?: { objetos: Asteroide[] } | null;
+    bolidos?: { filas: FilaBolido[] } | null;
+    sentry?: { total: number } | null;
+    exoplanetas?: { filas: unknown[] } | null;
+  },
+  ahora: number,
+): Omit<import('../../src/servicios/nasa/avisos').ResumenNasa, 'generado'>;

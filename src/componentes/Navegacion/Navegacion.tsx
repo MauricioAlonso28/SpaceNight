@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router';
 import { GRUPOS, RUTAS_BARRA, nombreRuta } from '../../app/rutas';
 import { useEsEscritorio } from '../../app/escritorio';
+import { useAvisosActivos } from '../../estado/avisos';
 import { textos } from '../../idioma/idioma';
 import { ICONOS } from './iconos';
 import './Navegacion.css';
@@ -63,6 +64,7 @@ export function Navegacion() {
   const abiertoMovil = abiertoEn === ruta;
   const setAbiertoMovil = (si: boolean) => setAbiertoEn(si ? ruta : null);
   const abierto = escritorio ? abiertoEscritorio : abiertoMovil;
+  const conAviso = new Set(useAvisosActivos().nuevos.map((a) => a.ruta));
 
   useEffect(() => {
     document.documentElement.style.setProperty(
@@ -115,6 +117,7 @@ export function Navegacion() {
                   to={`/${r.path}`}
                   end
                   title={abierto ? undefined : nombreRuta(r)}
+                  data-aviso={conAviso.has(r.path) || undefined}
                 >
                   <Icono clave={r.path} />
                   <span>{nombreRuta(r)}</span>

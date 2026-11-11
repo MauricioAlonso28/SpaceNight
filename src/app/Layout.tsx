@@ -3,6 +3,7 @@ import { Outlet } from 'react-router';
 import { Navegacion } from '../componentes/Navegacion/Navegacion';
 import { Cabecera } from '../componentes/Cabecera/Cabecera';
 import { Fondo3D } from '../componentes/Fondo3D/Fondo3D';
+import { MotorAvisos } from '../componentes/Avisos/MotorAvisos';
 import { useEsEscritorio } from './escritorio';
 import {
   useModoRojo,
@@ -21,6 +22,7 @@ export function Layout() {
   return (
     <>
       <Fondo3D />
+      <MotorAvisos />
       {escritorio && <Cabecera />}
       <main className="app">
         {!escritorio && <Cabecera />}

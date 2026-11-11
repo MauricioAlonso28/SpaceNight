@@ -8,8 +8,10 @@ import {
 import { idioma, textos } from '../../idioma/idioma';
 import { formatearNumero } from '../../servicios/formato';
 import {
+  MISIONES,
   imagenDe,
   masFrecuente,
+  misionDelDia,
   urlBusqueda,
   type ImagenNasa,
   type RespuestaImagenes,
@@ -56,31 +58,6 @@ const EN: typeof ES = {
   original: 'See on images.nasa.gov',
   mosaico: (q) => `NASA images for “${q}”`,
 };
-
-/** Atajos a misiones: lo que se busca y su nombre visible. */
-const MISIONES: { q: string; nombre: { es: string; en: string } }[] = [
-  { q: 'Apollo 11', nombre: { es: 'Apolo 11', en: 'Apollo 11' } },
-  { q: 'Hubble nebula', nombre: { es: 'Hubble', en: 'Hubble' } },
-  { q: 'James Webb Space Telescope', nombre: { es: 'Webb', en: 'Webb' } },
-  { q: 'Artemis', nombre: { es: 'Artemis', en: 'Artemis' } },
-  {
-    q: 'International Space Station Earth',
-    nombre: { es: 'Estación Espacial', en: 'Space Station' },
-  },
-  { q: 'Mars Perseverance', nombre: { es: 'Marte', en: 'Mars' } },
-  { q: 'Cassini Saturn', nombre: { es: 'Saturno', en: 'Saturn' } },
-  { q: 'spacewalk', nombre: { es: 'Caminatas espaciales', en: 'Spacewalks' } },
-  {
-    q: 'Space Shuttle launch',
-    nombre: { es: 'Transbordador', en: 'Space Shuttle' },
-  },
-];
-
-/** La misión del día: cambia cada día y es la misma para todos. */
-function misionDelDia(): string {
-  const dia = Math.floor(Date.now() / 86_400_000);
-  return MISIONES[dia % MISIONES.length].q;
-}
 
 /** Año de una fecha en ms. */
 const anio = (ms: number) => new Date(ms).getUTCFullYear();

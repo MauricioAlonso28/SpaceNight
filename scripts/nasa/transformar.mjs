@@ -130,3 +130,40 @@ export function recortarExoplanetas(filas) {
     ]),
   };
 }
+
+/**
+ * Resumen pequeño para los avisos y la portada de NASA en vivo, sacado de los archivos ya recortados (cualquiera puede faltar).
+ * @param ahora momento de la descarga, en ms
+ */
+export function resumir({ neo, bolidos, sentry, exoplanetas }, ahora) {
+  const corto = (o) => ({
+    id: o.id,
+    nombre: o.nombre,
+    fecha: o.fecha,
+    distanciaLunar: o.distanciaLunar,
+    peligroso: o.peligroso,
+    url: o.url,
+  });
+  const ultimo = bolidos?.filas?.length
+    ? bolidos.filas.reduce((m, f) => (f[0] > m[0] ? f : m))
+    : null;
+  return {
+    neo: neo
+      ? {
+          total: neo.objetos.length,
+          peligrosos: neo.objetos.filter((o) => o.peligroso).length,
+          cercanos: neo.objetos.filter((o) => o.distanciaLunar < 1).map(corto),
+          proximos: neo.objetos
+            .filter((o) => o.fecha > ahora)
+            .slice(0, 3)
+            .map(corto),
+        }
+      : null,
+    bolido: ultimo
+      ? { fecha: ultimo[0], kt: ultimo[1], lat: ultimo[2], lon: ultimo[3] }
+      : null,
+    bolidosTotal: bolidos?.filas?.length ?? null,
+    sentryTotal: sentry?.total ?? null,
+    exoplanetas: exoplanetas?.filas?.length ?? null,
+  };
+}
