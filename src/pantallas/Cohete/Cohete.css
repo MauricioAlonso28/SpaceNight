@@ -556,3 +556,110 @@ html[data-tema='rojo'] .cohete-canvas {
 .cohete-detalle-cuerpo .cohete-boton {
   margin-top: 12px;
 }
+
+.cohete-marco[hidden] {
+  display: none;
+}
+
+.cohete-modelos {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 16px;
+  height: var(--alto-escena, clamp(480px, calc(100dvh - 210px), 900px));
+}
+
+.cohete-modelos-lista {
+  overflow-y: auto;
+  padding: 18px 18px 20px;
+  border-radius: 20px;
+  border: 1px solid var(--borde);
+  background: var(--panel);
+  scrollbar-width: thin;
+}
+
+.cohete-modelos-lista h3 {
+  font-size: 1.5rem;
+  margin-bottom: 6px;
+}
+
+.cohete-modelos-lista ul {
+  list-style: none;
+  margin: 12px 0 18px;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.cohete-modelos-lista li {
+  display: grid;
+  gap: 4px;
+  justify-items: start;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.cohete-modelos-lista li[data-activo] {
+  border-color: var(--acento);
+}
+
+.cohete-modelos-lista li p {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+}
+
+.cohete-modelos-lista small {
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.cohete-modelos-lista small a {
+  color: var(--dato);
+}
+
+.cohete-modelos-lista .cohete-boton {
+  margin-top: 6px;
+}
+
+.cohete-modelos-error {
+  color: var(--acento) !important;
+}
+
+.cohete-modelos-visor {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(40, 60, 130, 0.35),
+    rgba(4, 10, 34, 0.25) 70%
+  );
+}
+
+.cohete-modelos-lienzo {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  user-select: none;
+}
+
+.cohete-modelos-aviso,
+.cohete-modelos-gestos {
+  position: absolute;
+  left: 16px;
+  bottom: 12px;
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.cohete-modelos-aviso {
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+}
