@@ -65,3 +65,7 @@ gravedad, atmósfera exponencial, empuje que cambia con la presión y guiado
 sencillo. La carga y el modo de recuperación cambian si llega a órbita. La
 pestaña de aterrizaje simula el regreso de la primera etapa (encendido de
 regreso, reentrada y aterrizaje con un motor) en barcaza o en la base.
+
+«Arma tu cohete» (`#/cohete/arma`) aplica la ecuación de Tsiolkovsky etapa por
+etapa (`src/servicios/cohete/tsiolkovsky.ts`) y compara el Δv con el que hace
+falta para la órbita baja, la geoestacionaria, la Luna, Marte y Júpiter.

@@ -41,6 +41,13 @@ export const ICONOS: Record<string, ReactNode> = {
       <path d="M3 20h18" strokeDasharray="2 3" />
     </>
   ),
+  'cohete/arma': (
+    <>
+      <rect x="9" y="11" width="6" height="9" rx="1" />
+      <rect x="10" y="5.5" width="4" height="5.5" rx="1" />
+      <path d="M10 5.5 12 2.5l2 3M7 20h10M17 8h4M19 6v4" />
+    </>
+  ),
   nasa: (
     <>
       <path d="M3 12h3l2.5-6 4 13 3-9 1.5 2H21" />
