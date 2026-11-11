@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState, type MouseEvent } from 'react';
 import type {
   ControlCohete,
   PasoRecorrido,
@@ -15,6 +15,7 @@ import {
 } from './catalogo';
 import { EscenaCohete } from './EscenaCohete';
 import { Ficha } from './Ficha';
+import { ListaComponentes } from './ListaComponentes';
 
 const ES = {
   titulo: 'Cohete',
@@ -27,9 +28,7 @@ const ES = {
   corte: 'Vista de corte',
   corteAuto:
     'En el recorrido el corte se activa solo en las piezas interiores.',
-  componentes: 'Componentes',
-  interior: 'interior',
-  material: 'material',
+  saltar: 'Ir a la lista de componentes, sin 3D',
   error: 'No se pudo cargar la lista de componentes.',
 };
 
@@ -44,9 +43,7 @@ const EN: typeof ES = {
   corte: 'Cutaway view',
   corteAuto:
     'During the tour the cutaway turns on by itself for inside pieces.',
-  componentes: 'Components',
-  interior: 'inside',
-  material: 'material',
+  saltar: 'Skip to the list of components, without 3D',
   error: 'Could not load the list of components.',
 };
 
@@ -131,6 +128,13 @@ export function VistaCohete() {
     control?.fijarCorte(!corte);
   };
 
+  const irALista = (ev: MouseEvent<HTMLAnchorElement>) => {
+    ev.preventDefault();
+    const lista = document.getElementById('lista-cohete');
+    lista?.scrollIntoView({ block: 'start' });
+    lista?.focus({ preventScroll: true });
+  };
+
   const componente = abierta ? porId.get(abierta) : undefined;
   const zona = (id: string) => {
     const z = datos?.zonas.find((zona) => zona.id === id);
@@ -139,6 +143,9 @@ export function VistaCohete() {
 
   return (
     <section className="cohete" aria-labelledby="t-cohete">
+      <a className="cohete-saltar" href="#lista-cohete" onClick={irALista}>
+        {t.saltar}
+      </a>
       <div className="cohete-cabeza">
         <div>
           <h2 id="t-cohete" className="cohete-titulo">
@@ -214,40 +221,13 @@ export function VistaCohete() {
 
       {catalogo === 'error' && <p>{t.error}</p>}
       {datos && (
-        <>
-          <h3 className="cohete-subtitulo">{t.componentes}</h3>
-          <div className="cohete-zonas">
-            {datos.zonas.map((z) => (
-              <section key={z.id} className="cohete-zona">
-                <h4>{textos(z.nombre)}</h4>
-                <ol>
-                  {ordenados
-                    .filter((c) => c.zona === z.id)
-                    .map((c) => (
-                      <li key={c.id} value={c.recorrido}>
-                        <button
-                          type="button"
-                          className="cohete-item"
-                          aria-pressed={abierta === c.id}
-                          disabled={!control || !libre}
-                          onClick={() => abrir(c)}
-                        >
-                          {textos(c.nombre)}
-                        </button>
-                        {c.interior && (
-                          <span className="cohete-etiqueta">{t.interior}</span>
-                        )}
-                        {c.tipo === 'material' && (
-                          <span className="cohete-etiqueta">{t.material}</span>
-                        )}
-                        <small>{textos(c.resumen)}</small>
-                      </li>
-                    ))}
-                </ol>
-              </section>
-            ))}
-          </div>
-        </>
+        <ListaComponentes
+          zonas={datos.zonas}
+          componentes={ordenados}
+          abierta={abierta}
+          puedeVer3D={!!control && libre}
+          alVer3D={abrir}
+        />
       )}
     </section>
   );
