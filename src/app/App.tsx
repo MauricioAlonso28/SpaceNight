@@ -28,6 +28,9 @@ const Lanzamientos = lazy(() =>
 const Vuelo = lazy(() =>
   import('../pantallas/Cohete/Vuelo').then((m) => ({ default: m.Vuelo })),
 );
+const Arma = lazy(() =>
+  import('../pantallas/Cohete/Arma').then((m) => ({ default: m.Arma })),
+);
 const NasaInicio = lazy(() =>
   import('../pantallas/Nasa/NasaInicio').then((m) => ({
     default: m.NasaInicio,
@@ -87,6 +90,7 @@ export function App() {
           <Route path="cohete" element={<Cohete />} />
           <Route path="cohete/lanzamientos" element={<Lanzamientos />} />
           <Route path="cohete/vuelo" element={<Vuelo />} />
+          <Route path="cohete/arma" element={<Arma />} />
           <Route path="nasa" element={<NasaInicio />} />
           <Route path="nasa/asteroides" element={<Asteroides />} />
           <Route path="nasa/tierra" element={<Tierra />} />
