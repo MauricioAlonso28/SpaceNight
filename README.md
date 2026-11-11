@@ -1,4 +1,4 @@
-# Tu cielo esta noche
+# SpaceNight
 
 Web app personal que muestra qué hay en el cielo de Lima cada noche: la Luna, los
 planetas, la Estación Espacial, el clima y los eventos del mes. Todo se calcula en

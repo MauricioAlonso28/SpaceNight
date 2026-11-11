@@ -14,7 +14,7 @@ export function Cabecera() {
   return (
     <header className="cabecera">
       <div>
-        <h1>Tu cielo esta noche</h1>
+        <h1>SpaceNight</h1>
         <p className="cabecera-lugar">
           {ubicacion.nombre}, {formatearFechaLarga(ahora, ubicacion.zona)}
         </p>

@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/tu-cielo/',
+  base: '/SpaceNight/',
   plugins: [
     react(),
     VitePWA({
@@ -12,8 +12,8 @@ export default defineConfig({
       injectRegister: 'script-defer',
       includeAssets: ['favicon.svg', 'icons/apple-touch-icon-180x180.png'],
       manifest: {
-        name: 'Tu cielo esta noche',
-        short_name: 'Tu cielo',
+        name: 'SpaceNight',
+        short_name: 'SpaceNight',
         description:
           'Qué hay en el cielo de Lima esta noche: Luna, planetas, Estación Espacial y clima.',
         lang: 'es',
