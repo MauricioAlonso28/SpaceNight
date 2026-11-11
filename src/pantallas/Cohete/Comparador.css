@@ -1,0 +1,192 @@
+.comp-lienzo {
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin: 0 0 18px;
+  scrollbar-width: thin;
+}
+
+.comp-lienzo svg {
+  display: block;
+  height: min(58vh, 520px);
+  min-height: 340px;
+  width: auto;
+  max-width: none;
+}
+
+.comp-rejilla line {
+  stroke: var(--borde);
+  stroke-width: 0.15;
+  stroke-dasharray: 0.8 1.6;
+}
+
+.comp-rejilla text,
+.comp-anio {
+  fill: var(--texto-suave);
+  font-size: 2.6px;
+  font-family: var(--fuente-texto);
+}
+
+.comp-suelo {
+  stroke: rgba(143, 180, 255, 0.5);
+  stroke-width: 0.35;
+}
+
+.comp-nombre {
+  fill: var(--texto);
+  font-size: 3px;
+  font-family: var(--fuente-texto);
+  font-weight: 600;
+}
+
+.comp-cohete {
+  cursor: pointer;
+  outline: none;
+}
+
+.comp-zona {
+  fill: transparent;
+  rx: 1.5;
+}
+
+.comp-cohete:hover .comp-zona,
+.comp-cohete:focus-visible .comp-zona {
+  fill: var(--pista);
+}
+
+.comp-cohete.elegido .comp-zona {
+  fill: rgba(255, 125, 102, 0.08);
+  stroke: var(--acento);
+  stroke-width: 0.3;
+}
+
+.comp-cohete.elegido .comp-nombre {
+  fill: var(--acento);
+}
+
+.comp-pieza {
+  stroke: rgba(200, 212, 255, 0.45);
+  stroke-width: 0.18;
+}
+
+.comp-ref path:not(.comp-ref-linea),
+.comp-ref circle,
+.comp-ref rect {
+  fill: #6fae9a;
+  opacity: 0.75;
+}
+
+.comp-ref-linea {
+  fill: none;
+  stroke: #6fae9a;
+  stroke-width: 0.8;
+}
+
+.comp-cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 28px 56px;
+}
+
+.comp-ficha {
+  animation: nasa-fundido 0.35s ease-out;
+}
+
+.comp-ficha h3 {
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  margin: 6px 0 8px;
+}
+
+.comp-dato {
+  color: var(--texto-suave);
+  max-width: 62ch;
+  margin: 0 0 6px;
+}
+
+.comp-pisos {
+  margin: 0 0 16px;
+  font-size: 0.88rem;
+  color: var(--dato);
+}
+
+.comp-estado {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.comp-estado.activo {
+  color: #7bd389;
+}
+
+.comp-estado.retirado {
+  color: var(--texto-suave);
+}
+
+.comp-estado.pruebas {
+  color: #ffd166;
+}
+
+.comp-carga h3 {
+  font-size: 1.4rem;
+  margin: 0 0 10px;
+}
+
+.comp-carga ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.comp-carga button {
+  display: grid;
+  grid-template-columns: 8.5em minmax(0, 1fr) 7em;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 4px 0;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.comp-carga button:hover,
+.comp-carga button[aria-pressed='true'] {
+  color: var(--texto);
+}
+
+.comp-carga small {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.comp-barra {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--pista);
+  overflow: hidden;
+}
+
+.comp-barra i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--dato);
+  transition: width 0.4s ease;
+}
+
+.comp-carga button[aria-pressed='true'] .comp-barra i {
+  background: var(--acento);
+}
+
+@media (max-width: 899px) {
+  .comp-cuerpo {
+    grid-template-columns: 1fr;
+  }
+
+  .comp-lienzo svg {
+    height: 380px;
+  }
+}

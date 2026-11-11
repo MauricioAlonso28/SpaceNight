@@ -69,3 +69,7 @@ regreso, reentrada y aterrizaje con un motor) en barcaza o en la base.
 «Arma tu cohete» (`#/cohete/arma`) aplica la ecuación de Tsiolkovsky etapa por
 etapa (`src/servicios/cohete/tsiolkovsky.ts`) y compara el Δv con el que hace
 falta para la órbita baja, la geoestacionaria, la Luna, Marte y Júpiter.
+
+«Cohetes a escala» (`#/cohete/escala`) dibuja trece cohetes reales a la misma
+escala junto a la Estatua de la Libertad, con sus cifras públicas aproximadas
+(`src/servicios/cohete/cohetes.ts`).
