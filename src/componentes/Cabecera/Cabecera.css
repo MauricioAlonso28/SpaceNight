@@ -1,0 +1,58 @@
+.cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.cabecera h1,
+.cabecera-reloj {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2rem, 6.4vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.08;
+  margin: 0;
+}
+
+.cabecera-lugar {
+  color: var(--texto-suave);
+  margin: 6px 0 0;
+}
+
+.cabecera-derecha {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.cabecera-reloj {
+  color: var(--dato);
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
+}
+
+.cabecera-ajustes {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-right: -10px;
+  border-radius: 50%;
+  color: var(--texto-suave);
+}
+
+.cabecera-ajustes:hover,
+.cabecera-ajustes.active {
+  color: var(--texto);
+}
+
+.cabecera-ajustes svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

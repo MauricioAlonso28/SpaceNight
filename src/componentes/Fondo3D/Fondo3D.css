@@ -1,0 +1,18 @@
+.fondo3d {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    var(--cielo-alto) 0%,
+    var(--cielo-bajo) 72%,
+    var(--horizonte) 100%
+  );
+}
+
+.fondo3d canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
