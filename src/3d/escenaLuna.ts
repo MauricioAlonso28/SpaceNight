@@ -3,19 +3,20 @@ import {
   CanvasTexture,
   DirectionalLight,
   Mesh,
-  MeshStandardMaterial,
+  MeshLambertMaterial,
   PerspectiveCamera,
   SRGBColorSpace,
   Scene,
   SphereGeometry,
   WebGLRenderer,
 } from 'three';
+import { densidadPixeles } from './comun';
 import {
-  densidadPixeles,
   inclinacion,
   reducirMovimiento,
   seguirInclinacion,
-} from './comun';
+  sigueMoviendose,
+} from './movimiento';
 
 /** Lo que la interfaz puede pedirle a la Luna 3D. */
 export interface ControlLuna {
@@ -42,21 +43,27 @@ function crater(g: CanvasRenderingContext2D, x: number, y: number, r: number) {
   g.fill();
 }
 
+const TONOS_MANCHA = 8;
+
 function manchas(g: CanvasRenderingContext2D, ancho: number, alto: number) {
-  for (let i = 0; i < 9000; i++) {
-    const l = (150 + Math.random() * 60) | 0;
-    g.fillStyle = `rgba(${l},${l - 3},${l - 8},.25)`;
-    g.beginPath();
-    g.arc(
-      Math.random() * ancho,
-      Math.random() * alto,
-      Math.random() * 3 + 0.5,
-      0,
-      7,
-    );
-    g.fill();
+  const lotes = Array.from({ length: TONOS_MANCHA }, () => new Path2D());
+  for (let i = 0; i < MANCHAS; i++) {
+    const x = Math.random() * ancho;
+    const y = Math.random() * alto;
+    const r = Math.random() * 4 + 0.8;
+    const lote = lotes[Math.floor(Math.random() * TONOS_MANCHA)];
+    lote.moveTo(x + r, y);
+    lote.arc(x, y, r, 0, 7);
   }
+  lotes.forEach((lote, k) => {
+    const l = Math.round(150 + (k / (TONOS_MANCHA - 1)) * 60);
+    g.fillStyle = `rgba(${l},${l - 3},${l - 8},.25)`;
+    g.fill(lote);
+  });
 }
+
+const MANCHAS = 3200;
+const CRATERES = 240;
 
 const MARES: readonly [number, number, number][] = [
   [230, 190, 70],
@@ -104,7 +111,7 @@ function rayosTycho(g: CanvasRenderingContext2D) {
 }
 
 /** Textura de la superficie: mares en la cara visible, cráteres y un cráter con rayos. */
-function lienzoLuna(): HTMLCanvasElement {
+export function lienzoLuna(): HTMLCanvasElement {
   const ancho = 1024;
   const alto = 512;
   const c = document.createElement('canvas');
@@ -115,7 +122,7 @@ function lienzoLuna(): HTMLCanvasElement {
   g.fillRect(0, 0, ancho, alto);
   manchas(g, ancho, alto);
   mares(g);
-  for (let i = 0; i < 520; i++) {
+  for (let i = 0; i < CRATERES; i++) {
     const r =
       Math.random() < 0.9 ? 2 + Math.random() * 6 : 8 + Math.random() * 14;
     crater(
@@ -129,26 +136,31 @@ function lienzoLuna(): HTMLCanvasElement {
   return c;
 }
 
-/** Monta la Luna 3D en un canvas; se arrastra para girarla y vuelve a su cara visible. */
-export function crearEscenaLuna(canvas: HTMLCanvasElement): ControlLuna {
-  const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(densidadPixeles());
+/**
+ * Monta la Luna 3D en un canvas; solo se redibuja al cambiar de fase, al arrastrarla o al inclinar el móvil. */
+export function crearEscenaLuna(
+  canvas: HTMLCanvasElement,
+  lienzo: HTMLCanvasElement = lienzoLuna(),
+): ControlLuna {
+  const renderer = new WebGLRenderer({
+    canvas,
+    alpha: true,
+    antialias: true,
+    powerPreference: 'low-power',
+  });
+  renderer.setPixelRatio(Math.min(densidadPixeles(), 1.5));
   const escena = new Scene();
   const camara = new PerspectiveCamera(28, 1, 0.1, 50);
   camara.position.set(0, 0, 4.6);
 
-  const lienzo = lienzoLuna();
   const mapa = new CanvasTexture(lienzo);
   mapa.colorSpace = SRGBColorSpace;
   mapa.anisotropy = 4;
-  const relieve = new CanvasTexture(lienzo);
-  const geometria = new SphereGeometry(1, 128, 96);
-  const material = new MeshStandardMaterial({
+  const geometria = new SphereGeometry(1, 96, 64);
+  const material = new MeshLambertMaterial({
     map: mapa,
-    bumpMap: relieve,
+    bumpMap: mapa,
     bumpScale: 0.5,
-    roughness: 1,
-    metalness: 0,
   });
   const luna = new Mesh(geometria, material);
   escena.add(luna);
@@ -156,63 +168,75 @@ export function crearEscenaLuna(canvas: HTMLCanvasElement): ControlLuna {
   escena.add(sol);
   escena.add(new AmbientLight(0x7d8cc8, 0.5));
 
-  const ajustarTamano = () => {
-    const lado = canvas.clientWidth;
-    if (lado) renderer.setSize(lado, lado, false);
-  };
-  const observador = new ResizeObserver(ajustarTamano);
-  observador.observe(canvas);
-  ajustarTamano();
-
-  let rotY = 0;
-  let arrastre: { x: number; r: number } | null = null;
-  const alPulsar = (ev: PointerEvent) => {
-    arrastre = { x: ev.clientX, r: rotY };
-    canvas.setPointerCapture(ev.pointerId);
-  };
-  const alMover = (ev: PointerEvent) => {
-    if (arrastre) rotY = arrastre.r + (ev.clientX - arrastre.x) * 0.01;
-  };
-  const alSoltar = () => {
-    arrastre = null;
-  };
-  canvas.addEventListener('pointerdown', alPulsar);
-  canvas.addEventListener('pointermove', alMover);
-  canvas.addEventListener('pointerup', alSoltar);
-  canvas.addEventListener('pointercancel', alSoltar);
-  const dejarDeSeguir = seguirInclinacion();
-  const quieto = reducirMovimiento();
-
   let objetivo = 0;
   let theta: number | null = null;
   let lado = 1;
-  let cx = 0;
-  let cy = 0;
+  let cx = inclinacion.x;
+  let cy = inclinacion.y;
+  let rotY = 0;
+  let arrastre: { x: number; r: number } | null = null;
   let cuadro = 0;
-  const animar = (t: number) => {
-    cx += (inclinacion.x - cx) * 0.05;
-    cy += (inclinacion.y - cy) * 0.05;
+  const quieto = reducirMovimiento();
+  const pedirCuadro = () => {
+    if (!cuadro) cuadro = requestAnimationFrame(dibujar);
+  };
+  const dibujar = () => {
+    cuadro = 0;
+    const paso = quieto ? 1 : 0.08;
+    cx += (inclinacion.x - cx) * paso;
+    cy += (inclinacion.y - cy) * paso;
     const actual = theta ?? objetivo;
     const d = Math.atan2(
       Math.sin(objetivo - actual),
       Math.cos(objetivo - actual),
     );
-    theta = actual + (quieto ? d : d * 0.08);
+    theta = actual + d * paso;
     sol.position.set(-Math.sin(theta) * 5 * lado, -0.9, -Math.cos(theta) * 5);
-    if (!arrastre) rotY *= 0.97;
-    const vaiven = quieto ? 0 : Math.sin(t / 2600) * 0.12;
-    luna.rotation.y = rotY + vaiven + cx * 0.25;
-    luna.rotation.x =
-      0.05 + cy * 0.15 + (quieto ? 0 : Math.sin(t / 3700) * 0.04);
+    if (!arrastre) rotY *= quieto ? 0 : 0.9;
+    luna.rotation.y = rotY + cx * 0.25;
+    luna.rotation.x = 0.05 + cy * 0.15;
     renderer.render(escena, camara);
-    cuadro = requestAnimationFrame(animar);
+    const sigue =
+      sigueMoviendose(cx, inclinacion.x) ||
+      sigueMoviendose(cy, inclinacion.y) ||
+      Math.abs(d * (1 - paso)) > 0.002 ||
+      (!arrastre && Math.abs(rotY) > 0.002);
+    if (sigue) pedirCuadro();
   };
-  cuadro = requestAnimationFrame(animar);
+
+  const ajustarTamano = () => {
+    const tamano = canvas.clientWidth;
+    if (tamano) renderer.setSize(tamano, tamano, false);
+    pedirCuadro();
+  };
+  const observador = new ResizeObserver(ajustarTamano);
+  observador.observe(canvas);
+  ajustarTamano();
+
+  const alPulsar = (ev: PointerEvent) => {
+    arrastre = { x: ev.clientX, r: rotY };
+    canvas.setPointerCapture(ev.pointerId);
+  };
+  const alMover = (ev: PointerEvent) => {
+    if (!arrastre) return;
+    rotY = arrastre.r + (ev.clientX - arrastre.x) * 0.01;
+    pedirCuadro();
+  };
+  const alSoltar = () => {
+    arrastre = null;
+    pedirCuadro();
+  };
+  canvas.addEventListener('pointerdown', alPulsar);
+  canvas.addEventListener('pointermove', alMover);
+  canvas.addEventListener('pointerup', alSoltar);
+  canvas.addEventListener('pointercancel', alSoltar);
+  const dejarDeSeguir = seguirInclinacion(pedirCuadro);
 
   return {
     fijarFase: (anguloGrados, hemisferioSur) => {
       objetivo = (anguloGrados * Math.PI) / 180;
       lado = hemisferioSur ? 1 : -1;
+      pedirCuadro();
     },
     destruir: () => {
       cancelAnimationFrame(cuadro);
@@ -225,7 +249,6 @@ export function crearEscenaLuna(canvas: HTMLCanvasElement): ControlLuna {
       geometria.dispose();
       material.dispose();
       mapa.dispose();
-      relieve.dispose();
       renderer.dispose();
     },
   };

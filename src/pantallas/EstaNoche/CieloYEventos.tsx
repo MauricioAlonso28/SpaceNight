@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
 import { ListaEventos } from '../../componentes/ListaEventos/ListaEventos';
 import {
+  useEventos,
   useLluvias,
   usePronostico,
   type PasosCalculados,
 } from '../../estado/datos';
-import { eventosEntre, pasosEntre } from '../../servicios/astro/eventos';
+import { pasosEntre } from '../../servicios/astro/eventos';
 import { fraccionIluminada } from '../../servicios/astro/luna';
 import { nocheSol } from '../../servicios/astro/sol';
 import { inicioDelDia, sumarDias } from '../../servicios/tiempo';
@@ -51,14 +52,16 @@ export function CieloYEventos({
   }, [inicioNoche, ubicacion]);
 
   const hoy = inicioDelDia(fecha, ubicacion.zona).getTime();
-  const eventos = useMemo(() => {
-    const desde = new Date(hoy);
-    const hasta = sumarDias(desde, DIAS_EVENTOS);
-    return [
-      ...eventosEntre(desde, hasta, ubicacion, lluvias),
-      ...(iss ? pasosEntre(iss.pasos, desde, hasta) : []),
-    ].sort((a, b) => a.fecha.getTime() - b.fecha.getTime());
-  }, [hoy, ubicacion, lluvias, iss]);
+  const hasta = sumarDias(new Date(hoy), DIAS_EVENTOS).getTime();
+  const astro = useEventos(hoy, hasta, ubicacion, lluvias);
+  const eventos = useMemo(
+    () =>
+      [
+        ...(astro ?? []),
+        ...(iss ? pasosEntre(iss.pasos, new Date(hoy), new Date(hasta)) : []),
+      ].sort((a, b) => a.fecha.getTime() - b.fecha.getTime()),
+    [astro, iss, hoy, hasta],
+  );
 
   const vista = vistaCondiciones(
     carga,
@@ -80,7 +83,11 @@ export function CieloYEventos({
         <h2 id="t-eventos">Próximos eventos</h2>
         <ListaEventos
           items={eventos.map((e) => itemEvento(e, new Date(hoy), formato))}
-          vacia={`Nada destacado en los próximos ${DIAS_EVENTOS} días.`}
+          vacia={
+            astro
+              ? `Nada destacado en los próximos ${DIAS_EVENTOS} días.`
+              : 'Calculando los eventos…'
+          }
         />
         {orbitaVieja && (
           <p className="condiciones-aviso">

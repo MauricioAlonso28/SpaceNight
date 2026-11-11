@@ -1,137 +1,205 @@
 import {
-  AdditiveBlending,
-  BufferAttribute,
-  BufferGeometry,
-  Color,
-  Euler,
-  Group,
-  PerspectiveCamera,
-  Points,
-  PointsMaterial,
-  Scene,
-  Texture,
-  Vector3,
-  WebGLRenderer,
-} from 'three';
-import {
-  densidadPixeles,
   gauss,
   inclinacion,
   reducirMovimiento,
   seguirInclinacion,
-  texturaPunto,
-} from './comun';
+  sigueMoviendose,
+} from './movimiento';
+import { ceder } from './soporte';
 
-/**
- * Nube de estrellas repartidas en una esfera o en una banda como la Vía Láctea.
- * @param tam tamaño del punto en píxeles
- * @param banda si se concentran en una franja inclinada
- */
-function nubeEstrellas(
-  n: number,
-  tam: number,
-  radioMin: number,
-  radioMax: number,
-  mapa: Texture,
-  banda: boolean,
-): Points {
-  const pos = new Float32Array(n * 3);
-  const col = new Float32Array(n * 3);
-  const v = new Vector3();
-  const c = new Color();
-  const giro = new Euler(1.05, 0, 0.5);
-  for (let i = 0; i < n; i++) {
-    if (banda) {
-      const fi = Math.random() * Math.PI * 2;
-      const b = gauss() * 0.11;
-      v.set(
-        Math.cos(b) * Math.cos(fi),
-        Math.sin(b),
-        Math.cos(b) * Math.sin(fi),
-      );
-      v.applyEuler(giro);
-    } else {
-      v.set(gauss(), gauss(), gauss()).normalize();
-    }
-    v.multiplyScalar(radioMin + Math.random() * (radioMax - radioMin));
-    v.toArray(pos, i * 3);
-    const calida = Math.random() < 0.18;
-    c.setHSL(
-      calida ? 0.08 + Math.random() * 0.04 : 0.58 + Math.random() * 0.06,
-      banda ? 0.25 : 0.35 + Math.random() * 0.3,
-      banda ? 0.6 + Math.random() * 0.2 : 0.78 + Math.random() * 0.2,
-    );
-    c.toArray(col, i * 3);
-  }
-  const geo = new BufferGeometry();
-  geo.setAttribute('position', new BufferAttribute(pos, 3));
-  geo.setAttribute('color', new BufferAttribute(col, 3));
-  const mat = new PointsMaterial({
-    size: tam,
-    map: mapa,
-    vertexColors: true,
-    transparent: true,
-    depthWrite: false,
-    blending: AdditiveBlending,
-    sizeAttenuation: false,
-    opacity: banda ? 0.45 : 1,
-  });
-  return new Points(geo, mat);
+const MARGEN = 32;
+const AREA_MOVIL = 390 * 844;
+const FACTOR_MAXIMO = 2.5;
+
+/** Una capa de estrellas a una profundidad: cuántas, de qué tamaño y cuánto se desplaza al inclinar. */
+interface Capa {
+  cantidad: number;
+  radio: [number, number];
+  alfa: number;
+  banda: boolean;
+  halo: boolean;
+  desplazamiento: number;
 }
 
-/** Dibuja el campo de estrellas que gira despacio; devuelve cómo destruirlo. */
-export function crearFondoEstrellas(canvas: HTMLCanvasElement): () => void {
-  const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: true });
-  renderer.setPixelRatio(densidadPixeles());
-  const escena = new Scene();
-  const camara = new PerspectiveCamera(62, 1, 0.1, 3000);
-  const eje = new Group();
-  eje.rotation.set(-0.45, 0, 0.2);
-  escena.add(eje);
-  const cielo = new Group();
-  eje.add(cielo);
-  const punto = texturaPunto();
-  const nubes = [
-    nubeEstrellas(2600, 2.2, 60, 900, punto, false),
-    nubeEstrellas(700, 3.4, 80, 900, punto, false),
-    nubeEstrellas(90, 6.2, 120, 700, punto, false),
-    nubeEstrellas(3200, 1.8, 500, 900, punto, true),
+const CAPAS: readonly Capa[] = [
+  {
+    cantidad: 1400,
+    radio: [0.35, 0.75],
+    alfa: 0.4,
+    banda: true,
+    halo: false,
+    desplazamiento: 5,
+  },
+  {
+    cantidad: 800,
+    radio: [0.35, 0.85],
+    alfa: 0.75,
+    banda: false,
+    halo: false,
+    desplazamiento: 11,
+  },
+  {
+    cantidad: 220,
+    radio: [0.7, 1.2],
+    alfa: 0.95,
+    banda: false,
+    halo: false,
+    desplazamiento: 18,
+  },
+  {
+    cantidad: 35,
+    radio: [0.9, 1.5],
+    alfa: 1,
+    banda: false,
+    halo: true,
+    desplazamiento: 26,
+  },
+];
+
+const TONOS_FRIOS = 6;
+const TONOS_CALIDOS = 2;
+
+/** Paleta pequeña de colores de estrella (azulados y algunos anaranjados), para dibujar por lotes. */
+function paleta(banda: boolean, alfa: number): string[] {
+  const saturacion = banda ? 25 : 50;
+  const luz = banda ? 70 : 88;
+  const frios = Array.from(
+    { length: TONOS_FRIOS },
+    (_, k) => `hsla(${209 + k * 4}, ${saturacion}%, ${luz - k}%, ${alfa})`,
+  );
+  const calidos = Array.from(
+    { length: TONOS_CALIDOS },
+    (_, k) => `hsla(${32 + k * 8}, ${saturacion + 10}%, ${luz - 4}%, ${alfa})`,
+  );
+  return [...frios, ...frios, ...frios, ...calidos];
+}
+
+/** Halo difuminado de una estrella brillante, dibujado una vez y copiado con drawImage. */
+function halo(): HTMLCanvasElement {
+  const c = document.createElement('canvas');
+  c.width = c.height = 32;
+  const g = c.getContext('2d')!;
+  const gr = g.createRadialGradient(16, 16, 0, 16, 16, 16);
+  gr.addColorStop(0, 'rgba(235,240,255,0.95)');
+  gr.addColorStop(0.25, 'rgba(210,222,255,0.45)');
+  gr.addColorStop(1, 'rgba(210,222,255,0)');
+  g.fillStyle = gr;
+  g.fillRect(0, 0, 32, 32);
+  return c;
+}
+
+/** Posición de una estrella: repartida por igual o apiñada en una franja inclinada, como la Vía Láctea. */
+function posicion(
+  ancho: number,
+  alto: number,
+  banda: boolean,
+): [number, number] {
+  if (!banda) return [Math.random() * ancho, Math.random() * alto];
+  const t = Math.random();
+  const desvio = gauss() * Math.hypot(ancho, alto) * 0.06;
+  const [x0, y0, x1, y1] = [
+    -0.1 * ancho,
+    0.85 * alto,
+    1.1 * ancho,
+    0.15 * alto,
   ];
-  nubes.forEach((n) => cielo.add(n));
+  const largo = Math.hypot(x1 - x0, y1 - y0);
+  const [nx, ny] = [-(y1 - y0) / largo, (x1 - x0) / largo];
+  return [x0 + (x1 - x0) * t + nx * desvio, y0 + (y1 - y0) * t + ny * desvio];
+}
 
-  const ajustarTamano = () => {
-    renderer.setSize(window.innerWidth, window.innerHeight, false);
-    camara.aspect = window.innerWidth / window.innerHeight;
-    camara.updateProjectionMatrix();
+function dibujarCapa(
+  lienzo: HTMLCanvasElement,
+  capa: Capa,
+  ancho: number,
+  alto: number,
+) {
+  const densidad =
+    capa.desplazamiento < 12 ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+  lienzo.width = Math.round(ancho * densidad);
+  lienzo.height = Math.round(alto * densidad);
+  const g = lienzo.getContext('2d')!;
+  g.scale(densidad, densidad);
+  const factor = Math.min(FACTOR_MAXIMO, (ancho * alto) / AREA_MOVIL);
+  const n = Math.round(capa.cantidad * factor);
+  const colores = paleta(capa.banda, capa.alfa);
+  const lotes = colores.map(() => new Path2D());
+  const brillo = capa.halo ? halo() : null;
+  for (let i = 0; i < n; i++) {
+    const [x, y] = posicion(ancho, alto, capa.banda);
+    const r = capa.radio[0] + Math.random() * (capa.radio[1] - capa.radio[0]);
+    if (brillo) g.drawImage(brillo, x - r * 4, y - r * 4, r * 8, r * 8);
+    const lote = lotes[Math.floor(Math.random() * lotes.length)];
+    lote.moveTo(x + r, y);
+    lote.arc(x, y, r, 0, Math.PI * 2);
+  }
+  lotes.forEach((lote, k) => {
+    g.fillStyle = colores[k];
+    g.fill(lote);
+  });
+}
+
+/**
+ * Cielo de fondo en capas de canvas 2D que se desplazan a distinta velocidad al inclinar el móvil o mover el ratón.
+ * Se dibuja una vez por tamaño de ventana; el movimiento es solo un transform de CSS.
+ * @returns la función que lo quita
+ */
+export function crearFondoEstrellas(contenedor: HTMLElement): () => void {
+  const lienzos = CAPAS.map(() => {
+    const c = document.createElement('canvas');
+    contenedor.appendChild(c);
+    return c;
+  });
+  let vigente = true;
+  const dibujar = async () => {
+    const ancho = window.innerWidth + MARGEN * 2;
+    const alto = window.innerHeight + MARGEN * 2;
+    for (const [i, capa] of CAPAS.entries()) {
+      if (!vigente) return;
+      dibujarCapa(lienzos[i], capa, ancho, alto);
+      await ceder();
+    }
   };
-  ajustarTamano();
-  window.addEventListener('resize', ajustarTamano);
-  const dejarDeSeguir = seguirInclinacion();
+  void dibujar();
+
   const quieto = reducirMovimiento();
-
-  let cx = 0;
-  let cy = 0;
+  let cx = inclinacion.x;
+  let cy = inclinacion.y;
   let cuadro = 0;
-  const animar = () => {
-    cx += (inclinacion.x - cx) * 0.05;
-    cy += (inclinacion.y - cy) * 0.05;
-    if (!quieto) cielo.rotation.y += 0.00018;
-    camara.position.set(cx * 7, -cy * 5, 0);
-    camara.rotation.set(-cy * 0.06, -cx * 0.09, 0);
-    renderer.render(escena, camara);
-    cuadro = requestAnimationFrame(animar);
+  const mover = () => {
+    cuadro = 0;
+    cx += (inclinacion.x - cx) * (quieto ? 1 : 0.08);
+    cy += (inclinacion.y - cy) * (quieto ? 1 : 0.08);
+    CAPAS.forEach((capa, i) => {
+      const d = quieto ? 0 : capa.desplazamiento;
+      lienzos[i].style.transform =
+        `translate3d(${(-cx * d).toFixed(2)}px, ${(-cy * d).toFixed(2)}px, 0)`;
+    });
+    if (
+      sigueMoviendose(cx, inclinacion.x) ||
+      sigueMoviendose(cy, inclinacion.y)
+    ) {
+      cuadro = requestAnimationFrame(mover);
+    }
   };
-  cuadro = requestAnimationFrame(animar);
+  const pedirMovimiento = () => {
+    if (!cuadro) cuadro = requestAnimationFrame(mover);
+  };
+  let espera = 0;
+  const alCambiarTamano = () => {
+    window.clearTimeout(espera);
+    espera = window.setTimeout(() => void dibujar(), 200);
+  };
+  window.addEventListener('resize', alCambiarTamano);
+  const dejarDeSeguir = seguirInclinacion(pedirMovimiento);
+  pedirMovimiento();
 
   return () => {
+    vigente = false;
     cancelAnimationFrame(cuadro);
-    window.removeEventListener('resize', ajustarTamano);
+    window.clearTimeout(espera);
+    window.removeEventListener('resize', alCambiarTamano);
     dejarDeSeguir();
-    nubes.forEach((n) => {
-      n.geometry.dispose();
-      (n.material as PointsMaterial).dispose();
-    });
-    punto.dispose();
-    renderer.dispose();
+    lienzos.forEach((c) => c.remove());
   };
 }

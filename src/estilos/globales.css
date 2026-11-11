@@ -157,3 +157,8 @@ a {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+html[data-tema='rojo'] {
+  filter: grayscale(1) sepia(1) saturate(8) hue-rotate(-50deg) brightness(0.75);
+  background: #000;
+}

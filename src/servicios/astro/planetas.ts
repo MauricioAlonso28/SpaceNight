@@ -145,17 +145,20 @@ export function nochePlaneta(
   };
 }
 
-/** Los cinco planetas a simple vista para la noche de una fecha, con el Sol y la Luna muestreados. */
-export function nochePlanetas(
-  fecha: Date,
-  ubicacion: Ubicacion,
-): {
+/** Una noche completa: la ventana, los instantes muestreados, el Sol, la Luna y los planetas. */
+export interface NochePlanetas {
   ventana: VentanaNoche;
   instantes: Date[];
   sol: Posicion[];
   luna: Posicion[];
   planetas: NochePlaneta[];
-} {
+}
+
+/** Los cinco planetas a simple vista para la noche de una fecha, con el Sol y la Luna muestreados. */
+export function nochePlanetas(
+  fecha: Date,
+  ubicacion: Ubicacion,
+): NochePlanetas {
   const ventana = ventanaNoche(fecha, ubicacion.zona);
   const instantes = instantesNoche(ventana);
   const sol = instantes.map((t) => posicion(Body.Sun, t, ubicacion));
