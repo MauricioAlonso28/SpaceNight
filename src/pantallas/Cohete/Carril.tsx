@@ -18,17 +18,20 @@ const EN: typeof ES = {
 
 /**
  * Carril lateral del recorrido: cada paso es un componente y el scroll mueve la cámara.
+ * @param bloqueado mientras hay una pieza fuera, el carril se atenúa y no mueve la cámara
  * @param alProgreso recibe la posición del scroll en pasos, con decimales (0 es el primero)
  */
 export function Carril({
   componentes,
   zonas,
   activo,
+  bloqueado,
   alProgreso,
 }: {
   componentes: ComponenteCohete[];
   zonas: ZonaCohete[];
   activo: number;
+  bloqueado: boolean;
   alProgreso: (progreso: number) => void;
 }) {
   const t = textos({ es: ES, en: EN });
@@ -57,7 +60,8 @@ export function Carril({
 
   return (
     <div
-      className="cohete-carril"
+      className={`cohete-carril${bloqueado ? ' bloqueado' : ''}`}
+      aria-disabled={bloqueado || undefined}
       ref={carril}
       tabIndex={0}
       role="region"

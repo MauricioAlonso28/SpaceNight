@@ -9,12 +9,39 @@ export interface ZonaCohete {
   nombre: Traducido;
 }
 
+/** Una cifra de la ficha: qué mide y cuánto, con su unidad. */
+export interface DatoFicha {
+  etiqueta: Traducido;
+  valor: Traducido;
+}
+
+/** Una fuente consultada para escribir la ficha. */
+export interface FuenteFicha {
+  titulo: string;
+  url: string;
+}
+
+/**
+ * La ficha de un componente: seis campos fijos y sus fuentes.
+ * @property enCohetes ejemplos de cohetes reales que la usan
+ */
+export interface FichaComponente {
+  paraQue: Traducido;
+  comoFunciona: Traducido;
+  material: Traducido;
+  datos: DatoFicha[];
+  otrosUsos: Traducido;
+  enCohetes: Traducido;
+  fuentes: FuenteFicha[];
+}
+
 /**
  * Un componente del cohete genérico, tal como viene en public/data/cohete.json.
  * @property tipo pieza si tiene malla 3D, material si solo tiene ficha
  * @property interior si solo se ve con la vista de corte
  * @property recorrido su puesto en el recorrido con scroll, de 1 en adelante
  * @property usadoEn solo en materiales: las piezas hechas de él; 'casco' son los cascos de aluminio
+ * @property ficha los seis campos; falta mientras no esté escrita
  */
 export interface ComponenteCohete {
   id: string;
@@ -25,6 +52,7 @@ export interface ComponenteCohete {
   nombre: Traducido;
   resumen: Traducido;
   usadoEn?: string[];
+  ficha?: FichaComponente;
 }
 
 /** Los componentes en el orden del recorrido, de la punta a los motores y luego los materiales. */
