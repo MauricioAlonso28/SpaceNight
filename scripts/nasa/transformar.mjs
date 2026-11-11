@@ -153,7 +153,10 @@ export function resumir({ neo, bolidos, sentry, exoplanetas }, ahora) {
           total: neo.objetos.length,
           peligrosos: neo.objetos.filter((o) => o.peligroso).length,
           cercanos: neo.objetos.filter((o) => o.distanciaLunar < 1).map(corto),
-          proximos: neo.objetos.filter((o) => o.fecha > ahora).slice(0, 3).map(corto),
+          proximos: neo.objetos
+            .filter((o) => o.fecha > ahora)
+            .slice(0, 3)
+            .map(corto),
         }
       : null,
     bolido: ultimo
