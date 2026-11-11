@@ -16,7 +16,7 @@ Los archivos de `public/data/` vienen de estas fuentes. Se regeneran con los scr
 - Cambios: longitudes pasadas a ascensión recta de 0 a 360°, nombres en español y espacios normalizados.
 - Generado con `node scripts/preparar-constelaciones.mjs <constellations.lines.json> <constellations.json>`.
 
-```
+````
 Copyright (c) 2015, Olaf Frohn
 All rights reserved.
 
@@ -33,3 +33,4 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ## lluvias-2026-2027.json
 
 - Fechas de pico y tasas típicas del calendario de la [International Meteor Organization](https://www.imo.net/), copiadas a mano.
+````
