@@ -1,4 +1,7 @@
-import { LineaNoche } from '../../componentes/LineaNoche/LineaNoche';
+import {
+  LineaNoche,
+  type FilaLinea,
+} from '../../componentes/LineaNoche/LineaNoche';
 import {
   HORAS_NOCHE,
   fraccionVentana,
@@ -10,10 +13,11 @@ import { textos } from '../../idioma/idioma';
 import { formatearHora } from '../../servicios/formato';
 import type { PasoISS } from '../../servicios/satelites/iss';
 import { filasNoche } from './filasNoche';
+import { lineasPlaneta } from './textosPlanetas';
 
 const MS_HORA = 3_600_000;
 
-/** Panel Tu noche, hora por hora: cielo, Luna, planetas y Estación de 18:00 a 06:00. */
+/** La noche de 18:00 a 06:00: cielo, Luna, cada planeta visible con su imagen y dónde buscarlo, y la Estación. */
 export function NocheHoraPorHora({
   ventana,
   instantes,
@@ -46,6 +50,9 @@ export function NocheHoraPorHora({
     posicion: h / HORAS_NOCHE,
   }));
   const posAhora = fraccionVentana(ahora, ventana);
+  const visibles = new Map(
+    planetas.filter((p) => p.visible).map((p) => [p.planeta as string, p]),
+  );
   const filas = filasNoche(
     ventana,
     instantes,
@@ -54,10 +61,28 @@ export function NocheHoraPorHora({
     planetas,
     enHora,
     estacion,
-  );
+  ).map((f): FilaLinea => {
+    const p = f.clave ? visibles.get(f.clave) : undefined;
+    if (f.clave === 'luna') return { ...f, retrato: 'luna', notas: [] };
+    if (!p) return f;
+    return {
+      ...f,
+      retrato: p.planeta,
+      notas: lineasPlaneta(p, zona, formato24h),
+      brillo: p.brillo,
+    };
+  });
 
   return (
-    <div className="panel">
+    <div className="noche">
+      {visibles.size === 0 && (
+        <p className="aviso">
+          {textos({
+            es: 'Esta noche ningún planeta pasa de 10° de altura con el cielo oscuro. Prueba otra noche con el deslizador.',
+            en: 'Tonight no planet climbs above 10° while the sky is dark. Try another night with the slider.',
+          })}
+        </p>
+      )}
       <LineaNoche
         filas={filas}
         marcas={marcas}

@@ -112,6 +112,7 @@ export function filaEstacion(
     .map((p) => fraccionVentana(p.aparece.fecha, ventana))
     .filter((f) => f >= 0 && f <= 1);
   return {
+    clave: 'estacion',
     nombre: t().estacion,
     descripcion: puntos.length === 0 ? t().noPasa : t().pasa(puntos.map(hora)),
     puntos,
@@ -135,11 +136,13 @@ export function filasNoche(
   const tramosLuna = tramosSobreHorizonte(instantes, luna, ventana);
   const filas: FilaLinea[] = [
     {
+      clave: 'cielo',
       nombre: t().cielo,
       descripcion: t().cieloDescripcion,
       degradado: degradadoCielo(sol),
     },
     {
+      clave: 'luna',
       nombre: nombreAstro('luna'),
       descripcion: describir(t().laLuna, tramosLuna, hora),
       color: '#efe6cc',
@@ -149,6 +152,7 @@ export function filasNoche(
   for (const p of planetas.filter((x) => x.visible)) {
     const lista = tramosSobreHorizonte(instantes, p.muestras, ventana);
     filas.push({
+      clave: p.planeta,
       nombre: nombrePlaneta(p.planeta),
       descripcion: describir(nombrePlaneta(p.planeta), lista, hora),
       color: PISTA_PLANETA[p.planeta],

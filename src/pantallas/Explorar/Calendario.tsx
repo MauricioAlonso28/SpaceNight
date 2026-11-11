@@ -91,61 +91,63 @@ export function Calendario({
 
   return (
     <div className="calendario">
-      <div className="calendario-cabecera">
-        <button
-          type="button"
-          className="boton"
-          aria-label={t.anterior}
-          onClick={() => mover(-1)}
-        >
-          ‹
-        </button>
-        <h3>
-          {t.meses[mes.mes - 1]} {mes.anio}
-        </h3>
-        <button
-          type="button"
-          className="boton"
-          aria-label={t.siguiente}
-          onClick={() => mover(1)}
-        >
-          ›
-        </button>
-      </div>
-      <table className="calendario-tabla">
-        <thead>
-          <tr>
-            {t.dias.map((d, i) => (
-              <th key={i} scope="col">
-                {d}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {semanas.map((s) => (
-            <tr key={s[0].inicio.getTime()}>
-              {s.map((d) => (
-                <td
-                  key={d.inicio.getTime()}
-                  className={[
-                    d.delMes ? '' : 'fuera',
-                    esHoy(d.inicio) ? 'hoy' : '',
-                    d.delMes && conEvento.has(d.dia) ? 'con-evento' : '',
-                  ].join(' ')}
-                >
-                  <span className="calendario-dia">{d.dia}</span>
-                  <IconoFase
-                    angulo={d.anguloFase}
-                    hemisferioSur={ubicacion.latitud < 0}
-                  />
-                </td>
+      <div className="calendario-mes">
+        <div className="calendario-cabecera">
+          <button
+            type="button"
+            className="boton"
+            aria-label={t.anterior}
+            onClick={() => mover(-1)}
+          >
+            ‹
+          </button>
+          <h3>
+            {t.meses[mes.mes - 1]} {mes.anio}
+          </h3>
+          <button
+            type="button"
+            className="boton"
+            aria-label={t.siguiente}
+            onClick={() => mover(1)}
+          >
+            ›
+          </button>
+        </div>
+        <table className="calendario-tabla">
+          <thead>
+            <tr>
+              {t.dias.map((d, i) => (
+                <th key={i} scope="col">
+                  {d}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <ul className="calendario-lista panel">
+          </thead>
+          <tbody>
+            {semanas.map((s) => (
+              <tr key={s[0].inicio.getTime()}>
+                {s.map((d) => (
+                  <td
+                    key={d.inicio.getTime()}
+                    className={[
+                      d.delMes ? '' : 'fuera',
+                      esHoy(d.inicio) ? 'hoy' : '',
+                      d.delMes && conEvento.has(d.dia) ? 'con-evento' : '',
+                    ].join(' ')}
+                  >
+                    <span className="calendario-dia">{d.dia}</span>
+                    <IconoFase
+                      angulo={d.anguloFase}
+                      hemisferioSur={ubicacion.latitud < 0}
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul className="calendario-lista">
         {lineas.map((l) => (
           <li key={`${l.titulo}-${l.fecha.getTime()}`}>
             <span className="calendario-fecha">

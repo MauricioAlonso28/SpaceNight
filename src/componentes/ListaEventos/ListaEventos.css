@@ -1,7 +1,8 @@
 .eventos {
   list-style: none;
   margin: 0;
-  padding: 4px 18px;
+  padding: 0;
+  border-bottom: 1px solid var(--borde);
 }
 
 .eventos li {
@@ -12,17 +13,16 @@
   border-top: 1px solid var(--borde);
 }
 
-.eventos li:first-child {
-  border-top: 0;
-}
-
 .eventos-icono {
   font-size: 1.4rem;
   line-height: 1.3;
 }
 
 .eventos-titulo {
-  font-weight: 500;
+  font-family: var(--fuente-titulo);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.2;
   margin: 0;
 }
 

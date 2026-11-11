@@ -16,9 +16,9 @@ export function ListaEventos({
   items: ItemEvento[];
   vacia: string;
 }) {
-  if (items.length === 0) return <p className="panel aviso">{vacia}</p>;
+  if (items.length === 0) return <p className="aviso">{vacia}</p>;
   return (
-    <ul className="eventos panel">
+    <ul className="eventos">
       {items.map((e) => (
         <li key={e.clave}>
           <span className="eventos-icono" aria-hidden="true">

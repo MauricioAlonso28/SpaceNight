@@ -55,7 +55,7 @@ const EN: typeof ES = {
 export function CondicionesCielo({ vista }: { vista: VistaCondiciones }) {
   const t = textos({ es: ES, en: EN });
   return (
-    <div className="panel condiciones">
+    <div className="condiciones">
       <Medidor
         valor={vista.puntuacion}
         etiqueta={

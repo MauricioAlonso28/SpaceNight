@@ -56,19 +56,19 @@
 }
 
 .seccion > h2 {
-  font-size: 1.8rem;
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
   margin-bottom: 14px;
 }
 
 .leyenda {
   color: var(--texto-suave);
-  font-size: 0.88rem;
-  margin: 14px 0 0;
+  font-size: 0.85rem;
+  margin: 10px 0 0;
 }
 
 .dos {
   display: grid;
-  gap: 0 24px;
+  gap: 0 64px;
 }
 
 @media (min-width: 900px) {
@@ -82,6 +82,8 @@
   grid-template-columns: 112px 1fr;
   gap: 6px 18px;
   align-items: center;
+  padding-top: 18px;
+  border-top: 1px solid var(--borde);
 }
 
 .condiciones-titulo {

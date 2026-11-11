@@ -42,6 +42,11 @@ const ES = {
     ],
     ['Mapa del mundo', 'Natural Earth', 'dominio público'],
     ['Fichas de planetas', 'NASA Planetary Fact Sheets', 'redactadas a mano'],
+    [
+      'Texturas del Sol, la Luna y los planetas',
+      'Solar System Scope',
+      'CC BY 4.0',
+    ],
   ] as [string, string, string][],
 };
 
@@ -76,6 +81,7 @@ const EN: typeof ES = {
     ],
     ['World map', 'Natural Earth', 'public domain'],
     ['Planet fact sheets', 'NASA Planetary Fact Sheets', 'written by hand'],
+    ['Sun, Moon and planet textures', 'Solar System Scope', 'CC BY 4.0'],
   ],
 };
 
@@ -130,8 +136,8 @@ export function Explorar() {
           />
         )}
       </div>
-      <section className="fuentes" aria-labelledby="t-fuentes">
-        <h3 id="t-fuentes">{t.fuentesTitulo}</h3>
+      <details className="fuentes">
+        <summary>{t.fuentesTitulo}</summary>
         <ul>
           {t.fuentes.map(([que, fuente, licencia]) => (
             <li key={que}>
@@ -139,7 +145,7 @@ export function Explorar() {
             </li>
           ))}
         </ul>
-      </section>
+      </details>
     </section>
   );
 }
