@@ -6,3 +6,10 @@
   padding: calc(env(safe-area-inset-top, 0px) + 22px) 16px
     calc(112px + env(safe-area-inset-bottom, 0px));
 }
+
+/* Escritorio: la navegación va arriba, así que el hueco pasa de abajo a arriba. */
+@media (min-width: 1024px) and (pointer: fine) {
+  .app {
+    padding: 90px 24px 48px;
+  }
+}

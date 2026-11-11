@@ -1,0 +1,402 @@
+{
+  "zonas": [
+    { "id": "punta", "nombre": { "es": "Punta", "en": "Nose" } },
+    {
+      "id": "segunda-etapa",
+      "nombre": { "es": "Segunda etapa", "en": "Second stage" }
+    },
+    {
+      "id": "entre-etapas",
+      "nombre": { "es": "Entre etapas", "en": "Interstage" }
+    },
+    {
+      "id": "primera-etapa",
+      "nombre": { "es": "Primera etapa", "en": "First stage" }
+    },
+    { "id": "motores", "nombre": { "es": "Motores", "en": "Engines" } },
+    { "id": "materiales", "nombre": { "es": "Materiales", "en": "Materials" } }
+  ],
+  "componentes": [
+    {
+      "id": "cofia",
+      "zona": "punta",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 1,
+      "nombre": { "es": "Cofia", "en": "Payload fairing" },
+      "resumen": {
+        "es": "Protege la carga del aire y el calor al subir; se abre en dos y cae",
+        "en": "Shields the payload from air and heat on the way up; splits in two and falls away"
+      }
+    },
+    {
+      "id": "satelite",
+      "zona": "punta",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 2,
+      "nombre": { "es": "Satélite (carga útil)", "en": "Satellite (payload)" },
+      "resumen": {
+        "es": "Lo que el cohete lleva a órbita",
+        "en": "What the rocket carries to orbit"
+      }
+    },
+    {
+      "id": "adaptador-carga",
+      "zona": "punta",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 3,
+      "nombre": { "es": "Adaptador de carga", "en": "Payload adapter" },
+      "resumen": {
+        "es": "Une el satélite al cohete y lo suelta en órbita",
+        "en": "Joins the satellite to the rocket and releases it in orbit"
+      }
+    },
+    {
+      "id": "apertura-cofia",
+      "zona": "punta",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 4,
+      "nombre": {
+        "es": "Mecanismo de apertura de la cofia",
+        "en": "Fairing separation mechanism"
+      },
+      "resumen": {
+        "es": "Separa las dos mitades de la cofia",
+        "en": "Pushes the two fairing halves apart"
+      }
+    },
+    {
+      "id": "motor-vacio",
+      "zona": "segunda-etapa",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 5,
+      "nombre": { "es": "Motor de vacío", "en": "Vacuum engine" },
+      "resumen": {
+        "es": "Empuja en el vacío; tobera muy grande",
+        "en": "Pushes in a vacuum; very large nozzle"
+      }
+    },
+    {
+      "id": "tanque-oxigeno-2",
+      "zona": "segunda-etapa",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 6,
+      "nombre": {
+        "es": "Tanque de oxígeno líquido",
+        "en": "Liquid oxygen tank"
+      },
+      "resumen": {
+        "es": "Guarda el oxidante a −183 °C",
+        "en": "Holds the oxidizer at −183 °C"
+      }
+    },
+    {
+      "id": "tanque-combustible-2",
+      "zona": "segunda-etapa",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 7,
+      "nombre": { "es": "Tanque de combustible", "en": "Fuel tank" },
+      "resumen": {
+        "es": "Guarda el queroseno refinado",
+        "en": "Holds the refined kerosene"
+      }
+    },
+    {
+      "id": "tanques-helio",
+      "zona": "segunda-etapa",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 8,
+      "nombre": {
+        "es": "Tanques de helio (COPV)",
+        "en": "Helium tanks (COPV)"
+      },
+      "resumen": {
+        "es": "Mantienen la presión de los tanques al vaciarse",
+        "en": "Keep the tanks pressurized as they empty"
+      }
+    },
+    {
+      "id": "propulsores-control",
+      "zona": "segunda-etapa",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 9,
+      "nombre": {
+        "es": "Propulsores de control (RCS)",
+        "en": "Control thrusters (RCS)"
+      },
+      "resumen": {
+        "es": "Pequeños chorros que orientan la etapa sin motor",
+        "en": "Small jets that point the stage without the engine"
+      }
+    },
+    {
+      "id": "computadora-vuelo",
+      "zona": "segunda-etapa",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 10,
+      "nombre": { "es": "Computadora de vuelo", "en": "Flight computer" },
+      "resumen": {
+        "es": "Guiado, navegación y control",
+        "en": "Guidance, navigation and control"
+      }
+    },
+    {
+      "id": "antenas",
+      "zona": "segunda-etapa",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 11,
+      "nombre": { "es": "Antenas", "en": "Antennas" },
+      "resumen": {
+        "es": "Telemetría y seguimiento desde tierra",
+        "en": "Telemetry and tracking from the ground"
+      }
+    },
+    {
+      "id": "baterias",
+      "zona": "segunda-etapa",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 12,
+      "nombre": { "es": "Baterías", "en": "Batteries" },
+      "resumen": {
+        "es": "Energía para la electrónica",
+        "en": "Power for the electronics"
+      }
+    },
+    {
+      "id": "interetapa",
+      "zona": "entre-etapas",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 13,
+      "nombre": { "es": "Interetapa", "en": "Interstage" },
+      "resumen": {
+        "es": "Une las etapas y cubre el motor de vacío",
+        "en": "Joins the stages and covers the vacuum engine"
+      }
+    },
+    {
+      "id": "sistema-separacion",
+      "zona": "entre-etapas",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 14,
+      "nombre": {
+        "es": "Sistema de separación",
+        "en": "Stage separation system"
+      },
+      "resumen": {
+        "es": "Suelta la segunda etapa y la empuja",
+        "en": "Releases the second stage and pushes it away"
+      }
+    },
+    {
+      "id": "aletas-rejilla",
+      "zona": "primera-etapa",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 15,
+      "nombre": { "es": "Aletas de rejilla", "en": "Grid fins" },
+      "resumen": {
+        "es": "Guían la etapa al volver a tierra",
+        "en": "Steer the stage on its way back to the ground"
+      }
+    },
+    {
+      "id": "tanque-oxigeno-1",
+      "zona": "primera-etapa",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 16,
+      "nombre": {
+        "es": "Tanque de oxígeno líquido",
+        "en": "Liquid oxygen tank"
+      },
+      "resumen": {
+        "es": "El tanque más grande del cohete",
+        "en": "The largest tank on the rocket"
+      }
+    },
+    {
+      "id": "tanque-combustible-1",
+      "zona": "primera-etapa",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 17,
+      "nombre": { "es": "Tanque de combustible", "en": "Fuel tank" },
+      "resumen": {
+        "es": "Combustible de los motores principales",
+        "en": "Fuel for the main engines"
+      }
+    },
+    {
+      "id": "conducto-oxigeno",
+      "zona": "primera-etapa",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 18,
+      "nombre": { "es": "Conducto de oxígeno", "en": "Oxygen downcomer" },
+      "resumen": {
+        "es": "Lleva el oxígeno atravesando el tanque de combustible",
+        "en": "Carries the oxygen down through the fuel tank"
+      }
+    },
+    {
+      "id": "patas-aterrizaje",
+      "zona": "primera-etapa",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 19,
+      "nombre": { "es": "Patas de aterrizaje", "en": "Landing legs" },
+      "resumen": {
+        "es": "Se despliegan para posarse",
+        "en": "Unfold to touch down"
+      }
+    },
+    {
+      "id": "motores-principales",
+      "zona": "motores",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 20,
+      "nombre": { "es": "Motores principales", "en": "Main engines" },
+      "resumen": {
+        "es": "Varios motores que dan el empuje del despegue",
+        "en": "Several engines that give the liftoff thrust"
+      }
+    },
+    {
+      "id": "tobera",
+      "zona": "motores",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 21,
+      "nombre": { "es": "Tobera", "en": "Nozzle" },
+      "resumen": {
+        "es": "Acelera y dirige los gases de escape",
+        "en": "Speeds up and directs the exhaust gases"
+      }
+    },
+    {
+      "id": "camara-combustion",
+      "zona": "motores",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 22,
+      "nombre": { "es": "Cámara de combustión", "en": "Combustion chamber" },
+      "resumen": {
+        "es": "Donde arde la mezcla a más de 3.000 °C",
+        "en": "Where the mixture burns at over 3,000 °C"
+      }
+    },
+    {
+      "id": "inyector",
+      "zona": "motores",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 23,
+      "nombre": { "es": "Inyector", "en": "Injector" },
+      "resumen": {
+        "es": "Mezcla combustible y oxígeno en la proporción justa",
+        "en": "Mixes fuel and oxygen in just the right ratio"
+      }
+    },
+    {
+      "id": "turbobomba",
+      "zona": "motores",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 24,
+      "nombre": { "es": "Turbobomba", "en": "Turbopump" },
+      "resumen": {
+        "es": "Empuja los propelentes a gran presión",
+        "en": "Drives the propellants in at high pressure"
+      }
+    },
+    {
+      "id": "cardan",
+      "zona": "motores",
+      "tipo": "pieza",
+      "interior": true,
+      "recorrido": 25,
+      "nombre": { "es": "Cardán", "en": "Gimbal" },
+      "resumen": {
+        "es": "Inclina el motor para dirigir el cohete",
+        "en": "Tilts the engine to steer the rocket"
+      }
+    },
+    {
+      "id": "escudo-termico-base",
+      "zona": "motores",
+      "tipo": "pieza",
+      "interior": false,
+      "recorrido": 26,
+      "nombre": { "es": "Escudo térmico de la base", "en": "Base heat shield" },
+      "resumen": {
+        "es": "Protege la base del calor de los motores",
+        "en": "Shields the base from the engines' heat"
+      }
+    },
+    {
+      "id": "aluminio-litio",
+      "zona": "materiales",
+      "tipo": "material",
+      "interior": false,
+      "recorrido": 27,
+      "nombre": {
+        "es": "Aleación de aluminio-litio",
+        "en": "Aluminum-lithium alloy"
+      },
+      "resumen": {
+        "es": "Pared de los tanques: ligera y resistente al frío",
+        "en": "Tank walls: light and tough in the cold"
+      }
+    },
+    {
+      "id": "fibra-carbono",
+      "zona": "materiales",
+      "tipo": "material",
+      "interior": false,
+      "recorrido": 28,
+      "nombre": { "es": "Fibra de carbono", "en": "Carbon fiber" },
+      "resumen": {
+        "es": "Cofia e interetapa: rigidez con poco peso",
+        "en": "Fairing and interstage: stiffness with little weight"
+      }
+    },
+    {
+      "id": "aislamiento-termico",
+      "zona": "materiales",
+      "tipo": "material",
+      "interior": false,
+      "recorrido": 29,
+      "nombre": { "es": "Aislamiento térmico", "en": "Thermal insulation" },
+      "resumen": {
+        "es": "Evita que el oxígeno se caliente y que se forme hielo",
+        "en": "Keeps the oxygen from warming up and ice from forming"
+      }
+    },
+    {
+      "id": "recubrimiento-ablativo",
+      "zona": "materiales",
+      "tipo": "material",
+      "interior": false,
+      "recorrido": 30,
+      "nombre": { "es": "Recubrimiento ablativo", "en": "Ablative coating" },
+      "resumen": {
+        "es": "Se desgasta a propósito para llevarse el calor",
+        "en": "Wears away on purpose to carry the heat off"
+      }
+    }
+  ]
+}

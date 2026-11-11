@@ -17,6 +17,9 @@ const Explorar = lazy(() =>
     default: m.Explorar,
   })),
 );
+const Cohete = lazy(() =>
+  import('../pantallas/Cohete/Cohete').then((m) => ({ default: m.Cohete })),
+);
 const Ajustes = lazy(() =>
   import('../pantallas/Ajustes/Ajustes').then((m) => ({ default: m.Ajustes })),
 );
@@ -40,6 +43,7 @@ export function App() {
           <Route path="mapa" element={<Mapa />} />
           <Route path="camara" element={<Camara />} />
           <Route path="explorar" element={<Explorar />} />
+          <Route path="cohete" element={<Cohete />} />
           <Route path={RUTA_AJUSTES.path} element={<Ajustes />} />
           <Route path="*" element={<Navigate to={RUTA_INICIAL} replace />} />
         </Route>

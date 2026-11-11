@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { NavLink } from 'react-router';
 import { RUTAS_BARRA, nombreRuta } from '../../app/rutas';
 import { textos } from '../../idioma/idioma';
-import './BarraInferior.css';
+import './Navegacion.css';
 
 const ICONOS: Record<string, ReactNode> = {
   'esta-noche': <path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" />,
@@ -24,12 +24,19 @@ const ICONOS: Record<string, ReactNode> = {
       <path d="M15.5 8.5l-2 5-5 2 2-5z" />
     </>
   ),
+  cohete: (
+    <>
+      <path d="M12 2.5c2.9 2.3 4.4 5.8 4.4 9.9v4.1H7.6v-4.1c0-4.1 1.5-7.6 4.4-9.9z" />
+      <circle cx="12" cy="10" r="1.8" />
+      <path d="M7.6 13.2 5 16.4v3.1h2.6M16.4 13.2l2.6 3.2v3.1h-2.6M10.4 19.2 12 21.8l1.6-2.6" />
+    </>
+  ),
 };
 
-/** Barra de navegación fija con las cuatro pantallas principales. */
-export function BarraInferior() {
+/** Navegación entre pantallas: barra inferior en el móvil y barra superior en escritorio. */
+export function Navegacion() {
   return (
-    <div className="barra-inferior">
+    <div className="navegacion">
       <nav aria-label={textos({ es: 'Pantallas', en: 'Screens' })}>
         {RUTAS_BARRA.map((ruta) => (
           <NavLink key={ruta.path} to={`/${ruta.path}`}>
