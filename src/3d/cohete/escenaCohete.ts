@@ -9,39 +9,51 @@ import {
   Vector2,
   Vector3,
   WebGLRenderer,
+  type Intersection,
   type Material,
   type MeshLambertMaterial,
 } from 'three';
-import { ALTO, crearModelo, type ModeloCohete } from './modelo';
+import { ALTO, crearModelo, type PiezaModelo } from './modelo';
+import {
+  VISTA_GENERAL,
+  acotar,
+  interpolarVista,
+  suave,
+  vistaDePieza,
+  type Vista,
+} from './vistas';
 
 const DISTANCIA_MIN = 5;
 const DISTANCIA_MAX = 170;
 const ELEVACION_MIN = -25;
 const ELEVACION_MAX = 70;
 const MOVIMIENTO_CLIC = 5;
-const COLOR_ELEGIDA = 0xb3412d;
+const COLOR_ELEGIDA = 0x9a3826;
 const COLOR_ENCIMA = 0x3b2a26;
+const OPACIDAD_CORTE = 0.38;
+const LEJOS = 1e6;
+const SVG = 'http://www.w3.org/2000/svg';
 
-/** Dónde mira la cámara: giro, inclinación y distancia alrededor de un punto del eje. */
-export interface Vista {
-  azimut: number;
-  elevacion: number;
-  distancia: number;
-  objetivoY: number;
+/**
+ * Un paso del recorrido con scroll.
+ * @property resalta piezas que se iluminan; 'casco' ilumina los cascos de aluminio
+ * @property foco pieza que la cámara encuadra, o null para ver el cohete entero
+ */
+export interface PasoRecorrido {
+  nombre: string;
+  interior: boolean;
+  foco: string | null;
+  resalta: string[];
 }
-
-/** Vista inicial: el cohete entero, algo de lado y desde un poco arriba. */
-export const VISTA_GENERAL: Vista = {
-  azimut: 35,
-  elevacion: 10,
-  distancia: 132,
-  objetivoY: ALTO / 2,
-};
 
 /** Lo que la interfaz puede pedirle a la escena. */
 export interface ControlCohete {
   elegir: (id: string | null) => void;
   vistaGeneral: () => void;
+  fijarCorte: (activo: boolean) => void;
+  iniciarRecorrido: (pasos: PasoRecorrido[]) => void;
+  irAlPaso: (progreso: number) => void;
+  salirRecorrido: () => void;
   destruir: () => void;
 }
 
@@ -54,10 +66,6 @@ export interface OpcionesEscena {
   nombre: (id: string) => string;
   alElegir: (id: string | null) => void;
 }
-
-const acotar = (v: number, min: number, max: number) =>
-  Math.min(max, Math.max(min, v));
-const suave = (t: number) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2);
 
 function materiales(malla: Mesh): Material[] {
   return Array.isArray(malla.material) ? malla.material : [malla.material];
@@ -74,7 +82,52 @@ function densidad(): number {
   return Math.min(window.devicePixelRatio || 1, 1.5);
 }
 
-/** Monta el cohete en un contenedor: canvas WebGL, etiqueta flotante y gestos de ratón y trackpad. */
+function reducirMovimiento(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/** Etiqueta HTML con una línea SVG hasta su pieza. */
+function crearEtiqueta(capa: HTMLElement) {
+  const svg = document.createElementNS(SVG, 'svg');
+  svg.setAttribute('class', 'cohete-lineas');
+  const linea = document.createElementNS(SVG, 'line');
+  const punto = document.createElementNS(SVG, 'circle');
+  punto.setAttribute('r', '4');
+  svg.append(linea, punto);
+  const caja = document.createElement('div');
+  caja.className = 'cohete-etiqueta3d';
+  capa.append(svg, caja);
+  return {
+    mostrar: (texto: string, x: number, y: number, ancho: number) => {
+      caja.textContent = texto;
+      caja.hidden = false;
+      svg.style.display = '';
+      const izquierda = x > ancho * 0.42;
+      const cx = izquierda
+        ? Math.max(16, x - 230)
+        : Math.min(ancho - 16, x + 230);
+      const cy = Math.max(24, y - 70);
+      caja.style.transform = `translate(${cx}px, ${cy}px) translate(${izquierda ? '0' : '-100%'}, -50%)`;
+      const bx = izquierda ? cx + caja.offsetWidth : cx - caja.offsetWidth;
+      linea.setAttribute('x1', String(bx));
+      linea.setAttribute('y1', String(cy));
+      linea.setAttribute('x2', String(x));
+      linea.setAttribute('y2', String(y));
+      punto.setAttribute('cx', String(x));
+      punto.setAttribute('cy', String(y));
+    },
+    ocultar: () => {
+      caja.hidden = true;
+      svg.style.display = 'none';
+    },
+    quitar: () => {
+      svg.remove();
+      caja.remove();
+    },
+  };
+}
+
+/** Monta el cohete en un contenedor: canvas WebGL, etiquetas y gestos de ratón y trackpad. */
 export function crearEscena(
   contenedor: HTMLElement,
   opciones: OpcionesEscena,
@@ -85,10 +138,13 @@ export function crearEscena(
   pista.className = 'cohete-pista';
   pista.hidden = true;
   contenedor.append(canvas, pista);
+  const etiqueta = crearEtiqueta(contenedor);
+  etiqueta.ocultar();
 
   const renderer = new WebGLRenderer({ canvas, antialias: true, alpha: true });
   renderer.setPixelRatio(densidad());
   renderer.setClearColor(0x000000, 0);
+  renderer.localClippingEnabled = true;
   const escena = new Scene();
   const camara = new PerspectiveCamera(35, 1, 0.5, 600);
   const luz = new DirectionalLight(0xffffff, 2.2);
@@ -96,13 +152,28 @@ export function crearEscena(
   camara.add(luz);
   escena.add(camara, new HemisphereLight(0xe6eeff, 0x1c2547, 1.4));
 
-  const modelo: ModeloCohete = crearModelo();
+  const modelo = crearModelo();
   escena.add(modelo.grupo);
   const tocables: Mesh[] = [];
   for (const p of modelo.piezas.values()) tocables.push(p.toque ?? p.malla);
-  const mallaDe = (id: string) => modelo.piezas.get(id)?.malla;
 
-  const vista: Vista = { ...VISTA_GENERAL };
+  const plano = new Plane(new Vector3(0, 0, -1), LEJOS);
+  const recortables: Mesh[] = [
+    ...modelo.cascos,
+    ...[...modelo.piezas.values()]
+      .filter((p) => p.recortable)
+      .map((p) => p.malla),
+  ];
+  const envolventes = new Set<Mesh>([
+    ...modelo.cascos,
+    modelo.piezas.get('cofia')!.malla,
+    modelo.piezas.get('interetapa')!.malla,
+  ]);
+  for (const m of recortables) {
+    materiales(m).forEach((mat) => (mat.clippingPlanes = [plano]));
+  }
+
+  let vista: Vista = { ...VISTA_GENERAL };
   let animacion: {
     desde: Vista;
     hasta: Vista;
@@ -111,6 +182,11 @@ export function crearEscena(
   } | null = null;
   let elegida: string | null = null;
   let encima: string | null = null;
+  let corteManual = false;
+  let corte = false;
+  let pasos: PasoRecorrido[] = [];
+  let pasoActivo = -1;
+  let antesDelRecorrido: { vista: Vista; corte: boolean } | null = null;
   let pendiente = 0;
 
   const colocarCamara = () => {
@@ -122,26 +198,70 @@ export function crearEscena(
       vista.distancia * Math.cos(el) * Math.cos(az),
     );
     camara.lookAt(0, vista.objetivoY, 0);
+    camara.updateMatrixWorld();
+  };
+
+  const colocarPlano = () => {
+    if (!corte) {
+      plano.constant = LEJOS;
+      return;
+    }
+    plano.normal.set(-camara.position.x, 0, -camara.position.z).normalize();
+    plano.constant = 0;
+  };
+
+  const aplicarCorte = (activo: boolean) => {
+    if (corte === activo) return;
+    corte = activo;
+    for (const m of envolventes) {
+      materiales(m).forEach((mat) => {
+        mat.transparent = activo;
+        mat.opacity = activo ? OPACIDAD_CORTE : 1;
+        mat.depthWrite = !activo;
+        mat.needsUpdate = true;
+      });
+    }
   };
 
   const avanzarAnimacion = (ahora: number) => {
     if (!animacion) return;
     const t = acotar((ahora - animacion.inicio) / animacion.duracion, 0, 1);
-    const k = suave(t);
-    const { desde, hasta } = animacion;
-    const giro = ((hasta.azimut - desde.azimut + 540) % 360) - 180;
-    vista.azimut = desde.azimut + giro * k;
-    vista.elevacion = desde.elevacion + (hasta.elevacion - desde.elevacion) * k;
-    vista.distancia = desde.distancia + (hasta.distancia - desde.distancia) * k;
-    vista.objetivoY = desde.objetivoY + (hasta.objetivoY - desde.objetivoY) * k;
+    vista = interpolarVista(animacion.desde, animacion.hasta, suave(t));
     if (t >= 1) animacion = null;
+  };
+
+  const anclaEnPantalla = (pieza: PiezaModelo) => {
+    const v = pieza.ancla.clone().project(camara);
+    if (v.z > 1 || Math.abs(v.x) > 1.05 || Math.abs(v.y) > 1.05) return null;
+    return {
+      x: ((v.x + 1) / 2) * contenedor.clientWidth,
+      y: ((1 - v.y) / 2) * contenedor.clientHeight,
+    };
+  };
+
+  const colocarEtiqueta = () => {
+    const paso = pasos[pasoActivo];
+    const pieza = paso?.foco ? modelo.piezas.get(paso.foco) : undefined;
+    const pantalla = pieza ? anclaEnPantalla(pieza) : null;
+    if (!paso || !pantalla) {
+      etiqueta.ocultar();
+      return;
+    }
+    etiqueta.mostrar(
+      paso.nombre,
+      pantalla.x,
+      pantalla.y,
+      contenedor.clientWidth,
+    );
   };
 
   const dibujar = (ahora: number) => {
     pendiente = 0;
     avanzarAnimacion(ahora);
     colocarCamara();
+    colocarPlano();
     renderer.render(escena, camara);
+    colocarEtiqueta();
     if (animacion) pedirCuadro();
   };
 
@@ -150,11 +270,8 @@ export function crearEscena(
   }
 
   const irA = (destino: Vista, duracion = 700) => {
-    const reducir = window.matchMedia(
-      '(prefers-reduced-motion: reduce)',
-    ).matches;
-    if (reducir || duracion <= 0) {
-      Object.assign(vista, destino);
+    if (reducirMovimiento() || duracion <= 0) {
+      vista = { ...destino };
       animacion = null;
     } else {
       animacion = {
@@ -188,17 +305,31 @@ export function crearEscena(
     raycaster.setFromCamera(puntero, camara);
   };
 
+  const visible = (golpe: Intersection) => {
+    const malla = golpe.object as Mesh;
+    if (!corte || !recortables.includes(malla)) return true;
+    return plano.distanceToPoint(golpe.point) >= 0;
+  };
+
   const piezaEn = (x: number, y: number): string | null => {
     rayoDesde(x, y);
-    const golpe = raycaster.intersectObjects(tocables, false)[0];
+    const golpe = raycaster.intersectObjects(tocables, false).find(visible);
     return (golpe?.object.userData.id as string | undefined) ?? null;
   };
 
   const actualizarBrillos = () => {
+    const resaltadas = new Set(pasos[pasoActivo]?.resalta ?? []);
     for (const p of modelo.piezas.values()) {
       const color =
-        p.id === elegida ? COLOR_ELEGIDA : p.id === encima ? COLOR_ENCIMA : 0;
+        p.id === elegida || resaltadas.has(p.id)
+          ? COLOR_ELEGIDA
+          : p.id === encima
+            ? COLOR_ENCIMA
+            : 0;
       brillo(p.malla, color);
+    }
+    for (const c of modelo.cascos) {
+      brillo(c, resaltadas.has('casco') ? COLOR_ELEGIDA : 0);
     }
     pedirCuadro();
   };
@@ -286,8 +417,8 @@ export function crearEscena(
     opciones.alElegir(id);
   };
 
-  const plano = new Plane();
-  const corte = new Vector3();
+  const planoEje = new Plane();
+  const corteEje = new Vector3();
 
   const alturaBajo = (x: number, y: number): number | null => {
     rayoDesde(x, y);
@@ -296,8 +427,8 @@ export function crearEscena(
       0,
       camara.position.z,
     ).normalize();
-    plano.setFromNormalAndCoplanarPoint(haciaCamara, new Vector3(0, 0, 0));
-    return raycaster.ray.intersectPlane(plano, corte) ? corte.y : null;
+    planoEje.setFromNormalAndCoplanarPoint(haciaCamara, new Vector3());
+    return raycaster.ray.intersectPlane(planoEje, corteEje) ? corteEje.y : null;
   };
 
   const alRueda = (ev: WheelEvent) => {
@@ -335,13 +466,65 @@ export function crearEscena(
   ajustarTamano();
 
   function elegir(id: string | null) {
-    elegida = id && mallaDe(id) ? id : null;
+    elegida = id && modelo.piezas.has(id) ? id : null;
     actualizarBrillos();
   }
+
+  const vistaDePaso = (paso: PasoRecorrido): Vista => {
+    const pieza = paso.foco ? modelo.piezas.get(paso.foco) : undefined;
+    return pieza ? vistaDePieza(pieza) : VISTA_GENERAL;
+  };
+
+  const irAlPaso = (progreso: number) => {
+    if (!pasos.length) return;
+    const p = acotar(progreso, 0, pasos.length - 1);
+    const i = Math.floor(p);
+    const siguiente = Math.min(i + 1, pasos.length - 1);
+    animacion = null;
+    vista = interpolarVista(
+      vistaDePaso(pasos[i]),
+      vistaDePaso(pasos[siguiente]),
+      suave(p - i),
+    );
+    const activo = Math.round(p);
+    if (activo !== pasoActivo) {
+      pasoActivo = activo;
+      aplicarCorte(corteManual || pasos[activo].interior);
+      actualizarBrillos();
+    }
+    pedirCuadro();
+  };
 
   return {
     elegir,
     vistaGeneral: () => irA(VISTA_GENERAL),
+    fijarCorte: (activo) => {
+      corteManual = activo;
+      aplicarCorte(activo);
+      pedirCuadro();
+    },
+    iniciarRecorrido: (nuevos) => {
+      antesDelRecorrido ??= { vista: { ...vista }, corte: corteManual };
+      pasos = nuevos;
+      pasoActivo = -1;
+      elegida = null;
+      const desde = { ...vista };
+      irAlPaso(0);
+      const destino = vista;
+      vista = desde;
+      irA(destino);
+    },
+    irAlPaso,
+    salirRecorrido: () => {
+      pasos = [];
+      pasoActivo = -1;
+      etiqueta.ocultar();
+      const antes = antesDelRecorrido;
+      antesDelRecorrido = null;
+      aplicarCorte(antes?.corte ?? corteManual);
+      actualizarBrillos();
+      irA(antes?.vista ?? VISTA_GENERAL);
+    },
     destruir: () => {
       cancelAnimationFrame(pendiente);
       observador.disconnect();
@@ -360,6 +543,7 @@ export function crearEscena(
       renderer.dispose();
       canvas.remove();
       pista.remove();
+      etiqueta.quitar();
     },
   };
 }

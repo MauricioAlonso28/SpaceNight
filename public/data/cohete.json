@@ -352,6 +352,13 @@
       "zona": "materiales",
       "tipo": "material",
       "interior": false,
+      "usadoEn": [
+        "casco",
+        "tanque-oxigeno-1",
+        "tanque-combustible-1",
+        "tanque-oxigeno-2",
+        "tanque-combustible-2"
+      ],
       "recorrido": 27,
       "nombre": {
         "es": "Aleación de aluminio-litio",
@@ -367,6 +374,7 @@
       "zona": "materiales",
       "tipo": "material",
       "interior": false,
+      "usadoEn": ["cofia", "interetapa", "patas-aterrizaje", "tanques-helio"],
       "recorrido": 28,
       "nombre": { "es": "Fibra de carbono", "en": "Carbon fiber" },
       "resumen": {
@@ -379,6 +387,7 @@
       "zona": "materiales",
       "tipo": "material",
       "interior": false,
+      "usadoEn": ["tanque-oxigeno-1", "tanque-oxigeno-2"],
       "recorrido": 29,
       "nombre": { "es": "Aislamiento térmico", "en": "Thermal insulation" },
       "resumen": {
@@ -391,6 +400,7 @@
       "zona": "materiales",
       "tipo": "material",
       "interior": false,
+      "usadoEn": ["escudo-termico-base"],
       "recorrido": 30,
       "nombre": { "es": "Recubrimiento ablativo", "en": "Ablative coating" },
       "resumen": {

@@ -14,6 +14,7 @@ export interface ZonaCohete {
  * @property tipo pieza si tiene malla 3D, material si solo tiene ficha
  * @property interior si solo se ve con la vista de corte
  * @property recorrido su puesto en el recorrido con scroll, de 1 en adelante
+ * @property usadoEn solo en materiales: las piezas hechas de él; 'casco' son los cascos de aluminio
  */
 export interface ComponenteCohete {
   id: string;
@@ -23,6 +24,14 @@ export interface ComponenteCohete {
   recorrido: number;
   nombre: Traducido;
   resumen: Traducido;
+  usadoEn?: string[];
+}
+
+/** Los componentes en el orden del recorrido, de la punta a los motores y luego los materiales. */
+export function enOrdenDeRecorrido(
+  componentes: ComponenteCohete[],
+): ComponenteCohete[] {
+  return [...componentes].sort((a, b) => a.recorrido - b.recorrido);
 }
 
 /** El catálogo entero: zonas en orden y componentes. */

@@ -102,12 +102,142 @@
 }
 
 .cohete-marco {
+  --alto-escena: clamp(480px, calc(100dvh - 210px), 900px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.cohete-marco.con-carril {
+  grid-template-columns: minmax(0, 1fr) 340px;
+}
+
+.cohete-lienzo {
   position: relative;
+}
+
+.cohete-boton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.cohete-lineas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.cohete-lineas line {
+  stroke: var(--acento);
+  stroke-width: 1.5;
+}
+
+.cohete-lineas circle {
+  fill: var(--acento);
+}
+
+.cohete-etiqueta3d {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: rgba(6, 14, 46, 0.9);
+  border: 1px solid var(--acento);
+  font-family: var(--fuente-titulo);
+  font-size: 1.1rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cohete-carril {
+  --alto-paso: 220px;
+  height: var(--alto-escena);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 20px;
+  border: 1px solid var(--borde);
+  background: var(--panel);
+  scrollbar-width: thin;
+}
+
+.cohete-carril-margen {
+  height: calc(50% - var(--alto-paso) / 2);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+}
+
+.cohete-carril ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cohete-paso {
+  height: var(--alto-paso);
+  padding: 6px 12px;
+}
+
+.cohete-paso button {
+  font: inherit;
+  color: var(--texto-suave);
+  text-align: left;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.cohete-paso[aria-current='step'] button {
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--acento);
+}
+
+.cohete-paso strong {
+  font-family: var(--fuente-titulo);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.cohete-paso-numero {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dato);
+}
+
+.cohete-paso-resumen {
+  font-size: 0.9rem;
+}
+
+.cohete-paso .cohete-etiqueta {
+  margin-left: 0;
 }
 
 .cohete-escena {
   position: relative;
-  height: clamp(480px, calc(100dvh - 210px), 900px);
+  height: var(--alto-escena);
   min-height: 480px;
   border-radius: 20px;
   overflow: hidden;
