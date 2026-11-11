@@ -53,7 +53,7 @@ function Icono({ clave }: { clave: string }) {
 
 /**
  * Navegación: en escritorio un panel a la izquierda que el botón ☰ abre y deja en riel de iconos, y recuerda cómo quedó;
- * en el móvil la barra inferior con las cuatro pantallas del cielo y Más, que abre el mismo panel por encima.
+ * en el móvil la barra inferior con las cuatro pantallas del cielo y Más, que abre una hoja desde abajo con el resto en filas de tres.
  */
 export function Navegacion() {
   const t = textos({ es: ES, en: EN });
@@ -92,47 +92,84 @@ export function Navegacion() {
 
   return (
     <>
-      <aside
-        className={`panel-nav${abierto ? ' abierto' : ''}`}
-        aria-label={t.pantallas}
-        hidden={!escritorio && !abiertoMovil}
-      >
-        <button
-          type="button"
-          className="panel-boton"
-          aria-expanded={abierto}
-          aria-controls="panel-lista"
-          aria-label={abierto ? t.cerrar : t.abrir}
-          onClick={alternar}
+      {escritorio && (
+        <aside
+          className={`panel-nav${abierto ? ' abierto' : ''}`}
+          aria-label={t.pantallas}
         >
-          <Icono clave="mas" />
-        </button>
-        <nav id="panel-lista">
-          {GRUPOS.map((g) => (
-            <div key={g.id} className="panel-grupo">
-              <p className="panel-titulo">{textos(g.nombre)}</p>
-              {g.rutas.map((r) => (
-                <NavLink
-                  key={r.path}
-                  to={`/${r.path}`}
-                  end
-                  title={abierto ? undefined : nombreRuta(r)}
-                  data-aviso={conAviso.has(r.path) || undefined}
-                >
-                  <Icono clave={r.path} />
-                  <span>{nombreRuta(r)}</span>
-                </NavLink>
-              ))}
-            </div>
-          ))}
-        </nav>
-      </aside>
+          <button
+            type="button"
+            className="panel-boton"
+            aria-expanded={abierto}
+            aria-controls="panel-lista"
+            aria-label={abierto ? t.cerrar : t.abrir}
+            onClick={alternar}
+          >
+            <Icono clave="mas" />
+          </button>
+          <nav id="panel-lista">
+            {GRUPOS.map((g) => (
+              <div key={g.id} className="panel-grupo">
+                <p className="panel-titulo">{textos(g.nombre)}</p>
+                {g.rutas.map((r) => (
+                  <NavLink
+                    key={r.path}
+                    to={`/${r.path}`}
+                    end
+                    title={abierto ? undefined : nombreRuta(r)}
+                    data-aviso={conAviso.has(r.path) || undefined}
+                  >
+                    <Icono clave={r.path} />
+                    <span>{nombreRuta(r)}</span>
+                  </NavLink>
+                ))}
+              </div>
+            ))}
+          </nav>
+        </aside>
+      )}
       {!escritorio && abiertoMovil && (
-        <div
-          className="panel-velo"
-          aria-hidden="true"
-          onClick={() => setAbiertoMovil(false)}
-        />
+        <>
+          <div
+            className="panel-velo"
+            aria-hidden="true"
+            onClick={() => setAbiertoMovil(false)}
+          />
+          <div
+            className="hoja-nav"
+            id="hoja-nav"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t.mas}
+          >
+            <button
+              type="button"
+              className="hoja-asa"
+              aria-label={t.cerrar}
+              onClick={() => setAbiertoMovil(false)}
+            />
+            {GRUPOS.filter((g) => g.id !== 'cielo')
+              .reverse()
+              .map((g) => (
+                <section key={g.id} className="hoja-grupo">
+                  <p className="panel-titulo">{textos(g.nombre)}</p>
+                  <nav aria-label={textos(g.nombre)}>
+                    {g.rutas.map((r) => (
+                      <NavLink
+                        key={r.path}
+                        to={`/${r.path}`}
+                        end
+                        data-aviso={conAviso.has(r.path) || undefined}
+                      >
+                        <Icono clave={r.path} />
+                        <span>{nombreRuta(r)}</span>
+                      </NavLink>
+                    ))}
+                  </nav>
+                </section>
+              ))}
+          </div>
+        </>
       )}
       {!escritorio && (
         <div className="navegacion">
@@ -147,7 +184,12 @@ export function Navegacion() {
               type="button"
               className="navegacion-mas"
               aria-expanded={abiertoMovil}
-              aria-controls="panel-lista"
+              aria-controls="hoja-nav"
+              data-aviso={
+                [...conAviso].some(
+                  (r) => !RUTAS_BARRA.some((b) => b.path === r),
+                ) || undefined
+              }
               onClick={alternar}
             >
               <Icono clave="mas" />
