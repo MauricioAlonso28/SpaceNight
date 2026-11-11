@@ -1,0 +1,250 @@
+.bolidos-escena {
+  position: relative;
+}
+
+.bolidos-mapa {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bolidos-tierra {
+  fill: rgba(120, 150, 230, 0.18);
+  stroke: rgba(150, 180, 255, 0.28);
+  stroke-width: 0.3;
+}
+
+.bolido {
+  fill: rgb(255, 125, 77);
+  fill-opacity: calc(0.75 - var(--edad) * 0.45);
+  stroke: rgba(255, 200, 170, 0.8);
+  stroke-width: 0.25;
+  cursor: pointer;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: bolido-entra 0.5s ease-out both;
+  transition:
+    fill-opacity 0.2s,
+    stroke-width 0.2s;
+}
+
+@keyframes bolido-entra {
+  from {
+    transform: scale(0);
+  }
+}
+
+.bolido:hover {
+  fill-opacity: 1;
+  stroke: #fff;
+  stroke-width: 0.6;
+}
+
+.bolido.reciente {
+  fill: #ffd166;
+  animation:
+    bolido-entra 0.5s ease-out both,
+    bolido-pulso 2s ease-in-out infinite;
+}
+
+@keyframes bolido-pulso {
+  50% {
+    stroke-width: 1.4;
+    stroke: rgba(255, 209, 102, 0.5);
+  }
+}
+
+.bolido.elegido {
+  fill-opacity: 1;
+  stroke: #fff;
+  stroke-width: 0.9;
+}
+
+.bolidos-ficha {
+  position: absolute;
+  left: 0;
+  bottom: 4%;
+  max-width: 300px;
+  padding: 4px 0 0 14px;
+  border-left: 2px solid var(--acento);
+  animation: nasa-fundido 0.3s ease-out;
+}
+
+.bolidos-ficha h3 {
+  font-size: 2.4rem;
+  line-height: 1;
+  margin: 4px 0;
+}
+
+.bolidos-ficha h3 small {
+  font-family: var(--fuente-texto);
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+.bolidos-ficha p:not(.nasa-rotulo) {
+  margin: 2px 0;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+.bolidos-anios {
+  margin-top: 18px;
+}
+
+.bolidos-barras {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 90px;
+  margin-top: 14px;
+}
+
+.bolidos-barras button {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.bolidos-barras span {
+  width: 100%;
+  height: var(--h);
+  min-height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--dato);
+  opacity: 0.65;
+  transition:
+    opacity 0.2s,
+    background 0.2s;
+}
+
+.bolidos-barras button:hover span {
+  opacity: 1;
+}
+
+.bolidos-barras button[aria-pressed='true'] span {
+  background: var(--acento);
+  opacity: 1;
+}
+
+.bolidos-barras button.apagada span {
+  opacity: 0.12;
+}
+
+.bolidos-eje {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.bolidos-listas {
+  display: grid;
+  gap: 32px;
+  margin-top: 40px;
+}
+
+@media (min-width: 900px) {
+  .bolidos-listas {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    gap: 56px;
+  }
+}
+
+.bolidos-listas h3 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.bolidos-nota {
+  margin: 0 0 10px;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+}
+
+.bolidos-top,
+.bolidos-sentry {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bolidos-top button,
+.bolidos-sentry a {
+  font: inherit;
+  display: grid;
+  gap: 2px 14px;
+  width: 100%;
+  padding: 10px 2px;
+  color: var(--texto);
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--borde);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.bolidos-top button {
+  grid-template-columns: 90px 1fr;
+}
+
+.bolidos-top button span:last-child {
+  grid-column: 2;
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+}
+
+.bolidos-top button[aria-pressed='true'] strong {
+  color: var(--acento);
+}
+
+.bolidos-top strong {
+  font-family: var(--fuente-titulo);
+  font-size: 1.2rem;
+}
+
+.bolidos-sentry a {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.bolidos-sentry a:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.bolidos-sentry span:nth-of-type(2) {
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+}
+
+.bolidos-prob {
+  font-family: var(--fuente-titulo);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dato);
+  text-align: right;
+}
+
+.bolidos-palermo {
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--pista), rgba(255, 125, 102, 0.6));
+}
+
+.bolidos-palermo i {
+  position: absolute;
+  left: var(--k);
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--texto);
+}
