@@ -2,7 +2,19 @@
   margin-top: 14px;
 }
 
+.nasa-cabeza {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
 .nasa-kicker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0;
   color: var(--acento);
   font-size: 0.72rem;
@@ -11,13 +23,145 @@
   text-transform: uppercase;
 }
 
+.nasa-vivo {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--acento);
+  box-shadow: 0 0 0 0 rgba(255, 125, 102, 0.6);
+  animation: nasa-latido 2s ease-out infinite;
+}
+
+@keyframes nasa-latido {
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 125, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 125, 102, 0);
+  }
+}
+
 .nasa-titulo {
-  font-size: clamp(2rem, 4vw, 3rem);
-  margin: 4px 0 8px;
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+  margin: 6px 0 8px;
 }
 
 .nasa-lead {
   color: var(--texto-suave);
-  max-width: 60ch;
+  max-width: 62ch;
   margin: 0;
+}
+
+.nasa-meta {
+  margin: 10px 0 0;
+  color: var(--texto-suave);
+  font-size: 0.8rem;
+}
+
+.nasa-meta a {
+  color: var(--dato);
+}
+
+.nasa-cifras {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 44px;
+  margin: 0 0 28px;
+  padding: 18px 0;
+  border-top: 1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
+}
+
+.nasa-cifra {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.nasa-cifra dd {
+  margin: 0;
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2rem, 3.4vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.nasa-cifra dd small {
+  margin-left: 6px;
+  font-family: var(--fuente-texto);
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--texto-suave);
+}
+
+.nasa-cifra dt {
+  margin-top: 6px;
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.nasa-cifra.acento dd {
+  color: var(--acento);
+}
+
+.nasa-sin-datos {
+  color: var(--texto-suave);
+  padding: 40px 0;
+}
+
+.nasa-enlace {
+  color: var(--dato);
+  font-size: 0.85rem;
+}
+
+.nasa-etiqueta {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--borde);
+  color: var(--dato);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  vertical-align: 2px;
+}
+
+.nasa-etiqueta.peligro {
+  border-color: var(--acento);
+  color: var(--acento);
+}
+
+.nasa-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.nasa-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+  background: none;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+}
+
+.nasa-chip:hover {
+  color: var(--texto);
+  border-color: var(--texto-suave);
+}
+
+.nasa-chip[aria-pressed='true'] {
+  color: var(--texto);
+  border-color: var(--acento);
+}
+
+.nasa-chip i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }
