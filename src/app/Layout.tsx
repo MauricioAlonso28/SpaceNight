@@ -4,6 +4,7 @@ import { Navegacion } from '../componentes/Navegacion/Navegacion';
 import { Cabecera } from '../componentes/Cabecera/Cabecera';
 import { Fondo3D } from '../componentes/Fondo3D/Fondo3D';
 import { MotorAvisos } from '../componentes/Avisos/MotorAvisos';
+import { aplicarVersionNueva } from './actualizacion';
 import { useEsEscritorio } from './escritorio';
 import {
   useModoRojo,
@@ -12,12 +13,13 @@ import {
 } from '../estado/hooks';
 import './Layout.css';
 
-/** Marco común: fondo 3D, cabecera, la pantalla activa y la navegación; en escritorio la cabecera va dentro de la barra superior. Cada pantalla nueva empieza arriba del todo. */
+/** Marco común: fondo 3D, cabecera, la pantalla activa y la navegación; en escritorio la cabecera va dentro de la barra superior. Cada pantalla nueva empieza arriba del todo y, si hay una versión nueva esperando, se carga al cambiar de pantalla. */
 export function Layout() {
   const escritorio = useEsEscritorio();
   const { pathname } = useLocation();
 
   useEffect(() => {
+    aplicarVersionNueva();
     window.scrollTo(0, 0);
   }, [pathname]);
   useReloj();
