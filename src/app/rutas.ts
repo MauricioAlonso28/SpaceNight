@@ -36,10 +36,15 @@ export const RUTA_NASA: Ruta = {
   nombre: { es: 'Resumen en vivo', en: 'Live overview' },
 };
 
-/** Las seis vistas de NASA en vivo, una por fuente de datos. */
+/** Las vistas de NASA en vivo. */
 export const RUTAS_NASA: readonly Ruta[] = [
   { path: 'nasa/asteroides', nombre: { es: 'Asteroides', en: 'Asteroids' } },
   { path: 'nasa/tierra', nombre: { es: 'La Tierra hoy', en: 'Earth today' } },
+  { path: 'nasa/sol-luna', nombre: { es: 'Sol y Luna', en: 'Sun and Moon' } },
+  {
+    path: 'nasa/naves',
+    nombre: { es: 'Naves lejanas', en: 'Deep-space craft' },
+  },
   {
     path: 'nasa/eventos',
     nombre: { es: 'Eventos naturales', en: 'Natural events' },

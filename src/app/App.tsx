@@ -47,6 +47,12 @@ const Exoplanetas = lazy(() =>
 const Archivo = lazy(() =>
   import('../pantallas/Nasa/Archivo').then((m) => ({ default: m.Archivo })),
 );
+const SolLuna = lazy(() =>
+  import('../pantallas/Nasa/SolLuna').then((m) => ({ default: m.SolLuna })),
+);
+const Naves = lazy(() =>
+  import('../pantallas/Nasa/Naves').then((m) => ({ default: m.Naves })),
+);
 const Ajustes = lazy(() =>
   import('../pantallas/Ajustes/Ajustes').then((m) => ({ default: m.Ajustes })),
 );
@@ -75,6 +81,8 @@ export function App() {
           <Route path="nasa/asteroides" element={<Asteroides />} />
           <Route path="nasa/tierra" element={<Tierra />} />
           <Route path="nasa/eventos" element={<Eventos />} />
+          <Route path="nasa/sol-luna" element={<SolLuna />} />
+          <Route path="nasa/naves" element={<Naves />} />
           <Route path="nasa/bolidos" element={<Bolidos />} />
           <Route path="nasa/exoplanetas" element={<Exoplanetas />} />
           <Route path="nasa/archivo" element={<Archivo />} />
