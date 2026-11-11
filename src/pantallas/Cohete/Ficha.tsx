@@ -93,7 +93,7 @@ export function ContenidoFicha({
   );
 }
 
-/** Zona, número y etiquetas de un componente, en una línea. */
+/** Número, zona y etiquetas de un componente, en una línea; sin zona cuando ya la dice el título de su grupo. */
 export function LineaZona({
   componente,
   zona,
@@ -104,7 +104,8 @@ export function LineaZona({
   const t = textos({ es: ES, en: EN });
   return (
     <span className="cohete-ficha-zona">
-      {String(componente.recorrido).padStart(2, '0')} · {zona}
+      {String(componente.recorrido).padStart(2, '0')}
+      {zona && ` · ${zona}`}
       {componente.interior && (
         <span className="cohete-etiqueta">{t.interior}</span>
       )}

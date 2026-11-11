@@ -21,18 +21,16 @@ import { acotar } from './vistas';
 
 /**
  * Lo que la interfaz puede pedirle al visor de modelos.
- * @property cargar con piezas, los nombres de las etapas que se pueden separar, de abajo arriba
+ * @property cargar muestra un glb ya descargado; con piezas, los nombres de las etapas que se pueden separar, de abajo arriba
  * @property separar abre o cierra el hueco entre etapas
  * @property abrir saca una etapa hacia un lado y la centra; con null la devuelve a su sitio
+ * @property fijarMargenes píxeles tapados por columnas a cada lado: el modelo se centra en el hueco libre
  */
 export interface ControlVisor {
-  cargar: (
-    url: string,
-    alProgreso: (fraccion: number) => void,
-    piezas?: readonly string[],
-  ) => Promise<void>;
+  cargar: (datos: ArrayBuffer, piezas?: readonly string[]) => Promise<void>;
   separar: (si: boolean) => void;
   abrir: (id: string | null) => void;
+  fijarMargenes: (izquierda: number, derecha: number) => void;
   destruir: () => void;
 }
 
@@ -91,16 +89,47 @@ export function crearVisor(
   let radio = 1;
   let pendiente = 0;
   let ultimo = 0;
+  const margen = { izquierda: 0, derecha: 0 };
+  const margenMeta = { izquierda: 0, derecha: 0 };
 
   const medioCampo = () => {
+    const { clientWidth: w, clientHeight: h } = contenedor;
+    const libre = Math.max(w - margen.izquierda - margen.derecha, w * 0.3);
     const vertical = ((camara.fov / 2) * Math.PI) / 180;
-    return Math.min(vertical, Math.atan(Math.tan(vertical) * camara.aspect));
+    return Math.min(
+      vertical,
+      Math.atan(Math.tan(vertical) * (h ? libre / h : camara.aspect)),
+    );
+  };
+
+  const moverMargenes = (dt: number) => {
+    const paso = reducirMovimiento() ? 1 : Math.min(1, dt * 8);
+    let moviendo = false;
+    for (const lado of ['izquierda', 'derecha'] as const) {
+      const falta = margenMeta[lado] - margen[lado];
+      margen[lado] =
+        Math.abs(falta) < 0.5 ? margenMeta[lado] : margen[lado] + falta * paso;
+      moviendo ||= margen[lado] !== margenMeta[lado];
+    }
+    const { clientWidth: w, clientHeight: h } = contenedor;
+    if (w && h) {
+      camara.setViewOffset(
+        w,
+        h,
+        (margen.derecha - margen.izquierda) / 2,
+        0,
+        w,
+        h,
+      );
+    }
+    return moviendo;
   };
 
   const dibujar = (ahora: number) => {
     pendiente = 0;
     const dt = ultimo ? Math.min((ahora - ultimo) / 1000, 0.1) : 0;
-    const animando = etapas?.avanzar(dt) ?? false;
+    const etapasMoviendo = etapas?.avanzar(dt) ?? false;
+    const animando = moverMargenes(dt) || etapasMoviendo;
     ultimo = animando ? ahora : 0;
     const foco = etapas?.enfoque() ?? {
       centro: new Vector3(),
@@ -131,7 +160,14 @@ export function crearVisor(
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camara.aspect = w / h;
-    camara.updateProjectionMatrix();
+    camara.setViewOffset(
+      w,
+      h,
+      (margen.derecha - margen.izquierda) / 2,
+      0,
+      w,
+      h,
+    );
     pedirCuadro();
   };
 
@@ -203,10 +239,8 @@ export function crearVisor(
   };
 
   return {
-    cargar: async (url, alProgreso, piezas = []) => {
-      const gltf = await cargador.loadAsync(url, (ev) => {
-        if (ev.total) alProgreso(ev.loaded / ev.total);
-      });
+    cargar: async (datos, piezas = []) => {
+      const gltf = await cargador.parseAsync(datos, '');
       if (modelo) {
         escena.remove(modelo);
         liberar(modelo);
@@ -219,6 +253,11 @@ export function crearVisor(
     },
     separar: (si) => {
       etapas?.separar(si);
+      pedirCuadro();
+    },
+    fijarMargenes: (izquierda, derecha) => {
+      margenMeta.izquierda = Math.max(0, izquierda);
+      margenMeta.derecha = Math.max(0, derecha);
       pedirCuadro();
     },
     abrir: (id) => {
