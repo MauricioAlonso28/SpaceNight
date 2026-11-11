@@ -1,0 +1,14 @@
+:root {
+  --cielo-alto: #061236;
+  --cielo-bajo: #0b1b52;
+  --horizonte: #142869;
+  --panel: rgba(14, 24, 70, 0.6);
+  --borde: rgba(159, 168, 207, 0.18);
+  --texto: #efe9da;
+  --texto-suave: #9fa8cf;
+  --dato: #8fb4ff;
+  --acento: #ff7d66;
+
+  --fuente-titulo: 'Cormorant Garamond', Georgia, serif;
+  --fuente-texto: 'IBM Plex Sans', system-ui, sans-serif;
+}
