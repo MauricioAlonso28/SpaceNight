@@ -20,9 +20,9 @@ const Explorar = lazy(() =>
 const Cohete = lazy(() =>
   import('../pantallas/Cohete/Cohete').then((m) => ({ default: m.Cohete })),
 );
-const Pendiente = lazy(() =>
-  import('../pantallas/Nasa/Pendiente').then((m) => ({
-    default: m.Pendiente,
+const NasaInicio = lazy(() =>
+  import('../pantallas/Nasa/NasaInicio').then((m) => ({
+    default: m.NasaInicio,
   })),
 );
 const Asteroides = lazy(() =>
@@ -71,7 +71,7 @@ export function App() {
           <Route path="camara" element={<Camara />} />
           <Route path="explorar" element={<Explorar />} />
           <Route path="cohete" element={<Cohete />} />
-          <Route path="nasa" element={<Pendiente />} />
+          <Route path="nasa" element={<NasaInicio />} />
           <Route path="nasa/asteroides" element={<Asteroides />} />
           <Route path="nasa/tierra" element={<Tierra />} />
           <Route path="nasa/eventos" element={<Eventos />} />

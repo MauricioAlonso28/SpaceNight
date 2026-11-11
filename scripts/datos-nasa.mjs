@@ -3,13 +3,14 @@
  * Uso: NASA_API_KEY=<clave> node scripts/datos-nasa.mjs   (sin clave usa DEMO_KEY, 10 consultas por hora)
  * Lo corre GitHub Actions cada 6 horas antes de publicar; si una fuente falla, deja la copia publicada anterior.
  */
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
   recortarBolidos,
   recortarExoplanetas,
   recortarNeo,
   recortarSentry,
+  resumir,
 } from './nasa/transformar.mjs';
 
 const SALIDA = fileURLToPath(new URL('../public/data/nasa/', import.meta.url));
@@ -79,4 +80,21 @@ for (const f of FUENTES) {
   }
 }
 
+const leer = (archivo) =>
+  existsSync(SALIDA + archivo)
+    ? JSON.parse(readFileSync(SALIDA + archivo, 'utf8'))
+    : null;
+const resumen = resumir(
+  {
+    neo: leer('neo.json'),
+    bolidos: leer('bolidos.json'),
+    sentry: leer('sentry.json'),
+    exoplanetas: leer('exoplanetas.json'),
+  },
+  ahora,
+);
+writeFileSync(
+  SALIDA + 'resumen.json',
+  JSON.stringify({ generado: estado.generado, ...resumen }),
+);
 writeFileSync(SALIDA + 'estado.json', JSON.stringify(estado));

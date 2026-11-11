@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { RUTA_AJUSTES, nombreRuta } from '../../app/rutas';
+import { Campana } from '../Avisos/Campana';
 import { useAhora } from '../../estado/hooks';
 import { useEstado } from '../../estado/store';
 import { nombreLugar } from '../../idioma/comunes';
@@ -46,6 +47,7 @@ export function Cabecera() {
         >
           {formatearHora(ahora, ubicacion.zona, formato24h)}
         </p>
+        <Campana />
         <Link
           to={`/${RUTA_AJUSTES.path}`}
           className="cabecera-ajustes"
