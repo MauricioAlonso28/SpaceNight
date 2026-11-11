@@ -1,0 +1,181 @@
+.mapa {
+  margin-top: 14px;
+}
+
+.mapa-titulo {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.mapa-marco {
+  position: relative;
+}
+
+.mapa-escena {
+  position: relative;
+  height: min(64dvh, 640px);
+  min-height: 360px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  background: #040a22;
+  touch-action: none;
+  user-select: none;
+}
+
+.mapa-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.mapa-canvas:active {
+  cursor: grabbing;
+}
+
+.mapa-etiquetas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.mapa-etiqueta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  line-height: 1;
+  margin: 8px 0 0 8px;
+  color: var(--texto-suave);
+  text-shadow: 0 0 4px #040a22;
+}
+
+.mapa-constelacion {
+  margin: -6px 0 0 0;
+  translate: -50% 0;
+  font-family: var(--fuente-titulo);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: rgba(143, 180, 255, 0.75);
+}
+
+.mapa-cuerpo {
+  color: var(--texto);
+  font-weight: 500;
+}
+
+.mapa-rumbo {
+  margin: -16px 0 0 0;
+  translate: -50% 0;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--acento);
+}
+
+.mapa-ficha {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  max-width: 340px;
+  padding: 14px 16px;
+}
+
+.mapa-ficha h3 {
+  font-size: 1.5rem;
+  padding-right: 32px;
+}
+
+.mapa-ficha-sub {
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+  margin: 2px 0 0;
+}
+
+.mapa-ficha dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin: 10px 0 0;
+}
+
+.mapa-ficha dt {
+  color: var(--texto-suave);
+  font-size: 0.78rem;
+}
+
+.mapa-ficha dd {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.mapa-cerrar {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--texto-suave);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.mapa-ayuda,
+.mapa-aviso-busqueda,
+.mapa-cargando {
+  color: var(--texto-suave);
+  font-size: 0.88rem;
+  margin: 10px 0 0;
+}
+
+.mapa-aviso-busqueda {
+  color: var(--acento);
+}
+
+.mapa-aviso {
+  padding: 24px;
+  color: var(--texto-suave);
+}
+
+.mapa-buscar {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.mapa-buscar input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+  padding: 9px 16px;
+}
+
+.mapa-horas {
+  margin-top: 16px;
+  max-width: none;
+}
+
+.mapa-interruptor {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+.mapa-interruptor input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--dato);
+}
