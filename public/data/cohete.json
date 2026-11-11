@@ -72,7 +72,7 @@
       "id": "motor-vacio",
       "zona": "segunda-etapa",
       "tipo": "pieza",
-      "interior": false,
+      "interior": true,
       "recorrido": 5,
       "nombre": { "es": "Motor de vacío", "en": "Vacuum engine" },
       "resumen": {
