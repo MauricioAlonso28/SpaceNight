@@ -71,6 +71,7 @@ export function CabezaNasa({
  * Una cifra grande con su etiqueta, que cuenta hacia arriba al aparecer.
  * @param decimales cuántos decimales muestra
  * @param unidad texto pequeño tras el número
+ * @param anio si es un año: sin separador de miles
  */
 export function Cifra({
   valor,
@@ -78,18 +79,20 @@ export function Cifra({
   decimales = 0,
   unidad,
   acento = false,
+  anio = false,
 }: {
   valor: number;
   etiqueta: string;
   decimales?: number;
   unidad?: string;
   acento?: boolean;
+  anio?: boolean;
 }) {
   const v = useContar(valor);
   return (
     <div className={`nasa-cifra${acento ? ' acento' : ''}`}>
       <dd>
-        {formatearNumero(v, decimales)}
+        {anio ? String(Math.round(v)) : formatearNumero(v, decimales)}
         {unidad && <small>{unidad}</small>}
       </dd>
       <dt>{etiqueta}</dt>
