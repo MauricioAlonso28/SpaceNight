@@ -19,9 +19,9 @@ describe('rutas', () => {
     ]);
   });
 
-  it('el panel lista cielo, cohete y NASA en vivo con sus seis vistas', () => {
+  it('el panel lista cielo, cohete y NASA en vivo con sus ocho vistas', () => {
     expect(GRUPOS.map((g) => g.id)).toEqual(['cielo', 'cohete', 'nasa']);
-    expect(RUTAS_NASA).toHaveLength(6);
+    expect(RUTAS_NASA).toHaveLength(8);
     const todas = GRUPOS.flatMap((g) => g.rutas.map((r) => r.path));
     expect(new Set(todas).size).toBe(todas.length);
     expect(todas).toContain('cohete');

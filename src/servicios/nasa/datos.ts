@@ -140,3 +140,69 @@ export function useApiEnVivo<T>(
   }, [url, cadaMs]);
   return datos?.url === url ? datos.valor : null;
 }
+
+/** Un acercamiento de los próximos 60 días (JPL CAD). */
+export interface AcercamientoCad {
+  des: string;
+  nombre: string;
+  fecha: number;
+  distanciaLunar: number;
+  velocidadKms: number;
+  h: number;
+}
+
+/** Objeto recién descubierto que Scout sigue sin confirmar. */
+export interface ObjetoScout {
+  nombre: string;
+  neo: number;
+  pha: number;
+  distanciaLunar: number | null;
+  h: number;
+  observaciones: number;
+  actualizado: number;
+  velocidadKms: number | null;
+}
+
+/** Distancia en km y velocidad de alejamiento en km/s desde un centro. */
+export interface Alejamiento {
+  km: number;
+  kms: number;
+}
+
+/** Naves lejanas: dónde estaban en t0 respecto de la Tierra y del Sol. */
+export interface DatosNaves {
+  generado: string;
+  t0: number;
+  naves: { id: string; tierra: Alejamiento; sol: Alejamiento }[];
+}
+
+/** La foto astronómica del día. */
+export interface Apod {
+  generado: string;
+  fecha: string;
+  titulo: string;
+  texto: string;
+  tipo: string;
+  url: string;
+  hd: string | null;
+  miniatura: string | null;
+  credito: string | null;
+}
+
+/** Rutas de las imágenes horarias de la Luna por año (SVS Dial-A-Moon). */
+export interface DatosLuna {
+  generado: string;
+  anios: Record<string, { base: string; digitos: number }>;
+}
+
+export const useCercanos60 = () =>
+  useJsonPublico<{ generado: string; objetos: AcercamientoCad[] }>(
+    'nasa/cercanos60.json',
+  );
+export const useScout = () =>
+  useJsonPublico<{ generado: string; objetos: ObjetoScout[] }>(
+    'nasa/scout.json',
+  );
+export const useNaves = () => useJsonPublico<DatosNaves>('nasa/naves.json');
+export const useApod = () => useJsonPublico<Apod>('nasa/apod.json');
+export const useLunaNasa = () => useJsonPublico<DatosLuna>('nasa/luna.json');

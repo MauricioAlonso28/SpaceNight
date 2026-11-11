@@ -167,3 +167,115 @@ export function resumir({ neo, bolidos, sentry, exoplanetas }, ahora) {
     exoplanetas: exoplanetas?.filas?.length ?? null,
   };
 }
+
+const MESES = {
+  Jan: 0,
+  Feb: 1,
+  Mar: 2,
+  Apr: 3,
+  May: 4,
+  Jun: 5,
+  Jul: 6,
+  Aug: 7,
+  Sep: 8,
+  Oct: 9,
+  Nov: 10,
+  Dec: 11,
+};
+const KM_POR_UA = 149_597_870.7;
+const KM_POR_LD = 384_400;
+
+/** Fecha de JPL como «2026-Nov-11 03:51» a ms (UTC). */
+export function fechaJpl(texto) {
+  const [d, h] = texto.trim().split(' ');
+  const [a, m, dia] = d.split('-');
+  const [hh, mm] = (h ?? '00:00').split(':');
+  return Date.UTC(Number(a), MESES[m], Number(dia), Number(hh), Number(mm));
+}
+
+/**
+ * Acercamientos de los próximos 60 días (JPL CAD): fecha, distancia en distancias lunares, velocidad y magnitud absoluta.
+ * @param api respuesta de cad.api con sus campos en `fields`
+ */
+export function recortarCad(api) {
+  const i = Object.fromEntries(api.fields.map((f, k) => [f, k]));
+  return {
+    objetos: (api.data ?? []).map((d) => ({
+      des: d[i.des],
+      nombre: (d[i.fullname] ?? d[i.des]).trim().replace(/[()]/g, '').trim(),
+      fecha: fechaJpl(d[i.cd]),
+      distanciaLunar: redondear((Number(d[i.dist]) * KM_POR_UA) / KM_POR_LD, 2),
+      velocidadKms: redondear(d[i.v_rel], 1),
+      h: redondear(d[i.h], 1),
+    })),
+  };
+}
+
+/** Objetos recién descubiertos que Scout sigue, sin confirmar todavía, del más probable NEO al menos. */
+export function recortarScout(api) {
+  return {
+    objetos: (api.data ?? [])
+      .map((o) => ({
+        nombre: o.objectName,
+        neo: Number(o.neoScore),
+        pha: Number(o.phaScore),
+        distanciaLunar: o.caDist === null ? null : redondear(o.caDist, 1),
+        h: redondear(o.H, 1),
+        observaciones: Number(o.nObs),
+        actualizado: Date.parse(`${o.lastRun.replace(' ', 'T')}Z`),
+        velocidadKms: redondear(o.vInf, 1),
+      }))
+      .sort(
+        (a, b) =>
+          b.neo - a.neo ||
+          (a.distanciaLunar ?? 1e9) - (b.distanciaLunar ?? 1e9),
+      ),
+  };
+}
+
+/**
+ * Distancia y velocidad de alejamiento de una nave desde la tabla de Horizons (cantidad 20: delta en UA y deldot en km/s).
+ * @returns null si la tabla no trae datos
+ */
+export function leerHorizons(resultado) {
+  const ini = resultado.indexOf('$$SOE');
+  const fin = resultado.indexOf('$$EOE');
+  if (ini < 0 || fin < 0) return null;
+  const fila = resultado
+    .slice(ini + 5, fin)
+    .trim()
+    .split('\n')[0]
+    .trim()
+    .split(/\s+/);
+  const delta = Number(fila[2]);
+  const deldot = Number(fila[3]);
+  if (Number.isNaN(delta) || Number.isNaN(deldot)) return null;
+  return { km: Math.round(delta * KM_POR_UA), kms: redondear(deldot, 3) };
+}
+
+/** La foto astronómica del día de la NASA, con lo que la vista necesita. */
+export function recortarApod(a) {
+  return {
+    fecha: a.date,
+    titulo: a.title,
+    texto: a.explanation,
+    tipo: a.media_type,
+    url: a.url,
+    hd: a.hdurl ?? null,
+    miniatura: a.thumbnail_url ?? null,
+    credito: a.copyright ? a.copyright.replace(/\s+/g, ' ').trim() : null,
+  };
+}
+
+/**
+ * Ruta base de las imágenes horarias de la Luna de un año (SVS Dial-A-Moon) a partir de la respuesta de su 1 de enero.
+ * @returns la base que termina en «moon.» y cuántos dígitos tiene el número de fotograma, o null
+ */
+export function baseLuna(api) {
+  const url = api?.image?.url;
+  const m =
+    typeof url === 'string' ? url.match(/^(.*\/moon\.)(\d+)\.jpg$/) : null;
+  return m
+    ? { base: m[1].replace('http://', 'https://'), digitos: m[2].length }
+    : null;
+}

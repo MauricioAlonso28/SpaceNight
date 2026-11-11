@@ -27,3 +27,42 @@ export function resumir(
   },
   ahora: number,
 ): Omit<import('../../src/servicios/nasa/avisos').ResumenNasa, 'generado'>;
+export function fechaJpl(texto: string): number;
+export function recortarCad(api: unknown): {
+  objetos: {
+    des: string;
+    nombre: string;
+    fecha: number;
+    distanciaLunar: number;
+    velocidadKms: number;
+    h: number;
+  }[];
+};
+export function recortarScout(api: unknown): {
+  objetos: {
+    nombre: string;
+    neo: number;
+    pha: number;
+    distanciaLunar: number | null;
+    h: number;
+    observaciones: number;
+    actualizado: number;
+    velocidadKms: number | null;
+  }[];
+};
+export function leerHorizons(
+  resultado: string,
+): { km: number; kms: number } | null;
+export function recortarApod(a: unknown): {
+  fecha: string;
+  titulo: string;
+  texto: string;
+  tipo: string;
+  url: string;
+  hd: string | null;
+  miniatura: string | null;
+  credito: string | null;
+};
+export function baseLuna(
+  api: unknown,
+): { base: string; digitos: number } | null;

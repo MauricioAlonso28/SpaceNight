@@ -6,7 +6,12 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {
+  baseLuna,
+  leerHorizons,
+  recortarApod,
   recortarBolidos,
+  recortarCad,
+  recortarScout,
   recortarExoplanetas,
   recortarNeo,
   recortarSentry,
@@ -32,7 +37,81 @@ const hasta = dia(ahora + 6 * DIA);
 const consultaExoplanetas =
   'select pl_name,hostname,disc_year,discoverymethod,pl_rade,pl_orbper,pl_insol,pl_eqt,sy_dist from pscomppars';
 
+/** Naves de la vista Naves lejanas: su código en JPL Horizons. */
+const NAVES = ['-31', '-32', '-98', '-96', '-170', '-159', '-255', '-49'];
+
+/** Distancia y velocidad de alejamiento de una nave vistas desde un centro (la Tierra 500@399 o el Sol 500@10). */
+async function horizons(nave, centro) {
+  const q = new URLSearchParams({
+    format: 'json',
+    COMMAND: `'${nave}'`,
+    MAKE_EPHEM: 'YES',
+    EPHEM_TYPE: 'OBSERVER',
+    CENTER: `'${centro}'`,
+    START_TIME: `'${new Date(ahora).toISOString().slice(0, 16).replace('T', ' ')}'`,
+    STOP_TIME: `'${new Date(ahora + 3_600_000).toISOString().slice(0, 16).replace('T', ' ')}'`,
+    STEP_SIZE: "'1h'",
+    QUANTITIES: "'20'",
+    OBJ_DATA: 'NO',
+  });
+  const j = await pedir(`https://ssd.jpl.nasa.gov/api/horizons.api?${q}`);
+  return leerHorizons(j.result ?? '');
+}
+
+/** Las naves que respondan, con su distancia a la Tierra y al Sol en el momento de la descarga. */
+async function naves() {
+  const lista = [];
+  for (const id of NAVES) {
+    try {
+      const tierra = await horizons(id, '500@399');
+      const sol = await horizons(id, '500@10');
+      if (tierra && sol) lista.push({ id, tierra, sol });
+    } catch (e) {
+      console.warn(`Horizons ${id}: ${e.message}`);
+    }
+  }
+  if (!lista.length) throw new Error('ninguna nave');
+  return { t0: ahora, naves: lista };
+}
+
+/** Rutas de las imágenes horarias de la Luna del año actual y del siguiente, si ya están publicadas. */
+async function luna() {
+  const anios = {};
+  const actual = new Date(ahora).getUTCFullYear();
+  for (const anio of [actual, actual + 1]) {
+    try {
+      const base = baseLuna(
+        await pedir(
+          `https://svs.gsfc.nasa.gov/api/dialamoon/${anio}-01-01T00:00`,
+        ),
+      );
+      if (base && base.base !== anios[anio - 1]?.base) anios[anio] = base;
+    } catch {
+      continue;
+    }
+  }
+  if (!anios[actual]) throw new Error('sin año actual');
+  return { anios };
+}
+
 const FUENTES = [
+  {
+    archivo: 'cercanos60.json',
+    url: 'https://ssd-api.jpl.nasa.gov/cad.api?date-min=now&date-max=%2B60&dist-max=10LD&fullname=true',
+    recortar: recortarCad,
+  },
+  {
+    archivo: 'scout.json',
+    url: 'https://ssd-api.jpl.nasa.gov/scout.api',
+    recortar: recortarScout,
+  },
+  {
+    archivo: 'apod.json',
+    url: `https://api.nasa.gov/planetary/apod?thumbs=true&api_key=${CLAVE}`,
+    recortar: recortarApod,
+  },
+  { archivo: 'naves.json', obtener: naves, recortar: (j) => j },
+  { archivo: 'luna.json', obtener: luna, recortar: (j) => j },
   {
     archivo: 'neo.json',
     url: `https://api.nasa.gov/neo/rest/v1/feed?start_date=${desde}&end_date=${hasta}&api_key=${CLAVE}`,
@@ -63,7 +142,7 @@ for (const f of FUENTES) {
   try {
     const datos = {
       generado: estado.generado,
-      ...f.recortar(await pedir(f.url)),
+      ...f.recortar(f.obtener ? await f.obtener() : await pedir(f.url)),
     };
     writeFileSync(SALIDA + f.archivo, JSON.stringify(datos));
     estado.fuentes[f.archivo] = { ok: true, generado: estado.generado };

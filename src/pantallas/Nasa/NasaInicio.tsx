@@ -8,7 +8,9 @@ import { useEstado } from '../../estado/store';
 import { textos } from '../../idioma/idioma';
 import { formatearNumero } from '../../servicios/formato';
 import type { ResumenNasa } from '../../servicios/nasa/avisos';
-import { useApiEnVivo } from '../../servicios/nasa/datos';
+import { useApiEnVivo, useNaves } from '../../servicios/nasa/datos';
+import { datosLuna } from '../../servicios/astro/luna';
+import { nombreFase } from '../EstaNoche/textos';
 import {
   masCercano,
   resumirEvento,
@@ -33,6 +35,10 @@ const ES = {
   registrados: (n: string) => `${n} registrados desde 1988`,
   confirmados: 'planetas confirmados alrededor de otras estrellas',
   mision: 'la misión del día en el archivo',
+  luna: (p: number) =>
+    `la Luna ahora, ${p} % iluminada · el Sol de SDO al lado`,
+  milMillones: 'mil millones de km',
+  voyager: 'lo que se ha alejado Voyager 1 de la Tierra, en vivo',
   avisos: 'Avisos',
   sinAvisos: 'Sin avisos por ahora.',
   abrir: 'Abrir',
@@ -51,6 +57,9 @@ const EN: typeof ES = {
   registrados: (n) => `${n} recorded since 1988`,
   confirmados: 'planets confirmed around other stars',
   mision: 'mission of the day in the archive',
+  luna: (p) => `the Moon now, ${p}% lit · SDO’s Sun beside it`,
+  milMillones: 'billion km',
+  voyager: 'how far Voyager 1 is from Earth, live',
   avisos: 'Alerts',
   sinAvisos: 'No alerts right now.',
   abrir: 'Open',
@@ -113,6 +122,10 @@ export function NasaInicio() {
     10 * 60_000,
   );
   const { activos } = useAvisosActivos();
+  const datosNaves = useNaves();
+  const naves = datosNaves && datosNaves !== 'error' ? datosNaves : null;
+  const voyager = naves?.naves.find((n) => n.id === '-31');
+  const luna = datosLuna(new Date(ahora), ubicacion);
 
   const r = resumen && resumen !== 'error' ? resumen : null;
   const eventos = useMemo(
@@ -185,6 +198,26 @@ export function NasaInicio() {
                 ? `${t.ultimo(formatearNumero(r.bolido.kt, 2))} · ${t.registrados(formatearNumero(r.bolidosTotal))}`
                 : ''
             }
+          />
+          <Linea
+            ruta="nasa/sol-luna"
+            valor={nombreFase(luna.fase)}
+            detalle={t.luna(Math.round(luna.fraccion * 100))}
+            visual={
+              <img
+                src={`https://sdo.gsfc.nasa.gov/assets/img/latest/latest_256_0171.jpg?c=${Math.floor(ahora / 900_000)}`}
+                alt=""
+              />
+            }
+          />
+          <Linea
+            ruta="nasa/naves"
+            valor={
+              voyager
+                ? `${formatearNumero((voyager.tierra.km + (voyager.tierra.kms * (ahora - naves!.t0)) / 1000) / 1e9, 3)} ${t.milMillones}`
+                : t.cargando
+            }
+            detalle={t.voyager}
           />
           <Linea
             ruta="nasa/exoplanetas"
