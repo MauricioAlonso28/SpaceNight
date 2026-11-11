@@ -173,10 +173,7 @@ export function crearEtapas(
       }
       const i = piezas.indexOf(abierta);
       const encuadre = Math.max(abierta.radio * 1.5, radioModelo * 0.2);
-      const centro = abierta.centro
-        .clone()
-        .add(desplazamiento(abierta, i))
-        .addScaledVector(lado, encuadre * 0.55);
+      const centro = abierta.centro.clone().add(desplazamiento(abierta, i));
       const mezcla = suave(extraccion.valor);
       const radioGeneral = radioModelo + alto / 2;
       return {

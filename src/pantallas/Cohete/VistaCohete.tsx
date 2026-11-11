@@ -15,6 +15,7 @@ import {
 } from './catalogo';
 import { EscenaCohete } from './EscenaCohete';
 import { Ficha } from './Ficha';
+import { modelosAbiertos, recordarModelosAbiertos } from './guardadoModelos';
 import { ListaComponentes } from './ListaComponentes';
 import { VisorModelos } from './VisorModelos';
 
@@ -71,7 +72,11 @@ export function VistaCohete() {
   const [enRecorrido, setEnRecorrido] = useState(false);
   const [corte, setCorte] = useState(false);
   const [activo, setActivo] = useState(0);
-  const [modelos, setModelos] = useState(false);
+  const [modelos, setModelosEstado] = useState(modelosAbiertos);
+  const setModelos = (si: boolean) => {
+    setModelosEstado(si);
+    recordarModelosAbiertos(si);
+  };
   const lienzo = useRef<HTMLDivElement>(null);
 
   const datos = catalogo && catalogo !== 'error' ? catalogo : null;
@@ -151,12 +156,10 @@ export function VistaCohete() {
         {t.saltar}
       </a>
       <div className="cohete-cabeza">
-        <div>
-          <h2 id="t-cohete" className="cohete-titulo">
-            {t.titulo}
-          </h2>
-          <p className="cohete-intro">{t.intro}</p>
-        </div>
+        <h2 id="t-cohete" className="cohete-titulo">
+          {t.titulo}
+        </h2>
+        <p className="cohete-intro">{t.intro}</p>
         <div className="cohete-herramientas">
           <button
             type="button"
@@ -201,40 +204,42 @@ export function VistaCohete() {
         </div>
       </div>
 
-      {modelos && <VisorModelos alCerrar={() => setModelos(false)} />}
-      <div
-        className={`cohete-marco${enRecorrido ? ' con-carril' : ''}`}
-        hidden={modelos}
-      >
+      <div className="cohete-escenario">
+        {modelos && <VisorModelos alCerrar={() => setModelos(false)} />}
         <div
-          className={`cohete-lienzo${componente ? ' con-ficha' : ''}`}
-          ref={lienzo}
+          className={`cohete-marco${enRecorrido ? ' con-carril' : ''}`}
+          hidden={modelos}
         >
-          <EscenaCohete
-            nombre={nombre}
-            interior={interior}
-            alCambiar={alCambiar}
-            alListo={setControl}
-          />
-          {componente && (
-            <Ficha
-              componente={componente}
-              zona={zona(componente.zona)}
-              alVolver={() => control?.volver()}
+          <div
+            className={`cohete-lienzo${componente ? ' con-ficha' : ''}`}
+            ref={lienzo}
+          >
+            <EscenaCohete
+              nombre={nombre}
+              interior={interior}
+              alCambiar={alCambiar}
+              alListo={setControl}
+            />
+            {componente && (
+              <Ficha
+                componente={componente}
+                zona={zona(componente.zona)}
+                alVolver={() => control?.volver()}
+              />
+            )}
+          </div>
+          {enRecorrido && datos && (
+            <Carril
+              componentes={ordenados}
+              zonas={datos.zonas}
+              activo={activo}
+              bloqueado={!libre}
+              alProgreso={alProgreso}
             />
           )}
+          <p className="cohete-gestos">{t.gestos}</p>
         </div>
-        {enRecorrido && datos && (
-          <Carril
-            componentes={ordenados}
-            zonas={datos.zonas}
-            activo={activo}
-            bloqueado={!libre}
-            alProgreso={alProgreso}
-          />
-        )}
       </div>
-      <p className="cohete-gestos">{t.gestos}</p>
 
       {catalogo === 'error' && <p>{t.error}</p>}
       {datos && (

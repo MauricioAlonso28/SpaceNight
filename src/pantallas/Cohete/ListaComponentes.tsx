@@ -60,7 +60,7 @@ export function ListaComponentes({
                   data-abierta={abierta === c.id || undefined}
                 >
                   <summary>
-                    <LineaZona componente={c} zona={textos(zona.nombre)} />
+                    <LineaZona componente={c} zona="" />
                     <strong>{textos(c.nombre)}</strong>
                     <small>{textos(c.resumen)}</small>
                   </summary>
