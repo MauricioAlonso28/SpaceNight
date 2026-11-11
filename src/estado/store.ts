@@ -6,7 +6,14 @@ import { BORTLE_ESTIMADO, LIMA, type Ubicacion } from '../tipos/ubicacion';
 export interface Ajustes {
   formato24h: boolean;
   modoRojo: boolean;
+  calibracionBrujula: number;
 }
+
+export const AJUSTES_INICIALES: Ajustes = {
+  formato24h: true,
+  modoRojo: false,
+  calibracionBrujula: 0,
+};
 
 /** Estado global: dónde se observa, qué fecha se mira y los ajustes. */
 export interface EstadoApp {
@@ -36,15 +43,21 @@ export function fechaDeUrl(busqueda: string): Date | null {
 }
 
 /**
- * Pone al día lo guardado por versiones anteriores: la v1 no tenía Bortle.
+ * Pone al día lo guardado por versiones anteriores: la v1 no tenía Bortle y la v2 no tenía calibración de brújula.
  * @param guardado lo que había en localStorage
  * @param version la versión con la que se guardó
  */
 export function migrarEstado(guardado: unknown, version: number): unknown {
-  const s = guardado as { ubicacion?: Partial<Ubicacion> } | null;
+  const s = guardado as {
+    ubicacion?: Partial<Ubicacion>;
+    ajustes?: Partial<Ajustes>;
+  } | null;
   if (version < 2 && s?.ubicacion && s.ubicacion.bortle === undefined) {
     const esLima = s.ubicacion.nombre === LIMA.nombre;
     s.ubicacion.bortle = esLima ? LIMA.bortle : BORTLE_ESTIMADO;
+  }
+  if (version < 3 && s) {
+    s.ajustes = { ...AJUSTES_INICIALES, ...s.ajustes };
   }
   return s;
 }
@@ -54,7 +67,7 @@ export const useEstado = create<EstadoApp>()(
     (set) => ({
       ubicacion: LIMA,
       ubicacionPreguntada: false,
-      ajustes: { formato24h: true, modoRojo: false },
+      ajustes: AJUSTES_INICIALES,
       ahora: new Date(),
       fechaSimulada:
         typeof location === 'undefined' ? null : fechaDeUrl(location.search),
@@ -69,7 +82,7 @@ export const useEstado = create<EstadoApp>()(
     }),
     {
       name: 'tu-cielo',
-      version: 2,
+      version: 3,
       migrate: migrarEstado,
       partialize: (s) => ({
         ubicacion: s.ubicacion,
