@@ -3,14 +3,18 @@ import { Luna3D } from '../../componentes/Luna3D/Luna3D';
 import { useAhora, useFechaVista } from '../../estado/hooks';
 import { useEstado } from '../../estado/store';
 import { datosLuna } from '../../servicios/astro/luna';
+import { ventanaNoche } from '../../servicios/astro/noche';
+import { nochePlanetas } from '../../servicios/astro/planetas';
 import { nocheSol } from '../../servicios/astro/sol';
 import { formatearDiaCorto, formatearHora } from '../../servicios/formato';
 import { inicioDelDia, sumarDias } from '../../servicios/tiempo';
 import { DeslizadorNoches } from './DeslizadorNoches';
+import { NocheHoraPorHora } from './NocheHoraPorHora';
+import { PlanetasVisibles } from './PlanetasVisibles';
 import { NOMBRE_FASE, notaFase } from './textos';
 import './EstaNoche.css';
 
-/** Portada: la Luna real de la noche elegida y el Sol de esa noche. */
+/** Portada: la Luna, los planetas visibles y la noche hora por hora. */
 export function EstaNoche() {
   const fecha = useFechaVista();
   const ahora = useAhora();
@@ -18,6 +22,11 @@ export function EstaNoche() {
   const formato24h = useEstado((s) => s.ajustes.formato24h);
   const luna = useMemo(() => datosLuna(fecha, ubicacion), [fecha, ubicacion]);
   const sol = useMemo(() => nocheSol(fecha, ubicacion), [fecha, ubicacion]);
+  const inicioNoche = ventanaNoche(fecha, ubicacion.zona).inicio.getTime();
+  const noche = useMemo(
+    () => nochePlanetas(new Date(inicioNoche), ubicacion),
+    [inicioNoche, ubicacion],
+  );
   const hemisferioSur = ubicacion.latitud < 0;
 
   const hora = (f: Date | null) =>
@@ -76,9 +85,26 @@ export function EstaNoche() {
           <DeslizadorNoches />
         </div>
       </section>
+      <section className="seccion" aria-labelledby="t-planetas">
+        <h2 id="t-planetas">Planetas visibles</h2>
+        <PlanetasVisibles
+          planetas={noche.planetas}
+          zona={ubicacion.zona}
+          formato24h={formato24h}
+        />
+      </section>
+      <section className="seccion" aria-labelledby="t-noche">
+        <h2 id="t-noche">Tu noche, hora por hora</h2>
+        <NocheHoraPorHora
+          {...noche}
+          ahora={ahora}
+          zona={ubicacion.zona}
+          formato24h={formato24h}
+        />
+      </section>
       <p className="pie">
-        Planetas, la noche hora por hora, el clima y los eventos llegan en las
-        próximas fases.
+        El clima y los próximos eventos llegan en la fase 3; la Estación
+        Espacial, en la fase 4.
       </p>
     </>
   );

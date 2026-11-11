@@ -1,0 +1,85 @@
+.linea {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding-top: 24px;
+}
+
+.linea-fila {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.linea-nombre {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+.linea-pista {
+  position: relative;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--pista);
+}
+
+.linea-tramo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.12);
+}
+
+.linea-horas {
+  position: relative;
+  height: 18px;
+  font-size: 0.78rem;
+  color: var(--texto-suave);
+  font-variant-numeric: tabular-nums;
+}
+
+.linea-horas span {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.linea-horas span:first-child {
+  transform: none;
+}
+
+.linea-horas span:last-child {
+  transform: translateX(-100%);
+}
+
+.linea-capa {
+  position: absolute;
+  top: 18px;
+  bottom: 28px;
+  left: 102px;
+  right: 0;
+  pointer-events: none;
+}
+
+.linea-ahora {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--acento);
+  box-shadow: 0 0 10px var(--acento);
+}
+
+.linea-ahora span {
+  position: absolute;
+  top: -19px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.74rem;
+  color: var(--acento);
+  white-space: nowrap;
+}
