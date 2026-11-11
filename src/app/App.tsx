@@ -33,6 +33,9 @@ const Asteroides = lazy(() =>
 const Tierra = lazy(() =>
   import('../pantallas/Nasa/Tierra').then((m) => ({ default: m.Tierra })),
 );
+const Eventos = lazy(() =>
+  import('../pantallas/Nasa/Eventos').then((m) => ({ default: m.Eventos })),
+);
 const Ajustes = lazy(() =>
   import('../pantallas/Ajustes/Ajustes').then((m) => ({ default: m.Ajustes })),
 );
@@ -60,7 +63,7 @@ export function App() {
           <Route path="nasa" element={<Pendiente />} />
           <Route path="nasa/asteroides" element={<Asteroides />} />
           <Route path="nasa/tierra" element={<Tierra />} />
-          <Route path="nasa/eventos" element={<Pendiente />} />
+          <Route path="nasa/eventos" element={<Eventos />} />
           <Route path="nasa/bolidos" element={<Pendiente />} />
           <Route path="nasa/exoplanetas" element={<Pendiente />} />
           <Route path="nasa/archivo" element={<Pendiente />} />
