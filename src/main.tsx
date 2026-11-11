@@ -5,8 +5,10 @@ import './estilos/fuentes.css';
 import './estilos/tokens.css';
 import './estilos/globales.css';
 import { medirBarraScroll } from './app/barraScroll';
+import { vigilarVersiones } from './app/actualizacion';
 
 medirBarraScroll();
+vigilarVersiones();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

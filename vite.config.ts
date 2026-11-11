@@ -39,6 +39,8 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,svg,png,ico,json,woff2,webp}'],
         globIgnores: ['assets/draco_*', 'modelos/**', 'data/nasa/**'],
         navigateFallback: 'index.html',
+        skipWaiting: true,
+        clientsClaim: true,
         runtimeCaching: [
           {
             urlPattern: ({ url }) => url.pathname.includes('/data/nasa/'),
