@@ -4,7 +4,7 @@ import { useEstado } from '../estado/store';
 import { fijarIdioma, resolverIdioma } from '../idioma/idioma';
 import { EstaNoche } from '../pantallas/EstaNoche/EstaNoche';
 import { Layout } from './Layout';
-import { RUTA_AJUSTES, RUTA_INICIAL } from './rutas';
+import { DESTINO_INICIAL, RUTA_AJUSTES } from './rutas';
 
 const Mapa = lazy(() =>
   import('../pantallas/Mapa/Mapa').then((m) => ({ default: m.Mapa })),
@@ -38,14 +38,14 @@ export function App() {
     <HashRouter key={idioma}>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Navigate to={RUTA_INICIAL} replace />} />
+          <Route index element={<Navigate to={DESTINO_INICIAL} replace />} />
           <Route path="esta-noche" element={<EstaNoche />} />
           <Route path="mapa" element={<Mapa />} />
           <Route path="camara" element={<Camara />} />
           <Route path="explorar" element={<Explorar />} />
           <Route path="cohete" element={<Cohete />} />
           <Route path={RUTA_AJUSTES.path} element={<Ajustes />} />
-          <Route path="*" element={<Navigate to={RUTA_INICIAL} replace />} />
+          <Route path="*" element={<Navigate to={DESTINO_INICIAL} replace />} />
         </Route>
       </Routes>
     </HashRouter>
