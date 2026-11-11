@@ -36,6 +36,10 @@ export const RUTAS_COHETE: readonly Ruta[] = [
     path: 'cohete/lanzamientos',
     nombre: { es: 'Próximos lanzamientos', en: 'Upcoming launches' },
   },
+  {
+    path: 'cohete/vuelo',
+    nombre: { es: 'Simulador de vuelo', en: 'Flight simulator' },
+  },
 ];
 
 /** Portada de NASA en vivo, con una línea viva de cada vista. */

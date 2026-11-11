@@ -58,3 +58,8 @@ cualquier pantalla: los próximos lanzamientos del mundo (Launch Library 2, de
 The Space Devs, descargado por el mismo `scripts/datos-nasa.mjs` en
 `public/data/nasa/lanzamientos.json`), con cuenta atrás, secuencia de vuelo y
 avisos en la campana para los que despegan en las próximas 6 horas.
+
+El simulador de vuelo (`#/cohete/vuelo`) integra paso a paso un cohete de dos
+etapas con los números públicos del Falcon 9 (`src/servicios/cohete/vuelo.ts`):
+gravedad, atmósfera exponencial, empuje que cambia con la presión y guiado
+sencillo. La carga y el modo de recuperación cambian si llega a órbita.
