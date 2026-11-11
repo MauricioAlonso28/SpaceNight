@@ -57,3 +57,18 @@ export function usePedirUbicacionUnaVez(): void {
     };
   }, [preguntada, fijar, marcar]);
 }
+
+const COLOR_BARRA = { normal: '#061236', rojo: '#000000' };
+
+/** Pone el modo rojo nocturno en <html> y en el color de la barra del navegador. */
+export function useModoRojo(): void {
+  const rojo = useEstado((s) => s.ajustes.modoRojo);
+  useEffect(() => {
+    const raiz = document.documentElement;
+    if (rojo) raiz.dataset.tema = 'rojo';
+    else delete raiz.dataset.tema;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', rojo ? COLOR_BARRA.rojo : COLOR_BARRA.normal);
+  }, [rojo]);
+}

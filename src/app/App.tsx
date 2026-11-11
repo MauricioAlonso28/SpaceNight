@@ -1,13 +1,9 @@
 import { lazy } from 'react';
 import { HashRouter, Navigate, Route, Routes } from 'react-router';
+import { EstaNoche } from '../pantallas/EstaNoche/EstaNoche';
 import { Layout } from './Layout';
 import { RUTA_AJUSTES, RUTA_INICIAL } from './rutas';
 
-const EstaNoche = lazy(() =>
-  import('../pantallas/EstaNoche/EstaNoche').then((m) => ({
-    default: m.EstaNoche,
-  })),
-);
 const Mapa = lazy(() =>
   import('../pantallas/Mapa/Mapa').then((m) => ({ default: m.Mapa })),
 );

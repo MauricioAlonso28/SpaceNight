@@ -1,0 +1,88 @@
+.ajustes {
+  margin-top: 14px;
+  max-width: 560px;
+  display: grid;
+  gap: 16px;
+}
+
+.ajustes h2 {
+  font-size: 1.8rem;
+}
+
+.ajustes fieldset {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  min-width: 0;
+}
+
+.ajustes legend {
+  float: left;
+  width: 100%;
+  font-family: var(--fuente-titulo);
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+.ajustes-actual {
+  color: var(--texto-suave);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.ajustes-aviso {
+  color: var(--acento);
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.ajustes label[for] {
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+.ajustes select {
+  font: inherit;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-height: 44px;
+}
+
+.ajustes select option {
+  color: #061236;
+}
+
+.ajustes .boton {
+  justify-self: start;
+  min-height: 44px;
+}
+
+.interruptor,
+.opcion {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.interruptor input,
+.opcion input {
+  width: 22px;
+  height: 22px;
+  margin: 2px 0 0;
+  accent-color: var(--dato);
+  flex: none;
+}
+
+.interruptor small {
+  display: block;
+  color: var(--texto-suave);
+  font-size: 0.85rem;
+  margin-top: 2px;
+}

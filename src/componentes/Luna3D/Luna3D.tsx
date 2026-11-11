@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import type { ControlLuna } from '../../3d/escenaLuna';
-import { soportaWebGL } from '../../3d/soporte';
+import { ceder, cuandoEsteLibre, soportaWebGL } from '../../3d/soporte';
 import './Luna3D.css';
 
 /**
@@ -21,7 +21,7 @@ export function Luna3D({
   const contenedor = useRef<HTMLDivElement>(null);
   const control = useRef<ControlLuna | null>(null);
   const fase = useRef({ angulo, hemisferioSur });
-  const [con3d] = useState(soportaWebGL);
+  const [con3d, setCon3d] = useState(soportaWebGL);
 
   useEffect(() => {
     const div = contenedor.current;
@@ -32,16 +32,30 @@ export function Luna3D({
     canvas.setAttribute('aria-label', 'La Luna en 3D, iluminada según su fase');
     div.appendChild(canvas);
     let vigente = true;
-    import('../../3d/escenaLuna').then(({ crearEscenaLuna }) => {
-      if (!vigente) return;
-      control.current = crearEscenaLuna(canvas);
-      control.current.fijarFase(
-        fase.current.angulo,
-        fase.current.hemisferioSur,
-      );
+    const cancelar = cuandoEsteLibre(() => {
+      void (async () => {
+        const { crearEscenaLuna, lienzoLuna } =
+          await import('../../3d/escenaLuna');
+        await ceder();
+        if (!vigente) return;
+        const lienzo = lienzoLuna();
+        await ceder();
+        if (!vigente) return;
+        try {
+          control.current = crearEscenaLuna(canvas, lienzo);
+          control.current.fijarFase(
+            fase.current.angulo,
+            fase.current.hemisferioSur,
+          );
+        } catch {
+          canvas.remove();
+          setCon3d(false);
+        }
+      })();
     });
     return () => {
       vigente = false;
+      cancelar();
       control.current?.destruir();
       control.current = null;
       canvas.remove();

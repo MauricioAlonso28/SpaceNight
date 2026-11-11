@@ -44,3 +44,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 ## planetas.json
 
 - Datos de las [NASA Planetary Fact Sheets](https://nssdc.gsfc.nasa.gov/planetary/factsheet/), redactados a mano. La distancia a la Tierra no está aquí: se calcula en el momento con Astronomy Engine.
+
+## Tipografías (public/fuentes)
+
+- Cormorant Garamond, de Christian Thalmann, e IBM Plex Sans, de IBM. Archivos `woff2` del subconjunto latino, tomados de Fontsource.
+- Licencia: [SIL Open Font License 1.1](https://openfontlicense.org).

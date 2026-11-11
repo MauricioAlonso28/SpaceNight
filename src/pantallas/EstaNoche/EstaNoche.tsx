@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import { Luna3D } from '../../componentes/Luna3D/Luna3D';
-import { usePasosISS } from '../../estado/datos';
+import { useNochePlanetas, usePasosISS } from '../../estado/datos';
 import { useAhora, useFechaVista } from '../../estado/hooks';
 import { useEstado } from '../../estado/store';
 import { datosLuna } from '../../servicios/astro/luna';
 import { HORAS_NOCHE, ventanaNoche } from '../../servicios/astro/noche';
-import { nochePlanetas } from '../../servicios/astro/planetas';
 import { nocheSol } from '../../servicios/astro/sol';
 import { formatearDiaCorto, formatearHora } from '../../servicios/formato';
 import { inicioDelDia, sumarDias } from '../../servicios/tiempo';
@@ -27,10 +26,7 @@ export function EstaNoche() {
   const luna = useMemo(() => datosLuna(fecha, ubicacion), [fecha, ubicacion]);
   const sol = useMemo(() => nocheSol(fecha, ubicacion), [fecha, ubicacion]);
   const inicioNoche = ventanaNoche(fecha, ubicacion.zona).inicio.getTime();
-  const noche = useMemo(
-    () => nochePlanetas(new Date(inicioNoche), ubicacion),
-    [inicioNoche, ubicacion],
-  );
+  const noche = useNochePlanetas(inicioNoche, ubicacion);
   const hemisferioSur = ubicacion.latitud < 0;
   const iss = usePasosISS(ubicacion, Math.floor(ahora.getTime() / MS_HORA));
   const nocheCubierta =
@@ -96,21 +92,29 @@ export function EstaNoche() {
       </section>
       <section className="seccion" aria-labelledby="t-planetas">
         <h2 id="t-planetas">Planetas visibles</h2>
-        <PlanetasVisibles
-          planetas={noche.planetas}
-          zona={ubicacion.zona}
-          formato24h={formato24h}
-        />
+        {noche ? (
+          <PlanetasVisibles
+            planetas={noche.planetas}
+            zona={ubicacion.zona}
+            formato24h={formato24h}
+          />
+        ) : (
+          <p className="aviso">Calculando los planetas…</p>
+        )}
       </section>
       <section className="seccion" aria-labelledby="t-noche">
         <h2 id="t-noche">Tu noche, hora por hora</h2>
-        <NocheHoraPorHora
-          {...noche}
-          ahora={ahora}
-          zona={ubicacion.zona}
-          formato24h={formato24h}
-          estacion={nocheCubierta ? iss.pasos : null}
-        />
+        {noche ? (
+          <NocheHoraPorHora
+            {...noche}
+            ahora={ahora}
+            zona={ubicacion.zona}
+            formato24h={formato24h}
+            estacion={nocheCubierta ? iss.pasos : null}
+          />
+        ) : (
+          <p className="aviso">Calculando la noche…</p>
+        )}
       </section>
       <CieloYEventos
         fecha={fecha}

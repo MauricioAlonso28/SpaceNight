@@ -1,14 +1,19 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ResultadoCache } from '../cache/cache';
-import type { Lluvia } from '../servicios/astro/eventos';
+import type { Evento, Lluvia } from '../servicios/astro/eventos';
 import { pronostico, type Pronostico } from '../servicios/clima/openMeteo';
 import { tleISS } from '../servicios/satelites/celestrak';
 import {
   HORAS_PREDICCION,
-  pasosVisibles,
   type PasoISS,
   type Tle,
 } from '../servicios/satelites/iss';
+import type { NochePlanetas } from '../servicios/astro/planetas';
+import {
+  calcularEventos,
+  calcularNochePlanetas,
+  calcularPasos,
+} from '../trabajadores/calculos';
 import type { Ubicacion } from '../tipos/ubicacion';
 
 /** Estado de una descarga: cargando, lista (quizá caducada) o fallida. */
@@ -78,17 +83,50 @@ export function usePasosISS(
   hora: number,
 ): PasosCalculados | null {
   const carga = useTleISS(hora);
-  return useMemo(() => {
-    if (carga.estado !== 'listo') return null;
+  const [calculados, setCalculados] = useState<PasosCalculados | null>(null);
+  useEffect(() => {
+    if (carga.estado !== 'listo') return;
+    let vigente = true;
     const desde = new Date((hora - HORAS_ATRAS) * MS_HORA);
     const horas = HORAS_ATRAS + HORAS_PREDICCION;
-    return {
-      pasos: pasosVisibles(carga.resultado.valor, ubicacion, desde, horas),
-      desde,
-      hasta: new Date(desde.getTime() + horas * MS_HORA),
-      horasDescarga: hora - carga.resultado.guardado / MS_HORA,
+    calcularPasos(carga.resultado.valor, ubicacion, desde, horas).then(
+      (pasos) =>
+        vigente &&
+        setCalculados({
+          pasos,
+          desde,
+          hasta: new Date(desde.getTime() + horas * MS_HORA),
+          horasDescarga: hora - carga.resultado.guardado / MS_HORA,
+        }),
+    );
+    return () => {
+      vigente = false;
     };
   }, [carga, ubicacion, hora]);
+  return calculados;
+}
+
+/**
+ * Eventos de un tramo, calculados en segundo plano; null hasta que llegan.
+ * @param desde inicio del tramo en milisegundos, para no recalcular con cada minuto
+ */
+export function useEventos(
+  desde: number,
+  hasta: number,
+  ubicacion: Ubicacion,
+  lluvias: Lluvia[],
+): Evento[] | null {
+  const [eventos, setEventos] = useState<Evento[] | null>(null);
+  useEffect(() => {
+    let vigente = true;
+    calcularEventos(new Date(desde), new Date(hasta), ubicacion, lluvias).then(
+      (lista) => vigente && setEventos(lista),
+    );
+    return () => {
+      vigente = false;
+    };
+  }, [desde, hasta, ubicacion, lluvias]);
+  return eventos;
 }
 
 let lluviasPedidas: Promise<Lluvia[]> | null = null;
@@ -148,4 +186,25 @@ export function useJsonPublico<T>(archivo: string): T | null | 'error' {
     };
   }, [archivo]);
   return datos;
+}
+
+/**
+ * Planetas, Sol y Luna de la noche que empieza a las 18:00 indicadas, calculados en segundo plano.
+ * @param inicioNoche las 18:00 de la noche, en milisegundos
+ */
+export function useNochePlanetas(
+  inicioNoche: number,
+  ubicacion: Ubicacion,
+): NochePlanetas | null {
+  const [noche, setNoche] = useState<NochePlanetas | null>(null);
+  useEffect(() => {
+    let vigente = true;
+    calcularNochePlanetas(new Date(inicioNoche), ubicacion).then(
+      (n) => vigente && setNoche(n),
+    );
+    return () => {
+      vigente = false;
+    };
+  }, [inicioNoche, ubicacion]);
+  return noche;
 }

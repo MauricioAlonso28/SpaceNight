@@ -1,25 +1,25 @@
 import { useEffect, useRef } from 'react';
-import { soportaWebGL } from '../../3d/soporte';
+import { cuandoEsteLibre } from '../../3d/soporte';
 import './Fondo3D.css';
 
-/** Cielo de fondo: degradado y campo de estrellas 3D detrás de toda la app. */
+/** Cielo de fondo: degradado y estrellas en capas con profundidad, detrás de toda la app. */
 export function Fondo3D() {
   const contenedor = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const div = contenedor.current;
-    if (!div || !soportaWebGL()) return;
-    const canvas = document.createElement('canvas');
-    div.appendChild(canvas);
+    if (!div) return;
     let vigente = true;
     let destruir: (() => void) | undefined;
-    import('../../3d/fondoEstrellas').then(({ crearFondoEstrellas }) => {
-      if (vigente) destruir = crearFondoEstrellas(canvas);
+    const cancelar = cuandoEsteLibre(() => {
+      import('../../3d/fondoEstrellas').then(({ crearFondoEstrellas }) => {
+        if (vigente) destruir = crearFondoEstrellas(div);
+      });
     });
     return () => {
       vigente = false;
+      cancelar();
       destruir?.();
-      canvas.remove();
     };
   }, []);
 

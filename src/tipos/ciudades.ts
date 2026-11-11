@@ -1,0 +1,70 @@
+import { LIMA, type Ubicacion } from './ubicacion';
+
+/** Ciudades para elegir a mano en Ajustes; Bortle estimado por el tamaño de la ciudad. */
+export const CIUDADES: readonly Ubicacion[] = [
+  LIMA,
+  {
+    nombre: 'Arequipa',
+    latitud: -16.409,
+    longitud: -71.537,
+    altura: 2335,
+    zona: 'America/Lima',
+    bortle: 7,
+  },
+  {
+    nombre: 'Cusco',
+    latitud: -13.532,
+    longitud: -71.967,
+    altura: 3399,
+    zona: 'America/Lima',
+    bortle: 7,
+  },
+  {
+    nombre: 'Trujillo',
+    latitud: -8.112,
+    longitud: -79.029,
+    altura: 34,
+    zona: 'America/Lima',
+    bortle: 7,
+  },
+  {
+    nombre: 'Chiclayo',
+    latitud: -6.771,
+    longitud: -79.841,
+    altura: 29,
+    zona: 'America/Lima',
+    bortle: 7,
+  },
+  {
+    nombre: 'Piura',
+    latitud: -5.194,
+    longitud: -80.632,
+    altura: 29,
+    zona: 'America/Lima',
+    bortle: 7,
+  },
+  {
+    nombre: 'Huancayo',
+    latitud: -12.065,
+    longitud: -75.204,
+    altura: 3259,
+    zona: 'America/Lima',
+    bortle: 6,
+  },
+  {
+    nombre: 'Iquitos',
+    latitud: -3.749,
+    longitud: -73.253,
+    altura: 106,
+    zona: 'America/Lima',
+    bortle: 6,
+  },
+  {
+    nombre: 'Puno',
+    latitud: -15.84,
+    longitud: -70.022,
+    altura: 3827,
+    zona: 'America/Lima',
+    bortle: 6,
+  },
+];
