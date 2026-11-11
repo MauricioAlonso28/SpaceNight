@@ -52,8 +52,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 ## ../modelos/*.glb
 
-- Fuente: [NASA 3D Resources](https://science.nasa.gov/3d-resources/), descargados el 11 de noviembre de 2026 sin cambios.
-  - `saturno-v.glb`: [Saturn V](https://science.nasa.gov/3d-resources/saturn-v/), crédito NASA/Michael D. Carbajal.
+- Fuente: [NASA 3D Resources](https://science.nasa.gov/3d-resources/), descargados el 11 de noviembre de 2026. Todos van sin cambios salvo el Saturno V.
+  - `saturno-v.glb`: [Saturn V](https://science.nasa.gov/3d-resources/saturn-v/), crédito NASA/Michael D. Carbajal. Partido en sus ocho piezas (S-IC, S-II, S-IVB, unidad de instrumentos, adaptador, módulo de servicio, módulo de mando y torre de escape) con `node scripts/despiezar-saturno.mjs <saturn_v.glb>`, que corta el cuerpo por alturas y quita unas animaciones vacías de la exportación. Las mallas, materiales y texturas son las de la NASA.
   - `transbordador.glb`: [Space Shuttle (D)](https://science.nasa.gov/3d-resources/space-shuttle-d/), crédito NASA/Johnson Space Center.
   - `tanque-externo.glb` y `propulsor-solido.glb`: [Space Shuttle Parts](https://science.nasa.gov/3d-resources/space-shuttle-parts/), crédito NASA/Johnson Space Center.
 - Uso: la NASA no otorga licencias sobre su material; según sus [pautas de uso de imágenes y medios](https://www.nasa.gov/nasa-brand-center/images-and-media/), los modelos 3D de la NASA en general no tienen derechos de autor en Estados Unidos. Se cita a la NASA como fuente y nada aquí sugiere que la NASA respalde esta app. Las marcas que se ven en los modelos (por ejemplo, en las alas del transbordador) son parte del vehículo real tal como la NASA lo publicó; la app no las usa como logotipo propio.

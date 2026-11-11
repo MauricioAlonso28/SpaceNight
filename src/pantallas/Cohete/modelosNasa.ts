@@ -1,9 +1,16 @@
-import type { Traducido } from './catalogo';
+import type { FuenteFicha, Traducido } from './catalogo';
+import {
+  ETAPAS_SATURNO,
+  FUENTES_SATURNO,
+  type PiezaModelo,
+} from './etapasSaturno';
 
 /**
  * Un modelo 3D de NASA 3D Resources guardado en public/modelos.
  * @property bytes tamaño del archivo, para avisar antes de descargarlo
  * @property pagina ficha del modelo en NASA 3D Resources
+ * @property piezas las partes que se pueden separar, de abajo arriba; sin ellas el modelo solo se gira
+ * @property fuentes de dónde salen las fichas de las piezas
  */
 export interface ModeloNasa {
   id: string;
@@ -13,6 +20,8 @@ export interface ModeloNasa {
   descripcion: Traducido;
   credito: string;
   pagina: string;
+  piezas?: PiezaModelo[];
+  fuentes?: FuenteFicha[];
 }
 
 /** Los modelos reales que se pueden ver; ninguno se descarga hasta que se pide. */
@@ -20,7 +29,7 @@ export const MODELOS_NASA: ModeloNasa[] = [
   {
     id: 'saturno-v',
     archivo: 'saturno-v.glb',
-    bytes: 927212,
+    bytes: 1069612,
     nombre: { es: 'Saturno V', en: 'Saturn V' },
     descripcion: {
       es: 'El cohete de tres etapas que llevó a los astronautas del Apolo a la Luna (1967–1973).',
@@ -28,6 +37,8 @@ export const MODELOS_NASA: ModeloNasa[] = [
     },
     credito: 'NASA/Michael D. Carbajal',
     pagina: 'https://science.nasa.gov/3d-resources/saturn-v/',
+    piezas: ETAPAS_SATURNO,
+    fuentes: FUENTES_SATURNO,
   },
   {
     id: 'transbordador',
